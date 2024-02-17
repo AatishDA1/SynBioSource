@@ -1,0 +1,115 @@
+/* General Components */
+body {
+  padding-top: 80px;
+}
+
+:root {
+  --header-height: 80px; /* Adjust based on actual navbar height */
+  --footer-height: 60px; /* Adjust based on actual footer height */
+}
+
+.main-content {
+  min-height: calc(
+    100vh - var(--header-height) - var(--footer-height)
+  ); /* Ensures no white space is left after footer. */
+}
+
+.line {
+  height: 4px;
+  width: 80px;
+  background: #0e7472;
+  margin: 20px auto;
+}
+
+/* Navbar */
+.navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  min-height: 80px;
+  width: 100%;
+  z-index: 1030; /* Ensures navbar is above other content */
+}
+
+.navbar-brand,
+.navbar-nav .nav-link {
+  font-size: 1.5rem;
+}
+
+.nav-link:hover {
+  color: #0e7472;
+}
+
+.nav-item {
+  margin-right: 15px;
+}
+
+.navbar-logo {
+  height: auto; /* Maintains aspect ratio */
+  max-height: 80%;
+}
+
+/* Footer */
+.footer {
+  min-height: 60px;
+  background-color: #1a1a1a;
+  color: white;
+  text-align: center;
+  padding: 20px 0;
+  font-size: 1.2rem;
+}
+
+.footer a {
+  font-size: 1.5rem;
+}
+
+/* Login & Registration Form */
+.login-form-container {
+  width: 100%;
+  max-width: 400px;
+  margin: 0 auto;
+  padding: 50px 20px;
+  text-align: center;
+}
+
+.form-group {
+  margin-bottom: 20px;
+  text-align: left;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 5px;
+}
+
+.form-group input[type="email"],
+.form-group input[type="password"] {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+}
+
+.form-focus-color:focus {
+  border-color: #0a4746;
+  box-shadow: 0 0 0 0.25rem #0e747228;
+}
+
+.btn {
+  display: inline-block;
+  cursor: pointer;
+}
+
+.btn-submit {
+  width: 100%;
+  padding: 10px;
+  margin-top: 10px;
+  background-color: #0a4746;
+  color: #fff;
+  border: none;
+}
+
+.btn-submit:hover {
+  background-color: #0e7472;
+  color: #fff;
+}

@@ -12,7 +12,10 @@ def index(request):
     return render(request, 'public/index.html')
 
 def login_user(request):
-    """Function to log a user in."""
+    """Function to log a user in and if they are logged in prevent them from doing so again until they logout."""
+    if request.user.is_authenticated:
+         return redirect('/')
+    
     if request.method == "POST":
         email = request.POST.get("email")
         password = request.POST.get("password")
@@ -30,7 +33,10 @@ def login_user(request):
         return render(request, 'auth/login.html', {})
     
 def register_user(request):
-    """Function to register a user."""
+    """Function to register a user then log them in. It also prevents them from signing-up again if they are already logged in."""
+    if request.user.is_authenticated:
+         return redirect('/')
+    
     if request.method == "POST":
             fullname =request.POST.get('fullname')
             email =request.POST.get('email')

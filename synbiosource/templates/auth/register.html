@@ -3,11 +3,11 @@
 {% block content %}
 <div class="container my-5">
   <div class="row justify-content-center">
-    <div class="col-md-6 text-center">
+    <div id="error-section" class="col-md-6 text-center">
       {% if error %}
       <div class="alert alert-danger alert-dismissible fade show" role="alert">
         <i class="bi bi-exclamation-triangle-fill"></i>
-        <strong>{{error}}</strong>
+        <strong id="error">{{error}}</strong>
         <button
           type="button"
           class="btn-close"
@@ -16,11 +16,34 @@
         ></button>
       </div>
       {% endif %}
+
+      <div
+        id="error-section"
+        style="display: none"
+        class="alert alert-danger alert-dismissible fade show"
+        role="alert"
+      >
+        <i class="bi bi-exclamation-triangle-fill"></i>
+        <strong id="error-1">{{error}}</strong>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="alert"
+          aria-label="Close"
+        ></button>
+      </div>
+
       <h1 class="display-4 fw-semibold">Sign-up</h1>
       <div class="line"></div>
       <div class="card">
-        <form class="p-4 p-md-5 border rounded-3 bg-light" method="POST">
+        <form
+          class="p-4 p-md-5 border rounded-3 bg-light"
+          onsubmit="handleSubmit(event)"
+          method="POST"
+        >
           {% csrf_token %}
+          <!-- Error Handling for Inputs -->
+          <p id="error">asdasd</p>
           <!-- Full Name -->
           <div class="form-floating mb-3">
             <input
@@ -29,6 +52,7 @@
               id="floatingFullName"
               name="fullname"
               placeholder="John Doe"
+              required
             />
             <label for="floatingFullName">Full Name</label>
           </div>
@@ -40,6 +64,7 @@
               id="floatingEmail"
               name="email"
               placeholder="name@example.com"
+              required
             />
             <label for="floatingEmail">Email address</label>
           </div>
@@ -51,6 +76,7 @@
               id="floatingPassword1"
               name="password1"
               placeholder="Password"
+              required
             />
             <label for="floatingPassword1">Password</label>
           </div>
@@ -62,6 +88,7 @@
               id="floatingPasswordRepeat"
               name="password2"
               placeholder="Repeat Password"
+              required
             />
             <label for="floatingPasswordRepeat">Repeat Password</label>
           </div>
@@ -89,4 +116,58 @@
     </div>
   </div>
 </div>
+<!-- Form Validation Script -->
+<script>
+  function handleSubmit(e) {
+    e.preventDefault();
+    let password1 = document.querySelector("#floatingPassword1").value;
+    let password2 = document.querySelector("#floatingPasswordRepeat").value;
+    let error_section = document.querySelector("#error-section");
+    let error1 = document.querySelector("#error-1");
+    if (!error_section) {
+      let parent = document.querySelector("#error-section");
+      parent.insertAdjacentHTML(
+        "beforeend",
+        `<div
+      id="error-section"
+      style="display: none"
+      class="alert alert-danger alert-dismissible fade show"
+      role="alert"
+    >
+      <i class="bi bi-exclamation-triangle-fill"></i>
+      <strong id="error-1">{{error}}</strong>
+      <button
+        type="button"
+        class="btn-close"
+        data-bs-dismiss="alert"
+        aria-label="Close"
+      ></button>
+    </div>`
+      );
+      error_section = document.querySelector("#error-section");
+    }
+    error_section.style.display = "none";
+    let msg = "";
+    // Check to ensure password is at least 8 characters long.
+    if (password1.length < 8) {
+      msg = msg + ` Your password is too short. <br/>`;
+    }
+    // Check to ensure passwords match.
+    if (password1 != password2) {
+      msg = msg + ` Your passwords do not match. <br/>`;
+    }
+
+    // Checks if any errors have been triggered and creates the message.
+    console.log(msg.length, msg);
+    if (msg.length) {
+      error1.innerHTML = msg;
+      console.log("false");
+      error_section.style.display = "block";
+      return false;
+    }
+    console.log("true");
+    return e.currentTarget.submit();
+  }
+</script>
+
 {% endblock %}

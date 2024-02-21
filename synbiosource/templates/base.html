@@ -50,6 +50,11 @@
             <li class="nav-item">
               <a class="nav-link" href="{% url 'home' %}">Home</a>
             </li>
+            {% if user.is_staff %}
+            <li class="nav-item">
+              <a class="nav-link" href="admin">Admin Dashboard</a>
+            </li>
+            {% endif %}
             <li class="nav-item">
               <a class="nav-link" href="#">Datasets</a>
             </li>
@@ -60,7 +65,9 @@
             <li class="nav-item">
               <form method="POST">
                 {% csrf_token %}
-                <button class="nav-link" type="submit" href="{% url 'home' %}">Logout</button>
+                <button class="nav-link" type="submit" href="{% url 'home' %}">
+                  Logout
+                </button>
               </form>
             </li>
             {% else %}

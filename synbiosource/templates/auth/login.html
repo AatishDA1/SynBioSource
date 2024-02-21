@@ -1,60 +1,58 @@
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Login</title>
-    <!-- Bootstrap CSS -->
-    <link
-      href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
-      rel="stylesheet"
-    />
-  </head>
-
-  <body>
-    <div class="container">
-      <div class="row justify-content-center">
-        <div class="col-md-6">
-          <div class="card mt-5">
-            <div class="card-body">
-              <form method="POST">
-                {% csrf_token %}
-                <h3 class="text-center mb-4">Login</h3>
-                <div class="form-group">
-                  <label for="email">Email address</label>
-                  <input
-                    type="email"
-                    class="form-control"
-                    id="email"
-                    aria-describedby="emailHelp"
-                    placeholder="Enter email"
-                    name="email"
-                  />
-                </div>
-                <div class="form-group">
-                  <label for="password">Password</label>
-                  <input
-                    type="password"
-                    class="form-control"
-                    id="password"
-                    placeholder="Password"
-                    name="password"
-                  />
-                </div>
-                <button type="submit" class="btn btn-primary btn-block">
-                  Login
-                </button>
-              </form>
-            </div>
+{% extends "base.html" %}
+<!-- Login Form -->
+{% block content %}
+<div class="container my-5">
+  <div class="row justify-content-center">
+    <div class="col-md-6 text-center">
+      {% if error %}
+      <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        <i class="bi bi-exclamation-triangle-fill"></i>
+        <strong>{{error}}</strong>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="alert"
+          aria-label="Close"
+        ></button>
+      </div>
+      {% endif %}
+      <h1 class="display-4 fw-semibold">Login</h1>
+      <div class="line"></div>
+      <div class="card">
+        <form method="POST" class="p-4 p-md-5 border rounded-3 bg-light">
+          {% csrf_token %}
+          <!-- Email Address -->
+          <div class="form-floating mb-3">
+            <input
+              type="email"
+              class="form-control form-focus-color"
+              id="floatingInput"
+              placeholder="name@example.com"
+              name="email"
+            />
+            <label for="floatingInput">Email address</label>
           </div>
-        </div>
+          <!-- Password -->
+          <div class="form-floating mb-3">
+            <input
+              type="password"
+              class="form-control form-focus-color"
+              id="floatingPassword"
+              name="password"
+              placeholder="Password"
+            />
+            <label for="floatingPassword">Password</label>
+          </div>
+          <button class="my-3 w-100 btn btn-lg btn-submit" type="submit">
+            Submit
+          </button>
+          <a href="#" class="d-block mb-3 text-muted">Forgot password?</a>
+          <a href="#" class="d-block mb-3 text-muted"
+            >Don't have an account? Sign up</a
+          >
+        </form>
       </div>
     </div>
-
-    <!-- Optional JavaScript -->
-    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-  </body>
-</html>
+  </div>
+</div>
+{% endblock %}

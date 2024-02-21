@@ -17,10 +17,17 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path,include
 from . import views
-urlpatterns = [
-    path('admin/', admin.site.urls),
+from django.conf.urls.static import static 
+from django.conf import settings 
 
-    path('login', views.login_user),
-    path('register',views.register_user),
-    # path('dashboard/', include('dashboard.urls')),
+urlpatterns = [
+    path('', views.index, name="home"),
+    path('admin', admin.site.urls),
+    path('login', views.login_user, name="login"),
+    path('register',views.register_user, name="register"),
 ]
+
+# To enable the use of static files. 
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+    urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

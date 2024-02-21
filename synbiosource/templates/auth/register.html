@@ -1,1 +1,92 @@
-<h1>register</h1>
+{% extends "base.html" %}
+<!-- Registration Form -->
+{% block content %}
+<div class="container my-5">
+  <div class="row justify-content-center">
+    <div class="col-md-6 text-center">
+      {% if error %}
+      <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        <i class="bi bi-exclamation-triangle-fill"></i>
+        <strong>{{error}}</strong>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="alert"
+          aria-label="Close"
+        ></button>
+      </div>
+      {% endif %}
+      <h1 class="display-4 fw-semibold">Sign-up</h1>
+      <div class="line"></div>
+      <div class="card">
+        <form class="p-4 p-md-5 border rounded-3 bg-light" method="POST">
+          {% csrf_token %}
+          <!-- Full Name -->
+          <div class="form-floating mb-3">
+            <input
+              type="text"
+              class="form-control form-focus-color"
+              id="floatingFullName"
+              name="fullname"
+              placeholder="John Doe"
+            />
+            <label for="floatingFullName">Full Name</label>
+          </div>
+          <!-- Email Address -->
+          <div class="form-floating mb-3">
+            <input
+              type="email"
+              class="form-control form-focus-color"
+              id="floatingEmail"
+              name="email"
+              placeholder="name@example.com"
+            />
+            <label for="floatingEmail">Email address</label>
+          </div>
+          <!-- Password -->
+          <div class="form-floating mb-3">
+            <input
+              type="password"
+              class="form-control form-focus-color"
+              id="floatingPassword1"
+              name="password1"
+              placeholder="Password"
+            />
+            <label for="floatingPassword1">Password</label>
+          </div>
+          <!-- Repeat Password -->
+          <div class="form-floating mb-3">
+            <input
+              type="password"
+              class="form-control form-focus-color"
+              id="floatingPasswordRepeat"
+              name="password2"
+              placeholder="Repeat Password"
+            />
+            <label for="floatingPasswordRepeat">Repeat Password</label>
+          </div>
+          <!-- Password Instructions -->
+          <div class="password-instructions mb-3 text-start">
+            <p><strong>Password must:</strong></p>
+            <ul>
+              <li>Be at least 8 characters long.</li>
+              <li>Not be entirely numeric.</li>
+              <li>Not be too similar to your other personal information.</li>
+              <li>Not be a commonly used password.</li>
+              <li>Not be entirely made up of digits.</li>
+            </ul>
+          </div>
+          <button class="my-3 w-100 btn btn-lg btn-submit" type="submit">
+            Submit
+          </button>
+          <div class="mt-3">
+            <a href="#" class="text-muted"
+              >Already have an account? Login here</a
+            >
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

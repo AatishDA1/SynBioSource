@@ -1,0 +1,101 @@
+{% extends "base.html" %} {% block content %} {% load static %}
+<!-- Hero Section -->
+<div class="hero-section">
+  <video playsinline autoplay muted loop>
+    <source
+      src="{% static 'assets/videos/hero_video.mp4' %}"
+      type="video/mp4"
+    />
+    If you can see this text then your browser does not support the video tag.
+  </video>
+  <div class="container animated-heading">
+    {% if message %}
+    <div class="alert alert-warning alert-dismissible fade show" role="alert">
+      <i class="bi bi-exclamation-triangle-fill"></i>
+      <strong>{{message}}</strong>
+      <button
+        type="button"
+        class="btn-close"
+        data-bs-dismiss="alert"
+        aria-label="Close"
+      ></button>
+    </div>
+    {% endif %} {% if user.is_authenticated %}
+    <h1>Welcome to SynBio Source, {{request.session.full_name}}</h1>
+    {% else %}
+    <h1>Welcome to SynBio Source</h1>
+    {% endif %}
+    <p class="lead">An online repository for Synthetic Biology Datasets.</p>
+    {% if user.is_authenticated %}
+    <a href="#" class="btn btn-secondary">Datasets</a>
+    {% else %}
+    <a href="{% url 'login' %}" class="btn btn-login">Login</a>
+    <a href="#" class="btn btn-secondary">Datasets</a>
+    {% endif %}
+  </div>
+  <!-- Scroll Down Indicator -->
+  <div class="scroll-down">
+    <div class="scroll-text">Scroll Down</div>
+    <div class="arrow">
+      <i class="bi bi-caret-down-fill"></i>
+    </div>
+  </div>
+</div>
+
+<!-- Information Section -->
+<section id="info-section" class="section-padding">
+  <div class="container">
+    <!-- Section Title -->
+    <div class="row">
+      <div class="col-12 text-center" data-aos="fade-down" data-aos-delay="150">
+        <div class="section-title">
+          <h1 class="display-4 fw-semibold">About Us</h1>
+          <div class="line"></div>
+          <p>
+            SynBio Source is an open-source platform designed for the Synthetic
+            Biology community, enabling easy sharing and management of datasets.
+            It offers intuitive uploading and searching capabilities, with the
+            goal of fostering a unified metadata standard to enhance
+            accessibility and collaboration within the field.
+          </p>
+        </div>
+      </div>
+    </div>
+    <!-- Information Boxes -->
+    <div class="row">
+      <div class="col-md-4" data-aos="fade-up" data-aos-delay="150">
+        <div class="info-box" style="background-color: #0e7472; color: #fff">
+          <i
+            class="bi bi-people-fill"
+            style="font-size: 8rem; margin-bottom: 10px"
+          ></i>
+          <h5 class="mt-4">Growing Community</h5>
+          <p>
+            Join our ever-expanding community of enthusiasts and professionals.
+          </p>
+        </div>
+      </div>
+      <div class="col-md-4" data-aos="fade-up" data-aos-delay="250">
+        <div class="info-box" style="background-color: #0e7472; color: #fff">
+          <i
+            class="bi bi-code-slash"
+            style="font-size: 8rem; margin-bottom: 10px"
+          ></i>
+          <h5 class="mt-4">Open-Source Code</h5>
+          <p>Contribute to and benefit from our open-source resources.</p>
+        </div>
+      </div>
+      <div class="col-md-4" data-aos="fade-up" data-aos-delay="350">
+        <div class="info-box" style="background-color: #0e7472; color: #fff">
+          <i
+            class="bi bi-bar-chart-line-fill"
+            style="font-size: 8rem; margin-bottom: 10px"
+          ></i>
+          <h5 class="mt-4">Expansive Datasets</h5>
+          <p>Gain access to quality datasets across various domains.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}

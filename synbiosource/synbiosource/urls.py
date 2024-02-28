@@ -25,9 +25,10 @@ urlpatterns = [
     path('admin', admin.site.urls),
     path('login', views.login_user, name="login"),
     path('register',views.register_user, name="register"),
+    path('dataset/',include('dataset.urls'),),
 ]
 
 # To enable the use of static files. 
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
-    urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+    urlpatterns += static(settings.STATIC_URL, document_root=settings.STATICFILES_DIRS)

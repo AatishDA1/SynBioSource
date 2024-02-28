@@ -4,37 +4,10 @@
 <div class="container my-5">
   <div class="row justify-content-center">
     <div id="error-section" class="col-md-6 text-center">
-      {% if error %}
-      <div class="alert alert-danger alert-dismissible fade show" role="alert">
-        <i class="bi bi-exclamation-triangle-fill"></i>
-        <strong id="error">{{error}}</strong>
-        <button
-          type="button"
-          class="btn-close"
-          data-bs-dismiss="alert"
-          aria-label="Close"
-        ></button>
-      </div>
-      {% endif %}
-
-      <div
-        id="error-section"
-        style="display: none"
-        class="alert alert-danger alert-dismissible fade show"
-        role="alert"
-      >
-        <i class="bi bi-exclamation-triangle-fill"></i>
-        <strong id="error-1">{{error}}</strong>
-        <button
-          type="button"
-          class="btn-close"
-          data-bs-dismiss="alert"
-          aria-label="Close"
-        ></button>
-      </div>
-
       <h1 class="display-4 fw-semibold">Sign-up</h1>
       <div class="line"></div>
+      <!-- Error Messages -->
+      <div id="dynamic-error-section"></div>
       <div class="card">
         <form
           class="p-4 p-md-5 border rounded-3 bg-light"
@@ -42,8 +15,6 @@
           method="POST"
         >
           {% csrf_token %}
-          <!-- Error Handling for Inputs -->
-          <p id="error">asdasd</p>
           <!-- Full Name -->
           <div class="form-floating mb-3">
             <input
@@ -99,8 +70,10 @@
               <li>Be at least 8 characters long.</li>
               <li>Not be entirely numeric.</li>
               <li>Not be too similar to your other personal information.</li>
-              <li>Not be a commonly used password.</li>
-              <li>Not be entirely made up of digits.</li>
+              <li>Include at least one uppercase letter.</li>
+              <li>Include at least one lowercase letter.</li>
+              <li>Include at least one number.</li>
+              <li>Include at least one special character (e.g., !@#$%^&*).</li>
             </ul>
           </div>
           <button class="my-3 w-100 btn btn-lg btn-submit" type="submit">
@@ -120,53 +93,66 @@
 <script>
   function handleSubmit(e) {
     e.preventDefault();
-    let password1 = document.querySelector("#floatingPassword1").value;
-    let password2 = document.querySelector("#floatingPasswordRepeat").value;
-    let error_section = document.querySelector("#error-section");
-    let error1 = document.querySelector("#error-1");
-    if (!error_section) {
-      let parent = document.querySelector("#error-section");
-      parent.insertAdjacentHTML(
-        "beforeend",
-        `<div
-      id="error-section"
-      style="display: none"
-      class="alert alert-danger alert-dismissible fade show"
-      role="alert"
-    >
-      <i class="bi bi-exclamation-triangle-fill"></i>
-      <strong id="error-1">{{error}}</strong>
-      <button
-        type="button"
-        class="btn-close"
-        data-bs-dismiss="alert"
-        aria-label="Close"
-      ></button>
-    </div>`
-      );
-      error_section = document.querySelector("#error-section");
-    }
-    error_section.style.display = "none";
-    let msg = "";
-    // Check to ensure password is at least 8 characters long.
+    // Retrieve key values.
+    let fullName = document
+      .getElementById("floatingFullName")
+      .value.toLowerCase();
+    let email = document.getElementById("floatingEmail").value.toLowerCase();
+    let password1 = document.getElementById("floatingPassword1").value;
+    let password2 = document.getElementById("floatingPasswordRepeat").value;
+    let errors = [];
+
+    // Clear previous errors.
+    document.getElementById("dynamic-error-section").innerHTML = "";
+
+    // Validation checks
     if (password1.length < 8) {
-      msg = msg + ` Your password is too short. <br/>`;
+      errors.push("Your password is too short.");
     }
-    // Check to ensure passwords match.
-    if (password1 != password2) {
-      msg = msg + ` Your passwords do not match. <br/>`;
+    if (password1 !== password2) {
+      errors.push("Your passwords do not match.");
+    }
+    if (/^\d+$/.test(password1)) {
+      errors.push("Your password must not be entirely numeric.");
+    }
+    if (
+      password1.toLowerCase().includes(fullName) ||
+      password1.toLowerCase().includes(email.split("@")[0])
+    ) {
+      errors.push("Your password must not contain your full name or email.");
+    }
+    if (!/[A-Z]/.test(password1)) {
+      errors.push("Your password must include at least one uppercase letter.");
+    }
+    if (!/[a-z]/.test(password1)) {
+      errors.push("Your password must include at least one lowercase letter.");
+    }
+    if (!/[0-9]/.test(password1)) {
+      errors.push("Your password must include at least one number.");
+    }
+    if (!/[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]+/.test(password1)) {
+      errors.push("Your password must include at least one special character.");
     }
 
-    // Checks if any errors have been triggered and creates the message.
-    console.log(msg.length, msg);
-    if (msg.length) {
-      error1.innerHTML = msg;
-      console.log("false");
-      error_section.style.display = "block";
+    // Display errors.
+    if (errors.length > 0) {
+      errors.forEach((error) => {
+        document.getElementById("dynamic-error-section").insertAdjacentHTML(
+          "beforeend",
+          `
+          <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <i class="bi bi-exclamation-triangle-fill"></i>
+            <strong>${error}</strong>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+          </div>
+        `
+        );
+      });
       return false;
     }
-    console.log("true");
-    return e.currentTarget.submit();
+
+    // If there are no errors, submit the form.
+    e.currentTarget.submit();
   }
 </script>
 

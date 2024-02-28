@@ -1,0 +1,142 @@
+{% extends "base.html" %} {% block content %}
+<div class="main-content">
+  <div class="container mt-5">
+    <h1 class="text-center padding">Upload Datasets</h1>
+    <div class="line"></div>
+
+    <!-- Upload Section -->
+    <form method="post" enctype="multipart/form-data" class="container mb-5">
+      {% csrf_token %}
+      <div class="row">
+        <!-- Dataset ZIP File Upload -->
+        <div class="col-md-6">
+          <div class="drag-area" id="datasetFileInput">
+            <i class="bi bi-download" aria-hidden="true"></i>
+            <p>Drag and Drop Dataset ZIP File Here or <b>Browse</b></p>
+            <input
+              type="file"
+              class="file-input"
+              accept=".zip"
+              onchange="updateFileInfo(this, 'zip-info')"
+              name="dataset-file"
+              required
+            />
+            <div class="upload-info" id="zip-info"></div>
+          </div>
+        </div>
+        <!-- Metadata JSON File Upload -->
+        <div class="col-md-6">
+          <div class="drag-area" id="jsonFileInput">
+            <i class="bi bi-download" aria-hidden="true"></i>
+            <p>Drag and Drop Metadata JSON File Here or <b>Browse</b></p>
+            <input
+              type="file"
+              class="file-input"
+              accept=".json"
+              onchange="updateFileInfo(this, 'json-info')"
+              name="json-file"
+              required
+            />
+            <div class="upload-info" id="json-info"></div>
+          </div>
+        </div>
+        <button type="submit" class="btn btn-submit mt-3">Submit</button>
+      </div>
+    </form>
+
+    <!-- Instruction Box -->
+    <div id="uploadInstructions" class="bg-light p-5 rounded">
+      <h2 class="text-center">Instructions</h2>
+      <div class="row">
+        <div class="col-4">
+          <div
+            id="instructions-navbar"
+            class="nav-pills flex-column sticky-top"
+            style="top: 20px"
+          >
+            <a class="nav-link" href="#item-1">Item 1</a>
+            <a class="nav-link ms-3 my-1" href="#item-1-1">Item 1-1</a>
+            <a class="nav-link ms-3 my-1" href="#item-1-2">Item 1-2</a>
+            <a class="nav-link" href="#item-2">Item 2</a>
+            <a class="nav-link" href="#item-3">Item 3</a>
+            <a class="nav-link ms-3 my-1" href="#item-3-1">Item 3-1</a>
+            <a class="nav-link ms-3 my-1" href="#item-3-2">Item 3-2</a>
+          </div>
+        </div>
+        <div class="col-8">
+          <div
+            data-bs-spy="scroll"
+            data-bs-target="#instructions-navbar"
+            data-bs-smooth-scroll="true"
+            class="uploadInstructions"
+            tabindex="0"
+            style="height: 400px; overflow-y: auto"
+          >
+            <h4 id="item-1">Item 1</h4>
+            <p>...</p>
+            <h5 id="item-1-1">Item 1-1</h5>
+            <p>...</p>
+            <h5 id="item-1-2">Item 1-2</h5>
+            <p>...</p>
+            <h4 id="item-2">Item 2</h4>
+            <p>...</p>
+            <h4 id="item-3">Item 3</h4>
+            <p>...</p>
+            <h5 id="item-3-1">Item 3-1</h5>
+            <p>...</p>
+            <h5 id="item-3-2">Item 3-2</h5>
+            <p>...</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Upload Boxes Script -->
+<script>
+  function updateFileInfo(input, infoId) {
+    const infoDiv = document.getElementById(infoId);
+    const parentDiv = input.closest(".drag-area");
+    const defaultText = parentDiv.querySelector("p");
+    const defaultIcon = parentDiv.querySelector("i");
+
+    if (input.files.length > 0) {
+      const file = input.files[0];
+      const isZip = file.name.endsWith(".zip"); // Check if the uploaded file is a ZIP
+      const iconClass = isZip ? "bi-file-zip" : "bi-file-earmark-text"; // Choose icon based on file type
+
+      // Hide default text and icon
+      defaultText.style.display = "none";
+      defaultIcon.style.display = "none";
+
+      // Display uploaded file name, appropriate icon, and a cross for removal
+      infoDiv.innerHTML = `<div class="file-info" style="position: relative; text-align: center;">
+                              <i class="bi ${iconClass}"></i>
+                              <span>${file.name}</span>
+                              <button class="btn-clear" style="position: absolute; right: 0; top: 0;" onclick="clearFile('${input.id}', '${infoId}')">×</button>
+                            </div>`;
+
+      parentDiv.classList.add("file-uploaded");
+    } else {
+      clearFile(input.id, infoId); // Call clearFile if no file is uploaded to reset
+    }
+  }
+
+  function clearFile(inputId, infoId) {
+    const input = document.getElementById(inputId);
+    const infoDiv = document.getElementById(infoId);
+    const parentDiv = input.closest(".drag-area");
+    const defaultText = parentDiv.querySelector("p");
+    const defaultIcon = parentDiv.querySelector("i");
+
+    // Reset everything to default
+    input.value = "";
+    infoDiv.innerHTML = "";
+    defaultText.style.display = "";
+    defaultIcon.style.display = "";
+    parentDiv.classList.remove("file-uploaded");
+  }
+</script>
+
+{% endblock %}

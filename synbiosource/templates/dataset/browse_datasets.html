@@ -1,0 +1,158 @@
+{% extends "base.html" %} {% block content %}
+<div class="main-content">
+  <div class="container mt-5">
+    <h1 class="text-center padding">Available Datasets</h1>
+    <div class="line"></div>
+
+    <!-- Filtering Section -->
+    <div class="filter-box">
+      <h4 class="mb-3">Filter Options</h4>
+      <div class="row">
+        <div class="col-lg-9 mb-3 d-flex">
+          <form method="post" class="flex-grow-1 me-2">
+            {% csrf_token %}
+            <div class="input-group">
+              <input
+                type="text"
+                class="form-control"
+                placeholder="Search datasets..."
+                name="keyword"
+              />
+              <button class="btn btn-outline-secondary btn-sm" type="submit">
+                Go
+              </button>
+            </div>
+          </form>
+          <select class="form-select w-auto">
+            <option selected>Sort by</option>
+            <option value="1">Most Downloads</option>
+            <option value="2">Newest</option>
+            <option value="3">Alphabetical</option>
+          </select>
+        </div>
+        <!-- Pagination -->
+        <div class="col-lg-3 mb-3">
+          <select class="form-select" onchange="handlePageChange(event)" id="entriesPerPage">
+            <option value="5" {% if count == "5" %} selected {% endif %}>5 per page</option>
+            <option value="10" {% if count == "10" %} selected {% endif %}>10 per page</option>
+            <option value="20" {% if count == "20" %} selected {% endif %}>20 per page</option>
+            <option value="50" {% if count == "50" %} selected {% endif %}>50 per page</option>
+          </select>
+        </div>
+        <!-- Keywords Section with Collapsible Feature -->
+        <div class="col-lg-12 mb-3">
+          <div class="d-flex justify-content-between align-items-center">
+            <h5>Keywords</h5>
+            <button
+              class="btn btn-outline-secondary"
+              data-bs-toggle="collapse"
+              href="#collapseKeywords"
+              aria-expanded="false"
+              aria-controls="collapseKeywords"
+            >
+              <i class="bi bi-chevron-down"></i>
+            </button>
+          </div>
+          <div class="collapse" id="collapseKeywords">
+            <div class="d-flex flex-wrap gap-2 mt-2">
+              <!-- Keywords as buttons -->
+              {% for keyword in keywords %}
+              <a href='/dataset/browse?keyword={{keyword.name}}'>
+              <button class="btn btn-outline-secondary Keyword-button">
+                <strong>{{keyword.name}}</strong> ({{keyword.dataset_count}})
+              </button>
+              </a>
+              {% endfor %}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Datasets List -->
+    <div class="dataset-list">
+      <!-- Example Dataset Entry as Button -->
+      {% for item in selected_datasets %}
+      <div class="dataset-card" onclick="viewDetail({{item.id}})">
+        <div class="card">
+          <div class="card-body">
+            <h5 class="card-title">
+              {{item.metadata_file.basic_identity.title}}
+            </h5>
+            <p class="card-text">
+              {{item.metadata_file.basic_identity.description}}
+            </p>
+            <div class="d-flex justify-content-between">
+              <small>Author: {{item.owner.full_name}}</small>
+              <small>Downloads: {{item.download_count}}</small>
+            </div>
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+      <!-- Repeat the entry for each dataset -->
+    </div>
+
+    <!-- Pagination -->
+    <div class="d-flex justify-content-between align-items-center padding">
+      <nav aria-label="Dataset pagination bottom" class="padding">
+        <ul class="pagination justify-content-center">
+          <!-- First Page Button -->
+          <li class="page-item">
+            <a
+              class="page-link"
+              href="/dataset/browse?page=1&count={{count}}"
+              aria-label="First"
+              >First</a
+            >
+          </li>
+          <!-- Previous Page Button -->
+          <li class="page-item {% if not has_prev %} disabled {% endif %}">
+            <a
+              class="page-link"
+              href="/dataset/browse?page={{prev}}&count={{count}}"
+              aria-label="Previous"
+              ><strong>&lsaquo;</strong></a
+            >
+          </li>
+          <!-- Current Page Indicator (Example for page 2 of 5) -->
+          <li class="page-item active" aria-current="page">
+            <span class="page-link">{{current_page}} / {{end_page}}</span>
+          </li>
+          <!-- Next Page Button -->
+          <li class="page-item {% if not has_next %} disabled {% endif %}">
+            <a
+              class="page-link"
+              href="/dataset/browse?page={{next}}&count={{count}}"
+              aria-label="Next"
+              ><strong>&rsaquo;</strong></a
+            >
+          </li>
+          <!-- Last Page Button -->
+          <li class="page-item">
+            <a
+              class="page-link"
+              href="/dataset/browse?page={{end_page}}&count={{count}}"
+              aria-label="Last"
+              >Last</a
+            >
+          </li>
+        </ul>
+      </nav>
+    </div>
+  </div>
+</div>
+
+<!-- Pagination Script -->
+<script>
+  function handlePageChange(event) {
+    event.preventDefault();
+    window.location.href =
+      window.location.pathname + "?count=" + event.target.value;
+  }
+
+  function viewDetail(id) {
+    window.location.href = "/dataset/browse/" + id;
+  }
+</script>
+{% endblock %}

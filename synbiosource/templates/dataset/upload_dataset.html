@@ -4,6 +4,22 @@
     <h1 class="text-center padding">Upload Datasets</h1>
     <div class="line"></div>
 
+    <!-- Upload Alert -->
+    {% if upload %}
+    <div class="alert alert-info alert-dismissible fade show" role="alert">
+      <div class="text-center">
+        <i class="bi bi-check"></i>
+        <strong>Your dataset has been successfully uploaded.</strong>
+      </div>
+      <button
+        type="button"
+        class="btn-close"
+        data-bs-dismiss="alert"
+        aria-label="Close"
+      ></button>
+    </div>
+    {% endif %}
+
     <!-- Upload Section -->
     <form method="post" enctype="multipart/form-data" class="container mb-5">
       {% csrf_token %}
@@ -70,7 +86,7 @@
             data-bs-smooth-scroll="true"
             class="uploadInstructions"
             tabindex="0"
-            style="height: 400px; overflow-y: auto"
+            style="height: 800px; overflow-y: auto"
           >
             <h4 id="item-1">Item 1</h4>
             <p>...</p>
@@ -101,41 +117,37 @@
     const defaultText = parentDiv.querySelector("p");
     const defaultIcon = parentDiv.querySelector("i");
 
-    if (input.files.length > 0) {
+    if (input.files && input.files[0]) {
       const file = input.files[0];
-      const isZip = file.name.endsWith(".zip"); // Check if the uploaded file is a ZIP
-      const iconClass = isZip ? "bi-file-zip" : "bi-file-earmark-text"; // Choose icon based on file type
+      let iconClass = file.name.endsWith(".zip")
+        ? "bi-file-earmark-zip"
+        : "bi-file-earmark-text";
 
-      // Hide default text and icon
+      // Update the display for file info
+      infoDiv.innerHTML = `<div class="file-display d-flex flex-column align-items-center justify-content-center">
+                                  <i class="bi ${iconClass} mb-2"></i>
+                                  <span>${file.name}</span>
+                               </div>`;
+
+      // Style adjustments
+      infoDiv.style.position = "absolute";
+      infoDiv.style.top = "50%";
+      infoDiv.style.left = "50%";
+      infoDiv.style.transform = "translate(-50%, -50%)";
+      infoDiv.style.textAlign = "center";
+
+      // Hide the default text and icon
       defaultText.style.display = "none";
       defaultIcon.style.display = "none";
 
-      // Display uploaded file name, appropriate icon, and a cross for removal
-      infoDiv.innerHTML = `<div class="file-info" style="position: relative; text-align: center;">
-                              <i class="bi ${iconClass}"></i>
-                              <span>${file.name}</span>
-                              <button class="btn-clear" style="position: absolute; right: 0; top: 0;" onclick="clearFile('${input.id}', '${infoId}')">×</button>
-                            </div>`;
-
       parentDiv.classList.add("file-uploaded");
     } else {
-      clearFile(input.id, infoId); // Call clearFile if no file is uploaded to reset
+      // Reset to default if no file is selected
+      defaultText.style.display = "";
+      defaultIcon.style.display = "";
+      infoDiv.innerHTML = "";
+      parentDiv.classList.remove("file-uploaded");
     }
-  }
-
-  function clearFile(inputId, infoId) {
-    const input = document.getElementById(inputId);
-    const infoDiv = document.getElementById(infoId);
-    const parentDiv = input.closest(".drag-area");
-    const defaultText = parentDiv.querySelector("p");
-    const defaultIcon = parentDiv.querySelector("i");
-
-    // Reset everything to default
-    input.value = "";
-    infoDiv.innerHTML = "";
-    defaultText.style.display = "";
-    defaultIcon.style.display = "";
-    parentDiv.classList.remove("file-uploaded");
   }
 </script>
 

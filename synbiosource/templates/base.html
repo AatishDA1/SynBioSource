@@ -67,7 +67,11 @@
                 Datasets
               </a>
               <ul class="dropdown-menu">
-                <li><a class="dropdown-item" href="#">Browse</a></li>
+                <li>
+                  <a class="dropdown-item" href="{% url 'browse-datasets' %}"
+                    >Browse</a
+                  >
+                </li>
                 <li>
                   <a class="dropdown-item" href="{% url 'upload-dataset' %}"
                     >Upload</a
@@ -91,7 +95,11 @@
                 Datasets
               </a>
               <ul class="dropdown-menu">
-                <li><a class="dropdown-item" href="#">Browse</a></li>
+                <li>
+                  <a class="dropdown-item" href="{% url 'browse-datasets' %}"
+                    >Browse</a
+                  >
+                </li>
                 <li>
                   <a class="dropdown-item" href="{% url 'login' %}">Upload</a>
                 </li>
@@ -105,12 +113,7 @@
             </li>
             {% endif %} {% if user.is_authenticated %}
             <li class="nav-item">
-              <form method="POST">
-                {% csrf_token %}
-                <button class="nav-link" type="submit" href="{% url 'home' %}">
-                  Logout
-                </button>
-              </form>
+              <a class="nav-link" href="{% url 'logout' %}"> Logout </a>
             </li>
             {% else %}
             <li class="nav-item">

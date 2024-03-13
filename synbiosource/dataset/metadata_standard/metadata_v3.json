@@ -1,0 +1,68 @@
+{
+  "basic_identity": {
+    "title": "Mandatory - Title of the Dataset.",
+    "organization": "Optional - Name of the organization associated with the author, if applicable.",
+    "description": "Mandatory - A detailed description of the dataset and its contents.",
+    "version": "Mandatory - Version of the dataset, if applicable.",
+    "keywords": "Mandatory - Minimum of 3 keywords related to this dataset in the format of keyword1, keyword2, keyword3..."
+  },
+  "related_publication": "Optional - Any papers related to the dataset's creation or use",
+  "usage": {
+    "license": "Mandatory - Type of license under which the dataset is distributed.",
+    "format": "Mandatory - Format of the dataset (e.g., CSV, JPEG, MP4, WAV, etc.).",
+    "size": "Mandatory - Size of the dataset, typically in MB or GB."
+  },
+  "format_details": {
+    "csv": {
+      "number_of_rows": "Mandatory - Total number of rows in the CSV file",
+      "number_of_columns": "Mandatory - Total number of columns in the CSV file",
+      "columns": [
+        {
+          "header": "Mandatory - Name of the column",
+          "description": "Mandatory - Description of the data each column holds",
+          "type": "Mandatory - Data type of the column (integer, string, date, etc.)"
+        }
+      ]
+    },
+    "image": {
+      "number_of_images": "Mandatory - Total number of images in the dataset.",
+      "resolution": "Optional - Resolution of the images (e.g., 1920x1080).",
+      "image_format": "Optional - File format of the images (e.g., JPEG, PNG)."
+    },
+    "video": {
+      "number_of_videos": "Mandatory - Total number of videos in the dataset.",
+      "average_length": "Optional - Average length of the videos (in minutes or seconds).",
+      "video_format": "Optional - File format of the videos (e.g., MP4, AVI).",
+      "resolution": "Optional - Resolution of the videos (e.g., 1920x1080)."
+    },
+    "audio": {
+      "number_of_audio_files": "Mandatory - Total number of audio files in the dataset.",
+      "average_length": "Optional - Average length of the audio files (in minutes or seconds).",
+      "audio_format": "Optional - File format of the audio files (e.g., MP3, WAV)."
+    },
+    "fasta": {
+      "number_of_files": "Mandatory - Total number of FASTA files",
+      "source_organisms": "Mandatory - List of source organisms or taxonomic identifiers",
+      "type_of_sequences": "Mandatory - Types of sequences, e.g., DNA, RNA, protein",
+      "sequence_length_range": "Mandatory - Range of sequence lengths, from shortest to longest"
+    },
+    "genbank": {
+      "number_of_files": "Mandatory - Total number of GenBank files",
+      "locus": "Mandatory - A brief summary including sequence length, molecule type, shape, and the date of the entry's creation or last modification",
+      "definition": "Mandatory - A concise description of the sequence",
+      "accession": "Mandatory - The primary accession number that identifies the sequence",
+      "source": "Mandatory - The biological source of the sequence",
+      "organism": "Mandatory - The taxonomic hierarchical classification of the source organism"
+    }
+  },
+  "related_datasets": {
+    "related_dataset_ids": ["Optional - Identifier of related datasets."]
+  },
+  "usage_examples": {
+    "description": "Optional - Brief description of a usage example.",
+    "example_url": "Optional - URL to more detailed information or code example."
+  },
+  "citation": {
+    "citation_text": "Optional - Recommended citation for the dataset."
+  }
+}

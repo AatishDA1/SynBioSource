@@ -1,0 +1,160 @@
+{% extends "base.html" %} {% block content %}
+<div class="main-content">
+  <div class="container mt-5">
+    <h1 class="text-center padding">
+      Edit {{datasetInfo.metadata_file.basic_identity.title}}
+    </h1>
+    <div class="line"></div>
+
+    <!-- Upload Alert -->
+    {% if edited %}
+    <div class="alert alert-info alert-dismissible fade show" role="alert">
+      <div class="text-center">
+        <i class="bi bi-check"></i>
+        <strong>Your dataset has been successfully edited.</strong>
+      </div>
+      <button
+        type="button"
+        class="btn-close"
+        data-bs-dismiss="alert"
+        aria-label="Close"
+      ></button>
+    </div>
+    {% endif %}
+
+    <!-- Edit Section -->
+    <form method="post" enctype="multipart/form-data" class="container mb-5">
+      {% csrf_token %}
+      <div class="row">
+        <!-- Dataset ZIP File Upload -->
+        <div class="col-md-6">
+          <div class="drag-area" id="datasetFileInput">
+            <i class="bi bi-file-earmark-zip" aria-hidden="true"></i>
+            <p>
+              Drag and Drop Dataset ZIP File Here or <b>Browse</b> to replace
+              {{datasetInfo.dataset_file}}
+            </p>
+            <input
+              type="file"
+              class="file-input"
+              accept=".zip"
+              onchange="updateFileInfo(this, 'zip-info')"
+              name="dataset-file"
+            />
+            <div class="upload-info" id="zip-info"></div>
+          </div>
+        </div>
+        <!-- Metadata JSON File Upload -->
+        <div class="col-md-6">
+          <div class="drag-area" id="jsonFileInput">
+            <i class="bi bi-file-earmark-text" aria-hidden="true"></i>
+            <p>
+              Drag and Drop Metadata JSON File Here or <b>Browse</b> to replace
+              the existing file.
+            </p>
+            <input
+              type="file"
+              class="file-input"
+              accept=".json"
+              onchange="updateFileInfo(this, 'json-info')"
+              name="json-file"
+            />
+            <div class="upload-info" id="json-info"></div>
+          </div>
+        </div>
+        <button type="submit" class="btn btn-submit mt-3">Submit</button>
+      </div>
+    </form>
+
+    <!-- Instruction Box -->
+    <div id="uploadInstructions" class="bg-light p-5 rounded">
+      <h2 class="text-center">Instructions</h2>
+      <div class="row">
+        <div class="col-4">
+          <div
+            id="instructions-navbar"
+            class="nav-pills flex-column sticky-top"
+            style="top: 20px"
+          >
+            <a class="nav-link" href="#item-1">Item 1</a>
+            <a class="nav-link ms-3 my-1" href="#item-1-1">Item 1-1</a>
+            <a class="nav-link ms-3 my-1" href="#item-1-2">Item 1-2</a>
+            <a class="nav-link" href="#item-2">Item 2</a>
+            <a class="nav-link" href="#item-3">Item 3</a>
+            <a class="nav-link ms-3 my-1" href="#item-3-1">Item 3-1</a>
+            <a class="nav-link ms-3 my-1" href="#item-3-2">Item 3-2</a>
+          </div>
+        </div>
+        <div class="col-8">
+          <div
+            data-bs-spy="scroll"
+            data-bs-target="#instructions-navbar"
+            data-bs-smooth-scroll="true"
+            class="uploadInstructions"
+            tabindex="0"
+            style="height: 800px; overflow-y: auto"
+          >
+            <h4 id="item-1">Item 1</h4>
+            <p>...</p>
+            <h5 id="item-1-1">Item 1-1</h5>
+            <p>...</p>
+            <h5 id="item-1-2">Item 1-2</h5>
+            <p>...</p>
+            <h4 id="item-2">Item 2</h4>
+            <p>...</p>
+            <h4 id="item-3">Item 3</h4>
+            <p>...</p>
+            <h5 id="item-3-1">Item 3-1</h5>
+            <p>...</p>
+            <h5 id="item-3-2">Item 3-2</h5>
+            <p>...</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Upload Boxes Script -->
+<script>
+  function updateFileInfo(input, infoId) {
+    const infoDiv = document.getElementById(infoId);
+    const parentDiv = input.closest(".drag-area");
+    const defaultText = parentDiv.querySelector("p");
+    const defaultIcon = parentDiv.querySelector("i");
+
+    if (input.files && input.files[0]) {
+      const file = input.files[0];
+      let iconClass = file.name.endsWith(".zip")
+        ? "bi-file-earmark-zip"
+        : "bi-file-earmark-text";
+
+      // Update the display for file info
+      infoDiv.innerHTML = `<div class="file-display d-flex flex-column align-items-center justify-content-center">
+                                  <i class="bi ${iconClass} mb-2"></i>
+                                  <span>${file.name}</span>
+                               </div>`;
+
+      // Style adjustments
+      infoDiv.style.position = "absolute";
+      infoDiv.style.top = "50%";
+      infoDiv.style.left = "50%";
+      infoDiv.style.transform = "translate(-50%, -50%)";
+      infoDiv.style.textAlign = "center";
+
+      // Hide the default text and icon
+      defaultText.style.display = "none";
+      defaultIcon.style.display = "none";
+
+      parentDiv.classList.add("file-uploaded");
+    } else {
+      // Reset to default if no file is selected
+      defaultText.style.display = "";
+      defaultIcon.style.display = "";
+      infoDiv.innerHTML = "";
+      parentDiv.classList.remove("file-uploaded");
+    }
+  }
+</script>
+
+{% endblock %}

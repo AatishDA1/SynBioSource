@@ -1,0 +1,113 @@
+{% extends "base.html" %} {% block content %}
+<div class="main-content">
+  <div class="container mt-5">
+    <h1 class="text-center padding">
+      {{datasetInfo.metadata_file.basic_identity.title}}
+    </h1>
+    <div class="line"></div>
+
+    <!-- Core Information -->
+    <h4 class="text-center font-weight-bold mt-3">
+      By {{datasetInfo.owner.full_name}}
+    </h4>
+    <h5 class="text-center font-weight-bold mt-3">
+      {{datasetInfo.created_at}}
+    </h5>
+    <div class="text-center mb-4">
+      <a
+        type="button"
+        class="btn btn-login mt-3"
+        href="/dataset/browse/download/{{datasetInfo.id}}"
+      >
+        Download <i class="bi bi-download"></i>
+      </a>
+    </div>
+
+    <!-- Edit Option -->
+    {% if request.user.id == datasetInfo.owner.id %}
+    <div class="text-center mb-4">
+      <a
+        type="button"
+        class="btn btn-login mt-3"
+        href="/dataset/browse/edit/{{datasetInfo.id}}"
+      >
+        Edit <i class="bi bi-pen"></i>
+      </a>
+    </div>
+    <div class="text-center mb-4">
+      <a
+        type="button"
+        class="btn btn-login mt-3"
+        href="/dataset/browse/delete/{{datasetInfo.id}}"
+      >
+        Delete <i class="bi bi-trash"></i>
+      </a>
+    </div>
+    {% elif request.user.is_moderator %}
+    <div class="text-center mb-4">
+      <a
+        type="button"
+        class="btn btn-login mt-3"
+        href="/dataset/browse/edit/{{datasetInfo.id}}"
+      >
+        Edit <i class="bi bi-download"></i>
+      </a>
+    </div>
+    <div class="text-center mb-4">
+      <a
+        type="button"
+        class="btn btn-login mt-3"
+        href="/dataset/browse/delete/{{datasetInfo.id}}"
+      >
+        Delete <i class="bi bi-trash"></i>
+      </a>
+    </div>
+    {% endif %}
+
+    <!-- Viewing Section -->
+    <div id="uploadInstructions" class="bg-light p-5 rounded">
+      <div class="row">
+        <div class="col-4">
+          <div
+            id="instructions-navbar"
+            class="nav-pills flex-column sticky-top"
+            style="top: 20px"
+          >
+            <a class="nav-link" href="#item-1">Basic Info</a>
+            <a class="nav-link ms-3 my-1" href="#item-1-1">Description</a>
+            <a class="nav-link ms-3 my-1" href="#item-1-2">Item 1-2</a>
+            <a class="nav-link" href="#item-2">Item 2</a>
+            <a class="nav-link" href="#item-3">Item 3</a>
+            <a class="nav-link ms-3 my-1" href="#item-3-1">Item 3-1</a>
+            <a class="nav-link ms-3 my-1" href="#item-3-2">Item 3-2</a>
+          </div>
+        </div>
+        <div class="col-8">
+          <div
+            data-bs-spy="scroll"
+            data-bs-target="#instructions-navbar"
+            data-bs-smooth-scroll="true"
+            class="uploadInstructions"
+            tabindex="0"
+            style="height: 800px; overflow-y: auto"
+          >
+            <h4 id="item-1">Basic Info</h4>
+            <h5 id="item-1-1">Description</h5>
+            <p>{{datasetInfo.metadata_file.basic_identity.description}}</p>
+            <h5 id="item-1-2">Item 1-2</h5>
+            <p>...</p>
+            <h4 id="item-2">Item 2</h4>
+            <p>...</p>
+            <h4 id="item-3">Item 3</h4>
+            <p>...</p>
+            <h5 id="item-3-1">Item 3-1</h5>
+            <p>...</p>
+            <h5 id="item-3-2">Item 3-2</h5>
+            <p>...</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

@@ -7,6 +7,10 @@ h2 {
   margin: 20px auto;
 }
 
+h4 {
+  margin: 20px auto;
+}
+
 :root {
   --header-height: 80px;
   --footer-height: 60px;
@@ -305,6 +309,9 @@ h2 {
 }
 
 .upload-info {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   position: absolute;
   width: 100%;
   bottom: 10px;

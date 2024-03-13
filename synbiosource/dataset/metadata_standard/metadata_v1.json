@@ -10,7 +10,8 @@
     "description": "Mandatory - A detailed description of the dataset and its contents.",
     "version": "Optional - Version of the dataset, if applicable.",
     "creation_date": "Mandatory - Date when the dataset was created in the format YYYY-MM-DD.",
-    "last_updated": "Optional - Date when the dataset was last updated in the format YYYY-MM-DD."
+    "last_updated": "Optional - Date when the dataset was last updated in the format YYYY-MM-DD.",
+    "keywords": "Mandatory - Minimum of 3 keywords related to this dataset in the format of keyword1, keyword2, keyword3..."
   },
   "related_publication": "Optional - Any papers related to the dataset's creation or use",
   "usage": {

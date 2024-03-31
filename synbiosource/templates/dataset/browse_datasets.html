@@ -22,13 +22,22 @@
                 Go
               </button>
             </div>
-          </form>
+          
           <select class="form-select w-auto">
             <option selected>Sort by</option>
             <option value="1">Most Downloads</option>
             <option value="2">Newest</option>
             <option value="3">Alphabetical</option>
           </select>
+          <select name='file-format' class="form-select w-auto">
+            <option hidden>File type</option>
+            <option value="csv">CSV</option>
+            <option value="json">JSON</option>
+            <option value="FASTA">FASTA</option>
+            <option value="pdf">PDF</option>
+            <!-- Add other file types as needed -->
+          </select>
+        </form>
         </div>
         <!-- Pagination -->
         <div class="col-lg-3 mb-3">

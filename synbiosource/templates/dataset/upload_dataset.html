@@ -3,13 +3,15 @@
   <div class="container mt-5">
     <h1 class="text-center padding">Upload Datasets</h1>
     <div class="line"></div>
+    <!-- Error Messages -->
+    <div id="dynamic-error-section"></div>
 
     <!-- Upload Alert -->
-    {% if upload %}
+    {% if messages %} {% for message in messages %}
     <div class="alert alert-info alert-dismissible fade show" role="alert">
       <div class="text-center">
         <i class="bi bi-check"></i>
-        <strong>Your dataset has been successfully uploaded.</strong>
+        <strong>{{ message }}</strong>
       </div>
       <button
         type="button"
@@ -18,7 +20,7 @@
         aria-label="Close"
       ></button>
     </div>
-    {% endif %}
+    {% endfor %} {% endif %}
 
     <!-- Upload Section -->
     <form method="post" enctype="multipart/form-data" class="container mb-5">
@@ -32,11 +34,15 @@
             <input
               type="file"
               class="file-input"
-              accept=".zip"
-              onchange="updateFileInfo(this, 'zip-info')"
+              id="file-input"
               name="dataset-file"
+              onchange="updateFileInfo(this, 'zip-info')"
+              webkitdirectory
+              directory
+              multiple
               required
             />
+            <input type="text" id="directories" name="directories" hidden />
             <div class="upload-info" id="zip-info"></div>
           </div>
         </div>
@@ -49,7 +55,8 @@
               type="file"
               class="file-input"
               accept=".json"
-              onchange="updateFileInfo(this, 'json-info')"
+              onchange="readJSON(event)"
+              id="json-file"
               name="json-file"
               required
             />
@@ -108,6 +115,95 @@
     </div>
   </div>
 </div>
+
+<!-- File Hierarchy Storage Script -->
+<script>
+  files = document.querySelector("#file-input").files;
+  document.querySelector("#file-input").addEventListener("change", function () {
+    files = document.querySelector("#file-input").files;
+    var directories = {};
+    for (var file of files) {
+      file.webkitRelativePath;
+      directories[file.name] = file.webkitRelativePath;
+    }
+    directories = JSON.stringify(directories);
+    console.log(directories);
+
+    document.querySelector("#directories").value = directories;
+  });
+</script>
+
+<!-- JSON Validation Script -->
+<script>
+  function readJSON() {
+    const fileInput = document.getElementById("json-file");
+    const file = fileInput.files[0];
+
+    const reader = new FileReader();
+
+    reader.onload = function (event) {
+      const fileContent = event.target.result;
+
+      // Clear previous errors.
+      document.getElementById("dynamic-error-section").innerHTML = "";
+
+      try {
+        const jsonObj = JSON.parse(fileContent);
+
+        if (validateJSON(jsonObj)) {
+          updateFileInfo(fileInput, "json-info");
+          return true;
+        } else {
+          return false;
+        }
+      } catch (e) {
+        console.log(e);
+        document.getElementById("dynamic-error-section").insertAdjacentHTML(
+          "beforeend",
+          `
+              <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                <i class="bi bi-exclamation-triangle-fill"></i>
+                <strong>Could not parse the JSON File, please ensure the format is correct.</strong>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+              </div>
+            `
+        );
+
+        return false;
+      }
+    };
+
+    reader.readAsText(file);
+  }
+
+  function validateJSON(obj) {
+    let errors = [];
+
+    if (!obj.basic_identity?.title) {
+      errors.push("Your dataset metadata is missing the Title");
+    }
+
+    if (errors.length > 0) {
+      errors.forEach((error) => {
+        document.getElementById("dynamic-error-section").insertAdjacentHTML(
+          "beforeend",
+          `
+          <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <i class="bi bi-exclamation-triangle-fill"></i>
+            <strong>${error}</strong>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+          </div>
+        `
+        );
+      });
+
+      // Clears input field if the value is incorrect.
+      document.getElementById("json-file").value = "";
+      return false;
+    }
+    return true;
+  }
+</script>
 
 <!-- Upload Boxes Script -->
 <script>

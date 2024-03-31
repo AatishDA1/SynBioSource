@@ -174,3 +174,6 @@ else:
     STATIC_ROOT = os.path.join(BASE_DIR, 's3_staticfiles')
     MEDIA_URL = '/mediafiles/'
     MEDIA_ROOT = os.path.join(BASE_DIR, 'mediafiles')
+
+
+DATA_UPLOAD_MAX_NUMBER_FILES=500

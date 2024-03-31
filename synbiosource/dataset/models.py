@@ -16,7 +16,7 @@ class DatasetRegistry(models.Model):
         """Function to return the name of the datasets selected to the admin panel."""
         if "basic_identity" not in self.metadata_file:
             return "no name"+str(self.id)
-        return self.metadata_file['basic_identity']['title']
+        return str(self.id)+" "+self.metadata_file['basic_identity']['title']
     
 class Keyword(models.Model):
     """Class to store all the keywords from the datasets."""

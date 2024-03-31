@@ -2,28 +2,64 @@ from django.shortcuts import render,redirect
 from .models import DatasetRegistry,Keyword
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
-import json
 from django.db.models import Q
+from django.core.files.base import ContentFile
+from django.core.files.storage import default_storage
+from django.contrib import messages
+from django.http import HttpResponseRedirect
+from django.conf import settings
+import os
+import json
+import zipfile
+import io
+import time
 
-# Create your views here.
+def upload_and_zip_folder(request, mapper, metadata):
+    """Function to create a zip file from the uploaded dataset folder."""
+    # Creates an in-memory BytesIO object to hold the ZIP file.
+    in_memory_zip = io.BytesIO()
+    
+    # Creates a ZIP file.
+    with zipfile.ZipFile(in_memory_zip, 'w', zipfile.ZIP_DEFLATED) as zf:
+        # Adds the metadata to the ZIP
+        zf.writestr('metadata.json', json.dumps(metadata).encode('utf-8'))
+        
+        # Loops through each file uploaded in the request.
+        for file in request.FILES.getlist('dataset-file'):
+            file_content = file.read()
+            # Writes each file to the ZIP, using the mapper for the file name.
+            zf.writestr(mapper[file.name], file_content)
+    
+    # Resets the pointer of the in-memory ZIP file.
+    in_memory_zip.seek(0)
+    
+    # Generates a unique filename for the ZIP file.
+    zip_filename = str(list(mapper.keys())[0]) + str(time.time()) + ".zip"
+    
+    # Saves the ZIP file to the default storage under the 'dataset/' directory in the S3 Bucket.
+    path = default_storage.save("dataset/" + zip_filename, ContentFile(in_memory_zip.read()))
+    
+    # Returns the path where the ZIP file was saved
+    return path
+
 @login_required(login_url='/login')
 def UploadDataset(request):
     """Function to allow users to upload datasets and prevent them from accessing the page if they aren't logged in."""
     # Handles file upload on POST request.
     if request.method == "POST":
-        # Retrieves files from the POST request.
-        dataset_file=request.FILES.get("dataset-file")
+        mapper=json.loads(request.POST.get("directories"))
         json_file=request.FILES.get("json-file")
 
         # Reads and parses the JSON file.
         json_data=json_file.read()
         metadata=json.loads(json_data)
-
+        metadata['folder_structure'] = mapper   
+        path=upload_and_zip_folder(request,mapper,metadata)
         # Creates a new DatasetRegistry entry with the uploaded files and parsed metadata.
         data=DatasetRegistry.objects.create(
             owner=request.user,
-            dataset_file=dataset_file,
-            metadata_file= json.loads(json_data)
+            dataset_file=path,
+            metadata_file= metadata
         )
         
         # Processes and stores keywords from the metadata if they exist.
@@ -39,7 +75,8 @@ def UploadDataset(request):
                     Keyword.objects.create(name=keyword,dataset_count=1)
 
         # Renders the upload page with a success message.
-        return render(request,'dataset/upload_dataset.html',{"upload":True}) 
+        messages.success(request,'Your dataset has been successfully uploaded.')
+        return HttpResponseRedirect('/dataset/upload') 
 
     # Renders the upload page for GET requests or initial page load.
     return render(request,'dataset/upload_dataset.html')  
@@ -48,20 +85,29 @@ def BrowseDatasets(request):
     """Function to allow users to browse the datasets, with dynamic queries to prevent the web-app overloading."""
     datasets=[]
     keyword=''
+    format=''
     
-    # Handles keyword extraction from POST or GET request.
+    # Handles keyword or file format extraction from POST or GET request.
+    print(request.POST)
     if request.method=='POST':
         keyword=request.POST.get('keyword')
+        format=request.POST.get('file-format') 
 
     if  request.method=='GET' and keyword=='':
-         keyword=request.GET.get('keyword')
-    
-    # Filters datasets based on the title or keywords.
-    if keyword=='' or keyword == None:
+         keyword=request.GET.get('keyword') or ''
+    print('keyword==>',keyword,'format==>',format)
+    # Filters datasets based on the title, keywords or Format.
+    if   keyword == '' and format == '':
          datasets=DatasetRegistry.objects.all().order_by('id')
     else:
-         datasets=DatasetRegistry.objects.filter(Q(metadata_file__basic_identity__title__icontains=keyword)|
-                                                 Q(metadata_file__basic_identity__keywords__icontains=keyword)).order_by('id')
+         query=Q()
+         if keyword:
+             query|=Q(metadata_file__basic_identity__title__icontains=keyword)
+             query|=Q(metadata_file__basic_identity__keywords__icontains=keyword)
+         if format:
+             query|=Q(metadata_file__usage__format__icontains=format)
+         print("final query==>",query)
+         datasets=DatasetRegistry.objects.filter(query).order_by('id')
     
     # Handles pagination.
     count="10"
@@ -74,6 +120,9 @@ def BrowseDatasets(request):
     selected_datasets = paginator.get_page(page_num)
 
     # Retrieves top keywords for display in the filter section.
+    #found_dataset_keyword=datasets.extra(select={"keywords":"metadata_file->>'basic_identity__keywords'"}).values('keywords').values('keywords')
+    #found_dataset_keyword=datasets.annotate(keywords=instance)
+    #print(found_dataset_keyword)
     keywords=Keyword.objects.filter().order_by('-dataset_count')[:10]
 
     # Renders the browsing page with the selected datasets and pagination controls.

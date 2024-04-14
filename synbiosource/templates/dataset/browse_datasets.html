@@ -7,72 +7,426 @@
     <!-- Filtering Section -->
     <div class="filter-box">
       <h4 class="mb-3">Filter Options</h4>
+      <p class="text-muted">Enter your search criteria and click 'Search' to filter datasets. You can also refine your search by clicking on the keywords at the bottom.</p>
       <div class="row">
-        <div class="col-lg-9 mb-3 d-flex">
-          <form method="post" class="flex-grow-1 me-2">
+        <div class="col-lg-12 mb-3">
+          <form method="post" class="d-flex flex-wrap align-items-center" style="gap: 0.5rem 1rem">
             {% csrf_token %}
-            <div class="input-group">
+            <!-- General -->
+            <h5 class="mb-3 w-100">General</h5>
+            <div class="input-group flex-grow-1" style="max-width: 53%;">
               <input
                 type="text"
                 class="form-control"
-                placeholder="Search datasets..."
+                placeholder="Search datasets based on their Title or Keywords..."
                 name="keyword"
               />
-              <button class="btn btn-outline-secondary btn-sm" type="submit">
-                Go
-              </button>
             </div>
-          
-          <select class="form-select w-auto">
-            <option selected>Sort by</option>
-            <option value="1">Most Downloads</option>
-            <option value="2">Newest</option>
-            <option value="3">Alphabetical</option>
-          </select>
-          <select name='file-format' class="form-select w-auto">
-            <option hidden>File type</option>
-            <option value="csv">CSV</option>
-            <option value="json">JSON</option>
-            <option value="FASTA">FASTA</option>
-            <option value="pdf">PDF</option>
-            <!-- Add other file types as needed -->
-          </select>
-        </form>
-        </div>
-        <!-- Pagination -->
-        <div class="col-lg-3 mb-3">
-          <select class="form-select" onchange="handlePageChange(event)" id="entriesPerPage">
-            <option value="5" {% if count == "5" %} selected {% endif %}>5 per page</option>
-            <option value="10" {% if count == "10" %} selected {% endif %}>10 per page</option>
-            <option value="20" {% if count == "20" %} selected {% endif %}>20 per page</option>
-            <option value="50" {% if count == "50" %} selected {% endif %}>50 per page</option>
-          </select>
-        </div>
-        <!-- Keywords Section with Collapsible Feature -->
-        <div class="col-lg-12 mb-3">
-          <div class="d-flex justify-content-between align-items-center">
-            <h5>Keywords</h5>
-            <button
-              class="btn btn-outline-secondary"
-              data-bs-toggle="collapse"
-              href="#collapseKeywords"
-              aria-expanded="false"
-              aria-controls="collapseKeywords"
-            >
-              <i class="bi bi-chevron-down"></i>
+            <select class="form-select" name="sort" style="width: 22%;">
+              <option selected>Sort by</option>
+              <option value="1">Most Downloads</option>
+              <option value="2">Newest</option>
+              <option value="3">Alphabetical</option>
+            </select>
+            <select class="form-select" onchange="handlePageChange(event)" id="entriesPerPage" style="width: 22%;">
+              <option value="5" {% if count == "5" %} selected {% endif %}>5 per page</option>
+              <option value="10" {% if count == "10" %} selected {% endif %}>10 per page</option>
+              <option value="20" {% if count == "20" %} selected {% endif %}>20 per page</option>
+              <option value="50" {% if count == "50" %} selected {% endif %}>50 per page</option>
+            </select>
+            <div class="w-100 mt-2"></div> <!-- This creates a new line -->
+            
+            <!-- Dataset Creation & Preprocessing -->
+            <div class="w-100 mt-2"></div>
+            <h5 class="mb-3 w-100">Dataset Creation & Preprocessing</h5>
+            <select name="data_origin" class="form-select" style="width: 49%;">
+              <option hidden value="">Data Origin</option>
+              <option value="Synthetically Generated">Synthetically Generated</option>
+              <option value="Naturally Obtained">Naturally Obtained</option>
+              <option value="Other">Other</option>
+            </select>
+            <select name="dataset_status" class="form-select" style="width: 49%;">
+              <option hidden value="">Dataset Status</option>
+              <option value="Complete">Complete</option>
+              <option value="In Progress">In Progress</option>
+              <option value="Abandoned & Incomplete">Abandoned & Incomplete</option>
+              <option value="Other">Other</option>
+            </select>
+            <select name="data_cleanliness" class="form-select" style="width: 49%;">
+              <option hidden value="">Data Cleanliness</option>
+              <option value="Clean">Clean</option>
+              <option value="Partially Clean">Partially Clean</option>
+              <option value="Unclean">Unclean</option>
+              <option value="N/A">N/A</option>
+            </select>
+            <select name="labeled" class="form-select" style="width: 49%;">
+              <option hidden value="">Labeled</option>
+              <option value="Yes">Yes</option>
+              <option value="No">No</option>
+              <option value="N/A">N/A</option>
+            </select>
+            <input
+              type="number"
+              min="0"
+              max="100"
+              class="form-control"
+              placeholder="Training Split (%)"
+              name="train_split"
+              style="width: 32.25%;"
+            />
+            <input
+              type="number"
+              min="0"
+              max="100"
+              class="form-control"
+              placeholder="Validation Split (%)"
+              name="validation_split"
+              style="width: 32.25%;"
+            />
+            <input
+              type="number"
+              min="0"
+              max="100"
+              class="form-control"
+              placeholder="Test Split (%)"
+              name="test_split"
+              style="width: 32.25%;"
+            />
+
+            <!-- Dataset Composition -->
+            <div class="w-100 mt-2"></div>
+            <h5 class="mb-3 w-100">Dataset Composition</h5>
+            <select name="file-format" class="form-select" style="width: 49%;" id="file-format" onchange="toggleFileTypeOptions()">
+              <option hidden value="">File type</option>
+              <option value="CSV">CSV</option>
+              <option value="Excel">Excel</option>
+              <option value="Image">Image</option>
+              <option value="Video">Video</option>
+              <option value="Audio">Audio</option>
+              <option value="FASTA">FASTA</option>
+              <option value="GenBank">GenBank</option>
+              <option value="Text">Text</option>
+              <option value="PDF">PDF</option>
+              <option value="Other">Other</option>
+            </select>
+            <input
+              type="number"
+              min="0"
+              class="form-control"
+              placeholder="Minimum Dataset Size (KB)"
+              name="min_dataset_size"
+              style="width: 24%;"
+            />
+            <input
+              type="number"
+              min="0"
+              class="form-control"
+              placeholder="Maximum Dataset Size (KB)"
+              name="max_dataset_size"
+              style="width: 24%;"
+            />
+            <input
+              type="number"
+              min="0"
+              class="form-control"
+              placeholder="Minimum Number of Files"
+              name="min_number_of_files"
+              style="width: 23.9%;"
+            />
+            <input
+              type="number"
+              min="0"
+              class="form-control"
+              placeholder="Maximum Number of Files"
+              name="max_number_of_files"
+              style="width: 23.9%;"
+            />
+            <input
+              type="number"
+              min="0"
+              class="form-control"
+              placeholder="Minimum Average File Size (KB)"
+              name="min_average_file_size"
+              style="width: 24%;"
+            />
+            <input
+              type="number"
+              min="0"
+              class="form-control"
+              placeholder="Maximum Average File Size (KB)"
+              name="max_average_file_size"
+              style="width: 24%;"
+            />
+            <div class="w-100 mt-2"></div>
+            
+            <!-- CSV Options -->
+            <div class="CSV file-type-options w-100 mt-2" style="display: none;">
+              <h5 class="mb-3">CSV Options</h5>
+              <div class="d-flex flex-wrap" style="gap: 0.5rem 1rem">
+                <select name="delimiter" class="form-select" style="width: 49%;">
+                  <option hidden value="">Delimiter</option>
+                  <option value="Comma">Comma</option>
+                  <option value="Colon">Colon</option>
+                  <option value="Semicolon">Semicolon</option>
+                  <option value="Other">Other</option>
+                </select>
+                <select name="has_header" class="form-select" style="width: 49%;">
+                  <option hidden value="">Has Header</option>
+                  <option value="Yes">Yes</option>
+                  <option value="No">No</option>
+                </select>
+              </div>
+            </div>         
+
+            <!-- Excel Options -->
+            <div class="Excel file-type-options w-100 mt-2" style="display: none;">
+              <h5 class="mb-3 w-100">Excel Options</h5>
+              <div class="d-flex flex-wrap" style="gap: 0.5rem 1rem">
+                <select name="has_macros" class="form-select" style="width: 49%;">
+                  <option hidden value="">Has Macros</option>
+                  <option value="Yes">Yes</option>
+                  <option value="No">No</option>
+                </select>
+                <input
+                  type="number"
+                  min="0"
+                  class="form-control"
+                  placeholder="Average Sheets"
+                  name="average_sheets"
+                  style="width: 49%;"
+                />
+              </div>  
+            </div>
+
+            <!-- Image Options -->
+            <div class="Image file-type-options w-100 mt-2" style="display: none;">
+              <h5 class="mb-3 w-100">Image Options</h5>
+              <div class="d-flex flex-wrap" style="gap: 0.5rem 1rem">
+                <select name="image_file_type" class="form-select" style="width: 49%;">
+                  <option hidden value="">File Type</option>
+                  <option value="JPEG">JPEG</option>
+                  <option value="PNG">PNG</option>
+                  <option value="GIF">GIF</option>
+                  <option value="TIFF">TIFF</option>
+                  <option value="BMP">BMP</option>
+                  <option value="Other">Other</option>
+                </select>
+                <input
+                  type="number"
+                  step="0.01"
+                  class="form-control"
+                  min="0"
+                  placeholder="Average Resolution (MP)"
+                  name="average_resolution"
+                  style="width: 49%;"
+                />
+                <select name="color_mode" class="form-select" style="width: 49%;">
+                  <option hidden value="">Color Mode</option>
+                  <option value="RGB">RGB</option>
+                  <option value="CMYK">CMYK</option>
+                  <option value="Grayscale">Grayscale</option>
+                  <option value="Other">Other</option>
+                </select>
+                <input
+                  type="text"
+                  class="form-control"
+                  placeholder="Image Processing"
+                  name="image_processing"
+                  style="width: 49%;"
+                />
+              </div>
+            </div>
+
+            <!-- Video Options -->
+            <div class="Video file-type-options w-100 mt-2" style="display: none;">
+              <h5 class="mb-3 w-100">Video Options</h5>
+              <div class="d-flex flex-wrap" style="gap: 0.5rem 1rem">
+                <select name="video_file_type" class="form-select" style="width: 49%;">
+                  <option hidden value="">File Type</option>
+                  <option value="MP4">MP4</option>
+                  <option value="AVI">AVI</option>
+                  <option value="MOV">MOV</option>
+                  <option value="WMV">WMV</option>
+                  <option value="MKV">MKV</option>
+                  <option value="Other">Other</option>
+                </select>
+                <input
+                  type="number"
+                  step="0.1"
+                  class="form-control"
+                  min="0"
+                  placeholder="Average Duration (min)"
+                  name="video_average_duration"
+                  style="width: 49%;"
+                />
+                <select name="video_resolution" class="form-select" style="width: 49%;">
+                  <option hidden value="">Resolution</option>
+                  <option value="Lower than SD">Lower than SD</option>
+                  <option value="SD">SD</option>
+                  <option value="HD">HD</option>
+                  <option value="Full HD">Full HD</option>
+                  <option value="2K">2K</option>
+                  <option value="4K">4K</option>
+                  <option value="8K">8K</option>
+                  <option value="Greater than 8K">Greater than 8K</option>
+                </select>
+                <input
+                  type="text"
+                  class="form-control"
+                  placeholder="Video Processing"
+                  name="video_processing"
+                  style="width: 49%;"
+                />
+              </div>
+            </div>
+
+            <!-- Audio Options -->
+            <div class="Audio file-type-options w-100 mt-2" style="display: none;">
+              <h5 class="mb-3 w-100">Audio Options</h5>
+              <div class="d-flex flex-wrap" style="gap: 0.5rem 1rem">
+                <select name="audio_file_type" class="form-select" style="width: 49%;">
+                  <option hidden value="">File Type</option>
+                  <option value="MP3">MP3</option>
+                  <option value="WAV">WAV</option>
+                  <option value="AAC">AAC</option>
+                  <option value="FLAC">FLAC</option>
+                  <option value="OGG">OGG</option>
+                  <option value="Other">Other</option>
+                </select>
+                <input
+                  type="number"
+                  step="0.1"
+                  class="form-control"
+                  min="0"
+                  placeholder="Average Duration (min)"
+                  name="audio_average_duration"
+                  style="width: 49%;"
+                />
+                <input
+                  type="number"
+                  step="0.1"
+                  class="form-control"
+                  min="0"
+                  placeholder="Average Bitrate (bps)"
+                  name="average_bitrate"
+                  style="width: 49%;"
+                />
+                <input
+                  type="text"
+                  class="form-control"
+                  placeholder="Audio Processing"
+                  name="audio_processing"
+                  style="width: 49%;"
+                />
+              </div>
+            </div>
+
+            <!-- FASTA Options -->
+            <div class="FASTA file-type-options w-100 mt-2" style="display: none;">
+              <h5 class="mb-3 w-100">FASTA Options</h5>
+              <div class="d-flex flex-wrap" style="gap: 0.5rem 1rem">
+                <select name="fasta_sequence_type" class="form-select" style="width: 49%;">
+                  <option hidden value="">Sequence Type</option>
+                  <option value="DNA">DNA</option>
+                  <option value="RNA">RNA</option>
+                  <option value="cDNA">cDNA</option>
+                  <option value="Amino Acid">Amino Acid</option>
+                  <option value="Other">Other</option>
+                </select>
+                <select name="fasta_organism_group" class="form-select" style="width: 49%;">
+                  <option hidden value="">Organism Group</option>
+                  <option value="Bacteria">Bacteria</option>
+                  <option value="Virus">Virus</option>
+                  <option value="Eukaryote">Eukaryote</option>
+                  <option value="Archaea">Archaea</option>
+                  <option value="Organelles">Organelles</option>
+                  <option value="Other">Other</option>
+                </select>
+                <input type="number" min="0" class="form-control" placeholder="Minimum Sequence Length" name="fasta_minimum_sequence_length" style="width: 49%;">
+                <input type="number" min="0" class="form-control" placeholder="Maximum Sequence Length" name="fasta_maximum_sequence_length" style="width: 49%;">
+              </div>
+            </div>
+
+            <!-- GenBank Options -->
+            <div class="GenBank file-type-options w-100 mt-2" style="display: none;">
+              <h5 class="mb-3 w-100">GenBank Options</h5>
+              <div class="d-flex flex-wrap" style="gap: 0.5rem 1rem">
+                <select name="genbank_sequence_type" class="form-select" style="width: 49%;">
+                  <option hidden value="">Sequence Type</option>
+                  <option value="DNA">DNA</option>
+                  <option value="RNA">RNA</option>
+                  <option value="cDNA">cDNA</option>
+                  <option value="Amino Acid">Amino Acid</option>
+                  <option value="Plasmid">Plasmid</option>
+                  <option value="Other">Other</option>
+                </select>
+                <select name="genbank_organism_group" class="form-select" style="width: 49%;">
+                  <option hidden value="">Organism Group</option>
+                  <option value="Bacteria">Bacteria</option>
+                  <option value="Virus">Virus</option>
+                  <option value="Eukaryote">Eukaryote</option>
+                  <option value="Archaea">Archaea</option>
+                  <option value="Organelles">Organelles</option>
+                  <option value="Other">Other</option>
+                </select>
+                <input type="number" min="0" class="form-control" placeholder="Minimum Sequence Length" name="genbank_minimum_sequence_length" style="width: 49%;">
+                <input type="number" min="0" class="form-control" placeholder="Maximum Sequence Length" name="genbank_maximum_sequence_length" style="width: 49%;">
+              </div>
+            </div>
+
+            <!-- Text Options -->
+            <div class="Text file-type-options w-100 mt-2" style="display: none;">
+              <h5 class="mb-3 w-100">Text Options</h5>
+              <div class="d-flex flex-wrap" style="gap: 0.5rem 1rem">
+                <select name="encoding" class="form-select" style="width: 49%;">
+                  <option hidden value="">Encoding</option>
+                  <option value="UTF-8">UTF-8</option>
+                  <option value="UTF-16">UTF-16</option>
+                  <option value="UTF-32">UTF-32</option>
+                  <option value="ASCII">ASCII</option>
+                  <option value="Other">Other</option>
+                </select>
+                <input type="text" class="form-control" placeholder="Language" name="language" style="width: 49%;">
+                <input type="text" class="form-control" placeholder="Text Format" name="text_format" style="width: 49%;">
+              </div>
+            </div>
+
+            <!-- PDF Options -->
+            <div class="PDF file-type-options w-100 mt-2" style="display: none;">
+              <h5 class="mb-3 w-100">PDF Options</h5>
+              <div class="d-flex flex-wrap" style="gap: 0.5rem 1rem">
+                <select name="text_extractable" class="form-select" style="width: 49%;">
+                  <option hidden value="">Text Extractable</option>
+                  <option value="Yes">Yes</option>
+                  <option value="No">No</option>
+                  <option value="N/A">N/A</option>
+                </select>
+                <input type="number" step="0.1" class="form-control" placeholder="PDF Version" name="pdf_version" style="width: 49%;">
+              </div>
+            </div>
+
+            <div class="w-100 mt-2"></div>
+            <button class="btn btn-submit w-50 mx-auto" type="submit">
+              Search
             </button>
-          </div>
-          <div class="collapse" id="collapseKeywords">
-            <div class="d-flex flex-wrap gap-2 mt-2">
-              <!-- Keywords as buttons -->
-              {% for keyword in keywords %}
-              <a href='/dataset/browse?keyword={{keyword.name}}'>
+            <button class="btn btn-text w-50 mx-auto" type="button" onclick="clearFilters()">
+              <u>Clear all Filters</u>
+            </button>
+          </form>
+        </div>
+        
+        <!-- Keywords Section -->
+        <div class="col-lg-12 mb-3">
+          <h5>Keywords</h5>
+          <div class="d-flex flex-wrap gap-2 mt-2">
+            <!-- Keywords as buttons -->
+            {% for keyword in keywords %}
+            <a href='/dataset/browse?keyword={{keyword.name}}'>
               <button class="btn btn-outline-secondary Keyword-button">
                 <strong>{{keyword.name}}</strong> ({{keyword.dataset_count}})
               </button>
-              </a>
-              {% endfor %}
-            </div>
+            </a>
+            {% endfor %}
           </div>
         </div>
       </div>
@@ -163,5 +517,27 @@
   function viewDetail(id) {
     window.location.href = "/dataset/browse/" + id;
   }
+</script>
+<!-- File Type Options Script -->
+<script>
+  function toggleFileTypeOptions() {
+    const fileType = document.getElementById('file-format').value;
+    const fileTypeOptions = document.querySelectorAll('.file-type-options');
+    fileTypeOptions.forEach(option => {
+      if (option.classList.contains(fileType)) {
+        option.style.display = 'block';
+      } else {
+        option.style.display = 'none';
+      }
+    });
+  }
+</script>
+<!-- Clear Filters Script -->
+<script>
+function clearFilters() {
+  var form = document.querySelector('form');
+  form.reset();
+  form.submit();
+}
 </script>
 {% endblock %}

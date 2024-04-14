@@ -2,12 +2,13 @@ from django.shortcuts import render,redirect
 from .models import DatasetRegistry,Keyword
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
-from django.db.models import Q
+from django.db.models import Q, F, Func, Value, CharField, IntegerField
 from django.core.files.base import ContentFile
 from django.core.files.storage import default_storage
 from django.contrib import messages
 from django.http import HttpResponseRedirect
 from django.conf import settings
+
 import os
 import json
 import zipfile
@@ -83,31 +84,283 @@ def UploadDataset(request):
 
 def BrowseDatasets(request):
     """Function to allow users to browse the datasets, with dynamic queries to prevent the web-app overloading."""
+    # Initializes the list of datasets to be returned.
     datasets=[]
-    keyword=''
-    format=''
     
-    # Handles keyword or file format extraction from POST or GET request.
-    print(request.POST)
+    # Initializes variables relating to the datasets' basic identity. 
+    keyword=''
+
+    # Initializes variables relating to the datasets' creation.
+    data_origin = ''
+    dataset_status = ''
+    cleanliness_status = ''
+    labeled_status = ''
+    train_split = ''
+    validation_split = ''
+    test_split = ''
+
+    # Initializes variables relating to the datasets' composition.
+     # General
+    format=''
+    min_dataset_size=''
+    max_dataset_size=''
+    min_number_of_files=''
+    max_number_of_files=''
+    min_average_file_size=''
+    max_average_file_size=''
+     # CSV
+    delimiter=''
+    has_header=''
+     # Excel
+    has_macros=''
+    average_sheets=''
+     # Images
+    image_file_type=''
+    average_resolution=''
+    color_mode=''
+    image_processing=''
+     # Videos
+    video_file_type=''
+    video_average_duration=''
+    video_resolution=''
+    video_processing=''
+     # Audio
+    audio_file_type=''
+    audio_average_duration=''
+    audio_bitrate=''
+    audio_processing=''
+     # FASTA
+    fasta_sequence_type=''
+    fasta_organism_type=''
+    fasta_minimum_sequence_length=''
+    fasta_maximum_sequence_length=''
+     # GenBank
+    genbank_sequence_type=''
+    genbank_organism_type=''
+    genbank_minimum_sequence_length=''
+    genbank_maximum_sequence_length=''
+     # Text
+    encoding=''
+    language=''
+    text_format=''
+     # PDF
+    text_extractable=''
+    pdf_version=''
+
+    # Handles the extraction of the search parameters following a submission of the form.
+    # print(request.POST)
     if request.method=='POST':
         keyword=request.POST.get('keyword')
+        # Dataset Creation
+        data_origin=request.POST.get('data_origin')
+        dataset_status=request.POST.get('dataset_status')
+        cleanliness_status=request.POST.get('data_cleanliness')
+        labeled_status=request.POST.get('labeled')
+        train_split=request.POST.get('train_split')
+        validation_split=request.POST.get('validation_split')
+        test_split=request.POST.get('test_split')
+        
+        # Dataset Composition
+         # General
         format=request.POST.get('file-format') 
+        min_dataset_size=request.POST.get('min_dataset_size')
+        max_dataset_size=request.POST.get('max_dataset_size')
+        min_number_of_files=request.POST.get('min_number_of_files')
+        max_number_of_files=request.POST.get('max_number_of_files')
+        min_average_file_size=request.POST.get('min_average_file_size')
+        max_average_file_size=request.POST.get('max_average_file_size')
+         # CSV
+        delimiter=request.POST.get('delimiter')
+        has_header=request.POST.get('has_header')
+         # Excel
+        has_macros=request.POST.get('has_macros')
+        average_sheets=request.POST.get('average_sheets')
+         # Images
+        image_file_type=request.POST.get('image_file_type')
+        average_resolution=request.POST.get('average_resolution')
+        color_mode=request.POST.get('color_mode')
+        image_processing=request.POST.get('image_processing')
+         # Videos
+        video_file_type=request.POST.get('video_file_type')
+        video_average_duration=request.POST.get('video_average_duration')
+        video_resolution=request.POST.get('video_resolution')
+        video_processing=request.POST.get('video_processing')
+         # Audio
+        audio_file_type=request.POST.get('audio_file_type')
+        audio_average_duration=request.POST.get('audio_average_duration')
+        audio_bitrate=request.POST.get('audio_bitrate')
+        audio_processing=request.POST.get('audio_processing')
+        # FASTA
+        fasta_sequence_type=request.POST.get('fasta_sequence_type')
+        fasta_organism_type=request.POST.get('fasta_organism_type')
+        fasta_minimum_sequence_length=request.POST.get('fasta_minimum_sequence_length')
+        fasta_maximum_sequence_length=request.POST.get('fasta_maximum_sequence_length')
+         # GenBank
+        genbank_sequence_type=request.POST.get('genbank_sequence_type')
+        genbank_organism_type=request.POST.get('genbank_organism_type')
+        genbank_minimum_sequence_length=request.POST.get('genbank_minimum_sequence_length')
+        genbank_maximum_sequence_length=request.POST.get('genbank_maximum_sequence_length')
+         # Text
+        encoding=request.POST.get('encoding')
+        language=request.POST.get('language')
+        text_format=request.POST.get('text_format')
+         # PDF
+        text_extractable=request.POST.get('text_extractable')
+        pdf_version=request.POST.get('pdf_version')
 
+    # Keyword Handling
     if  request.method=='GET' and keyword=='':
          keyword=request.GET.get('keyword') or ''
-    print('keyword==>',keyword,'format==>',format)
-    # Filters datasets based on the title, keywords or Format.
-    if   keyword == '' and format == '':
+    # print('keyword==>',keyword,'format==>',format)
+    
+    # Filters datasets based on search parameters specified with Django QuerySet Field Lookups.
+    if   keyword == '' and \
+            data_origin == '' and \
+            dataset_status == '' and \
+            cleanliness_status == '' and \
+            labeled_status == '' and \
+            train_split == '' and \
+            validation_split == '' and \
+            test_split == '' and \
+            format == '' and \
+            min_dataset_size == '' and max_dataset_size == '' and \
+            min_number_of_files == '' and max_number_of_files == '' and \
+            min_average_file_size == '' and max_average_file_size == '' and \
+            delimiter == '' and \
+            has_header == '' and \
+            has_macros == '' and \
+            average_sheets == '' and \
+            image_file_type == '' and \
+            average_resolution == '' and \
+            color_mode == '' and \
+            image_processing == '' and \
+            video_file_type == '' and \
+            video_average_duration == '' and \
+            video_resolution == '' and \
+            video_processing == '' and \
+            audio_file_type == '' and \
+            audio_average_duration == '' and \
+            audio_bitrate == '' and \
+            audio_processing == '' and \
+            fasta_sequence_type == '' and \
+            fasta_organism_type == '' and \
+            fasta_minimum_sequence_length == '' and fasta_maximum_sequence_length == '' and \
+            genbank_sequence_type == '' and \
+            genbank_organism_type == '' and \
+            genbank_minimum_sequence_length == '' and genbank_maximum_sequence_length == '' and \
+            encoding == '' and \
+            language == '' and \
+            text_format == '' and \
+            text_extractable == '' and \
+            pdf_version == '':
          datasets=DatasetRegistry.objects.all().order_by('id')
     else:
-         query=Q()
-         if keyword:
-             query|=Q(metadata_file__basic_identity__title__icontains=keyword)
-             query|=Q(metadata_file__basic_identity__keywords__icontains=keyword)
-         if format:
-             query|=Q(metadata_file__usage__format__icontains=format)
-         print("final query==>",query)
-         datasets=DatasetRegistry.objects.filter(query).order_by('id')
+        query=Q()
+        if keyword:
+            query|=Q(metadata_file__basic_identity__title__icontains=keyword)
+            query|=Q(metadata_file__basic_identity__keywords__icontains=keyword)
+        # Dataset Creation
+        if data_origin:
+            query = query & Q(metadata_file__dataset_creation__general__data_origin__icontains=data_origin)
+        if dataset_status:
+            query = query & Q(metadata_file__dataset_creation__data_completion__dataset_status__icontains=dataset_status)
+        if cleanliness_status:
+            query = query & Q(metadata_file__dataset_creation__pre_processing__data_cleanliness__cleanliness_status__icontains=cleanliness_status)
+        if labeled_status:
+            query = query & Q(metadata_file__dataset_creation__pre_processing__labeling__labeled__icontains=labeled_status)
+        if train_split and train_split!='':
+            query = query & Q(metadata_file__dataset_creation__pre_processing__data_split__train_split__iexact=train_split)
+        if validation_split and validation_split!='':
+            query = query & Q(metadata_file__dataset_creation__pre_processing__data_split__validation_split__iexact=validation_split)
+        if test_split and test_split!='':
+            query = query & Q(metadata_file__dataset_creation__pre_processing__data_split__test_split__iexact=test_split)
+        
+        # Dataset Composition
+         # General
+        if format:
+            query = query & Q(metadata_file__dataset_composition__general__format__icontains=format)
+        if min_dataset_size and min_dataset_size!='':
+            query = query & Q(metadata_file__dataset_composition__general__dataset_size__gte=min_dataset_size)
+        if max_dataset_size and max_dataset_size!='':
+            query = query & Q(metadata_file__dataset_composition__general__dataset_size__lte=max_dataset_size)
+        if min_number_of_files and min_number_of_files!='':
+            query = query & Q(metadata_file__dataset_composition__general__number_of_files__gte=min_number_of_files)
+        if max_number_of_files and max_number_of_files!='':
+            query = query & Q(metadata_file__dataset_composition__general__number_of_files__lte=max_number_of_files)
+        if min_average_file_size and min_average_file_size!='':
+            query = query & Q(metadata_file__dataset_composition__general__average_file_size__gte=min_average_file_size)
+        if max_average_file_size and max_average_file_size!='':
+            query = query & Q(metadata_file__dataset_composition__general__average_file_size__lte=max_average_file_size)
+         # CSV
+        if delimiter:
+            query = query & Q(metadata_file__dataset_composition__csv__delimiter__icontains=delimiter)
+        if has_header:
+            query = query & Q(metadata_file__dataset_composition__csv__has_header__icontains=has_header)
+         # Excel
+        if has_macros:
+            query = query & Q(metadata_file__dataset_composition__excel__has_macros__icontains=has_macros)
+        if average_sheets and average_sheets!='':
+            query = query & Q(metadata_file__dataset_composition__excel__average_sheets__iexact=average_sheets)
+         # Images
+        if image_file_type:
+            query = query & Q(metadata_file__dataset_composition__image__file_type__icontains=image_file_type)
+        if average_resolution and average_resolution!='':
+            query = query & Q(metadata_file__dataset_composition__image__average_resolution__iexact=average_resolution)
+        if color_mode:
+            query = query & Q(metadata_file__dataset_composition__image__color_mode__icontains=color_mode)
+        if image_processing:
+            query = query & Q(metadata_file__dataset_composition__image__image_processing__icontains=image_processing)
+         # Videos
+        if video_file_type:
+            query = query & Q(metadata_file__dataset_composition__video__file_type__icontains=video_file_type)
+        if video_average_duration and video_average_duration!='':
+            query = query & Q(metadata_file__dataset_composition__video__average_duration__iexact=video_average_duration)
+        if video_resolution:
+            query = query & Q(metadata_file__dataset_composition__video__resolution__icontains=video_resolution)
+        if video_processing:
+            query = query & Q(metadata_file__dataset_composition__video__video_processing__icontains=video_processing)
+         # Audio
+        if audio_file_type:
+            query = query & Q(metadata_file__dataset_composition__audio__file_type__icontains=audio_file_type)
+        if audio_average_duration and audio_average_duration!='':
+            query = query & Q(metadata_file__dataset_composition__audio__average_duration__iexact=audio_average_duration)
+        if audio_bitrate:
+            query = query & Q(metadata_file__dataset_composition__audio__bitrate__iexact=audio_bitrate)
+        if audio_processing:
+            query = query & Q(metadata_file__dataset_composition__audio__audio_processing__icontains=audio_processing)
+         # FASTA
+        if fasta_sequence_type:
+            query = query & Q(metadata_file__dataset_composition__fasta__sequence_type__icontains=fasta_sequence_type)
+        if fasta_organism_type:
+            query = query & Q(metadata_file__dataset_composition__fasta__organism_type__icontains=fasta_organism_type)
+        if fasta_minimum_sequence_length and fasta_minimum_sequence_length!='':
+            query = query & Q(metadata_file__dataset_composition__fasta__minimum_sequence_length__gte=fasta_minimum_sequence_length)
+        if fasta_maximum_sequence_length and fasta_maximum_sequence_length!='':
+            query = query & Q(metadata_file__dataset_composition__fasta__maximum_sequence_length__lte=fasta_maximum_sequence_length)
+         # GenBank
+        if genbank_sequence_type:
+            query = query & Q(metadata_file__dataset_composition__genbank__sequence_type__icontains=genbank_sequence_type)
+        if genbank_organism_type:
+            query = query & Q(metadata_file__dataset_composition__genbank__organism_type__icontains=genbank_organism_type)
+        if genbank_minimum_sequence_length and genbank_minimum_sequence_length!='':
+            query = query & Q(metadata_file__dataset_composition__genbank__minimum_sequence_length__gte=genbank_minimum_sequence_length)
+        if genbank_maximum_sequence_length and genbank_maximum_sequence_length!='':
+            query = query & Q(metadata_file__dataset_composition__genbank__maximum_sequence_length__lte=genbank_maximum_sequence_length)
+        # Text
+        if encoding:
+            query = query & Q(metadata_file__dataset_composition__text__encoding__icontains=encoding)
+        if language and language!='':
+            query = query & Q(metadata_file__dataset_composition__text__language__icontains=language)
+        if text_format and text_format!='':
+            query = query & Q(metadata_file__dataset_composition__text__text_format__icontains=text_format)
+         # PDF
+        if text_extractable:
+            query = query & Q(metadata_file__dataset_composition__pdf__text_extractable__icontains=text_extractable)
+        if pdf_version and pdf_version!='':
+            query = query & Q(metadata_file__dataset_composition__pdf__pdf_version__iexact=pdf_version)
+
+        # print("final query==>",query)
+        datasets=DatasetRegistry.objects.filter(query).order_by('id')  
     
     # Handles pagination.
     count="10"
@@ -119,12 +372,13 @@ def BrowseDatasets(request):
     page_num=request.GET.get('page')
     selected_datasets = paginator.get_page(page_num)
 
-    # Retrieves top keywords for display in the filter section.
-    #found_dataset_keyword=datasets.extra(select={"keywords":"metadata_file->>'basic_identity__keywords'"}).values('keywords').values('keywords')
-    #found_dataset_keyword=datasets.annotate(keywords=instance)
-    #print(found_dataset_keyword)
-    keywords=Keyword.objects.filter().order_by('-dataset_count')[:10]
+    allKeywords =[]
+    for dataset in selected_datasets:
+        allKeywords+= dataset.metadata_file['basic_identity']['keywords'].split(',')
 
+
+    keywords=Keyword.objects.filter(name__in=allKeywords).order_by('-dataset_count')[:10]
+    
     # Renders the browsing page with the selected datasets and pagination controls.
     return render(request, 'dataset/browse_datasets.html', {
         'selected_datasets': selected_datasets,

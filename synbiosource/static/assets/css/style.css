@@ -3,11 +3,10 @@ body {
   padding-top: 80px;
 }
 
-h2 {
-  margin: 20px auto;
-}
-
-h4 {
+h2,
+h3,
+h4,
+h5 {
   margin: 20px auto;
 }
 
@@ -242,6 +241,24 @@ h4 {
   margin: 0 5px;
 }
 
+.form-control:focus,
+.form-select:focus {
+  border-color: #0a4746;
+  box-shadow: 0 0 0 0.25rem #0e747228, 0 0 0 0.2rem #0e747228;
+}
+
+.btn-text {
+  background: none;
+  border: none;
+  margin: 0;
+  padding: 0;
+  cursor: pointer;
+}
+
+.btn-text:hover {
+  color: #0e7472;
+}
+
 /* Datasets */
 .dataset-card {
   margin-bottom: 30px;
@@ -254,6 +271,22 @@ h4 {
 
 .padding {
   padding: 15px 0;
+}
+
+/* Pagination Controls */
+.pagination .page-item.active .page-link {
+  background-color: #0e7472;
+  border-color: #0a4746;
+  color: white;
+}
+
+.pagination .page-link {
+  color: #0a4746;
+}
+
+.pagination .page-link:hover {
+  background-color: #0e7472;
+  color: white;
 }
 
 /* Upload Datasets Page */
@@ -344,4 +377,46 @@ h4 {
   height: 400px;
   overflow-y: auto;
   padding-right: 1rem;
+}
+
+/* View Datasets Page */
+/* File Tree */
+#folderStructure ul {
+  list-style-type: none;
+  padding-left: 20px;
+  margin: 0;
+}
+
+#folderStructure li {
+  position: relative;
+  margin: 0;
+  padding-left: 1.5em;
+}
+
+#folderStructure li::before {
+  content: "";
+  position: absolute;
+  top: 0.55em;
+  left: 0;
+  width: 1em;
+  height: 1px;
+  background-color: #ccc;
+}
+
+#folderStructure li::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 1px;
+  height: 100%;
+  background-color: #ccc;
+}
+
+#folderStructure li:last-child::after {
+  height: 0.5em;
+}
+
+#folderStructure ul > li:last-child::after {
+  content: none;
 }

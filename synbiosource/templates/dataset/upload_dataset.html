@@ -8,9 +8,9 @@
 
     <!-- Upload Alert -->
     {% if messages %} {% for message in messages %}
-    <div class="alert alert-info alert-dismissible fade show" role="alert">
+    <div class="alert alert-secondary alert-dismissible fade show" role="alert">
       <div class="text-center">
-        <i class="bi bi-check"></i>
+        <i class="bi bi-check-circle-fill"></i>
         <strong>{{ message }}</strong>
       </div>
       <button
@@ -26,11 +26,11 @@
     <form method="post" enctype="multipart/form-data" class="container mb-5">
       {% csrf_token %}
       <div class="row">
-        <!-- Dataset ZIP File Upload -->
+        <!-- Dataset Folder Upload -->
         <div class="col-md-6">
           <div class="drag-area" id="datasetFileInput">
             <i class="bi bi-download" aria-hidden="true"></i>
-            <p>Drag and Drop Dataset ZIP File Here or <b>Browse</b></p>
+            <p>Drag and Drop <b>Dataset Folder</b> Here or Browse</p>
             <input
               type="file"
               class="file-input"
@@ -50,7 +50,7 @@
         <div class="col-md-6">
           <div class="drag-area" id="jsonFileInput">
             <i class="bi bi-download" aria-hidden="true"></i>
-            <p>Drag and Drop Metadata JSON File Here or <b>Browse</b></p>
+            <p>Drag and Drop <b>Metadata JSON File</b> Here or Browse</p>
             <input
               type="file"
               class="file-input"
@@ -69,7 +69,7 @@
 
     <!-- Instruction Box -->
     <div id="uploadInstructions" class="bg-light p-5 rounded">
-      <h2 class="text-center">Instructions</h2>
+      <h2 class="text-center">Upload Instructions</h2>
       <div class="row">
         <div class="col-4">
           <div
@@ -77,13 +77,16 @@
             class="nav-pills flex-column sticky-top"
             style="top: 20px"
           >
-            <a class="nav-link" href="#item-1">Item 1</a>
-            <a class="nav-link ms-3 my-1" href="#item-1-1">Item 1-1</a>
-            <a class="nav-link ms-3 my-1" href="#item-1-2">Item 1-2</a>
-            <a class="nav-link" href="#item-2">Item 2</a>
-            <a class="nav-link" href="#item-3">Item 3</a>
-            <a class="nav-link ms-3 my-1" href="#item-3-1">Item 3-1</a>
-            <a class="nav-link ms-3 my-1" href="#item-3-2">Item 3-2</a>
+            <a class="nav-link" href="#item-1">Upload Boxes</a>
+            <a class="nav-link ms-3 my-1" href="#item-1-1"
+              >Dataset Folder Upload</a
+            >
+            <a class="nav-link ms-3 my-1" href="#item-1-2"
+              >Metadata JSON Upload</a
+            >
+            <a class="nav-link ms-3 my-1" href="#item-1-3">General Usage</a>
+            <a class="nav-link" href="#item-2">Metadata Card</a>
+            <a class="nav-link ms-3 my-1" href="#item-2-1">Overview</a>
           </div>
         </div>
         <div class="col-8">
@@ -95,156 +98,191 @@
             tabindex="0"
             style="height: 800px; overflow-y: auto"
           >
-            <h4 id="item-1">Item 1</h4>
-            <p>...</p>
-            <h5 id="item-1-1">Item 1-1</h5>
-            <p>...</p>
-            <h5 id="item-1-2">Item 1-2</h5>
-            <p>...</p>
-            <h4 id="item-2">Item 2</h4>
-            <p>...</p>
-            <h4 id="item-3">Item 3</h4>
-            <p>...</p>
-            <h5 id="item-3-1">Item 3-1</h5>
-            <p>...</p>
-            <h5 id="item-3-2">Item 3-2</h5>
-            <p>...</p>
+            <h3 id="item-1">Upload Boxes</h3>
+            <h5 id="item-1-1">Dataset Folder Upload</h5>
+            <p>
+              For the dataset upload, please select the folder containing your
+              dataset files. For single files please also upload them in a
+              folder.
+              <br /> <br />
+              Please note that the <b>Maximum Number of Files is 1000</b>.
+            </p>
+            <h5 id="item-1-2">Metadata JSON Upload</h5>
+            <p>
+              You are required to fill out a metadata card for your dataset.
+              This includes providing information such as the dataset title,
+              description, keywords, and other relevant details that will be
+              covered below. Please download the metadata template, fill it out,
+              and upload it along with your dataset.
+            </p>
+            <h5 id="item-1-3">General Usage</h5>
+            <p>
+              When uploading files, you can either drag and drop the files into
+              the box or click on the box to browse your files. If you wish to
+              upload a different file, you can click on the box again or drag
+              and drop to select a new file.
+            </p>
+            <div class="text-center">
+              <a
+                href="metadata_template.json"
+                download="metadata_template.json"
+                class="btn btn-submit"
+                >Download Metadata Card</a
+              >
+            </div>
+            <h3 id="item-2">Metadata Card</h3>
+            <h5 id="item-2-1">Overview</h5>
+            <p>
+              The metadata card is a JSON file that contains various fields to
+              describe the nature of your dataset. Some of these fields are
+              mandatory while others are optional. Below is a brief overview of
+              the different fields:
+            </p>
           </div>
         </div>
       </div>
     </div>
-  </div>
-</div>
 
-<!-- File Hierarchy Storage Script -->
-<script>
-  files = document.querySelector("#file-input").files;
-  document.querySelector("#file-input").addEventListener("change", function () {
-    files = document.querySelector("#file-input").files;
-    var directories = {};
-    for (var file of files) {
-      file.webkitRelativePath;
-      directories[file.name] = file.webkitRelativePath;
-    }
-    directories = JSON.stringify(directories);
-    console.log(directories);
+    <!-- File Hierarchy Storage Script -->
+    <script>
+      files = document.querySelector("#file-input").files;
+      document
+        .querySelector("#file-input")
+        .addEventListener("change", function () {
+          files = document.querySelector("#file-input").files;
+          var directories = {};
+          for (var file of files) {
+            file.webkitRelativePath;
+            directories[file.name] = file.webkitRelativePath;
+          }
+          directories = JSON.stringify(directories);
+          console.log(directories);
 
-    document.querySelector("#directories").value = directories;
-  });
-</script>
+          document.querySelector("#directories").value = directories;
+        });
+    </script>
 
-<!-- JSON Validation Script -->
-<script>
-  function readJSON() {
-    const fileInput = document.getElementById("json-file");
-    const file = fileInput.files[0];
+    <!-- JSON Validation Script -->
+    <script>
+      function readJSON() {
+        const fileInput = document.getElementById("json-file");
+        const file = fileInput.files[0];
 
-    const reader = new FileReader();
+        const reader = new FileReader();
 
-    reader.onload = function (event) {
-      const fileContent = event.target.result;
+        reader.onload = function (event) {
+          const fileContent = event.target.result;
 
-      // Clear previous errors.
-      document.getElementById("dynamic-error-section").innerHTML = "";
+          // Clear previous errors.
+          document.getElementById("dynamic-error-section").innerHTML = "";
 
-      try {
-        const jsonObj = JSON.parse(fileContent);
+          try {
+            const jsonObj = JSON.parse(fileContent);
 
-        if (validateJSON(jsonObj)) {
-          updateFileInfo(fileInput, "json-info");
-          return true;
-        } else {
-          return false;
-        }
-      } catch (e) {
-        console.log(e);
-        document.getElementById("dynamic-error-section").insertAdjacentHTML(
-          "beforeend",
-          `
+            if (validateJSON(jsonObj)) {
+              updateFileInfo(fileInput, "json-info");
+              return true;
+            } else {
+              return false;
+            }
+          } catch (e) {
+            console.log(e);
+            document.getElementById("dynamic-error-section").insertAdjacentHTML(
+              "beforeend",
+              `
               <div class="alert alert-danger alert-dismissible fade show" role="alert">
                 <i class="bi bi-exclamation-triangle-fill"></i>
                 <strong>Could not parse the JSON File, please ensure the format is correct.</strong>
                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
               </div>
             `
-        );
+            );
 
-        return false;
+            return false;
+          }
+        };
+
+        reader.readAsText(file);
       }
-    };
 
-    reader.readAsText(file);
-  }
+      function validateJSON(obj) {
+        let errors = [];
 
-  function validateJSON(obj) {
-    let errors = [];
+        if (!obj.basic_identity?.title) {
+          errors.push("Your dataset metadata is missing the Title");
+        }
 
-    if (!obj.basic_identity?.title) {
-      errors.push("Your dataset metadata is missing the Title");
-    }
-
-    if (errors.length > 0) {
-      errors.forEach((error) => {
-        document.getElementById("dynamic-error-section").insertAdjacentHTML(
-          "beforeend",
-          `
+        if (errors.length > 0) {
+          errors.forEach((error) => {
+            document.getElementById("dynamic-error-section").insertAdjacentHTML(
+              "beforeend",
+              `
           <div class="alert alert-danger alert-dismissible fade show" role="alert">
             <i class="bi bi-exclamation-triangle-fill"></i>
             <strong>${error}</strong>
             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
           </div>
         `
-        );
-      });
+            );
+          });
 
-      // Clears input field if the value is incorrect.
-      document.getElementById("json-file").value = "";
-      return false;
-    }
-    return true;
-  }
-</script>
+          // Clears input field if the value is incorrect.
+          document.getElementById("json-file").value = "";
+          return false;
+        }
+        return true;
+      }
+    </script>
 
-<!-- Upload Boxes Script -->
-<script>
-  function updateFileInfo(input, infoId) {
-    const infoDiv = document.getElementById(infoId);
-    const parentDiv = input.closest(".drag-area");
-    const defaultText = parentDiv.querySelector("p");
-    const defaultIcon = parentDiv.querySelector("i");
+    <!-- Upload Boxes Script -->
+    <script>
+      function updateFileInfo(input, infoId) {
+        const infoDiv = document.getElementById(infoId);
+        const parentDiv = input.closest(".drag-area");
+        const defaultText = parentDiv.querySelector("p");
+        const defaultIcon = parentDiv.querySelector("i");
 
-    if (input.files && input.files[0]) {
-      const file = input.files[0];
-      let iconClass = file.name.endsWith(".zip")
-        ? "bi-file-earmark-zip"
-        : "bi-file-earmark-text";
+        if (input.files && input.files[0]) {
+          const file = input.files[0];
 
-      // Update the display for file info
-      infoDiv.innerHTML = `<div class="file-display d-flex flex-column align-items-center justify-content-center">
-                                  <i class="bi ${iconClass} mb-2"></i>
-                                  <span>${file.name}</span>
-                               </div>`;
+          // Determine the type of upload (folder or file) and update the display accordingly
+          if (input.getAttribute("webkitdirectory") !== null) {
+            // Folder upload
+            let folderName = file.webkitRelativePath.split("/")[0];
+            infoDiv.innerHTML = `<div class="file-display d-flex flex-column align-items-center justify-content-center">
+                                <i class="bi bi-folder mb-2"></i>
+                                <span>${folderName}</span>
+                             </div>`;
+          } else {
+            // File upload
+            infoDiv.innerHTML = `<div class="file-display d-flex flex-column align-items-center justify-content-center">
+                                <i class="bi bi-file-earmark-text mb-2"></i>
+                                <span>${file.name}</span>
+                             </div>`;
+          }
 
-      // Style adjustments
-      infoDiv.style.position = "absolute";
-      infoDiv.style.top = "50%";
-      infoDiv.style.left = "50%";
-      infoDiv.style.transform = "translate(-50%, -50%)";
-      infoDiv.style.textAlign = "center";
+          // Style adjustments
+          infoDiv.style.position = "absolute";
+          infoDiv.style.top = "50%";
+          infoDiv.style.left = "50%";
+          infoDiv.style.transform = "translate(-50%, -50%)";
+          infoDiv.style.textAlign = "center";
 
-      // Hide the default text and icon
-      defaultText.style.display = "none";
-      defaultIcon.style.display = "none";
+          // Hide the default text and icon
+          defaultText.style.display = "none";
+          defaultIcon.style.display = "none";
 
-      parentDiv.classList.add("file-uploaded");
-    } else {
-      // Reset to default if no file is selected
-      defaultText.style.display = "";
-      defaultIcon.style.display = "";
-      infoDiv.innerHTML = "";
-      parentDiv.classList.remove("file-uploaded");
-    }
-  }
-</script>
+          parentDiv.classList.add("file-uploaded");
+        } else {
+          // Reset to default if no file or folder is selected
+          defaultText.style.display = "";
+          defaultIcon.style.display = "";
+          infoDiv.innerHTML = "";
+          parentDiv.classList.remove("file-uploaded");
+        }
+      }
+    </script>
 
-{% endblock %}
+    {% endblock %}
+  </div>
+</div>

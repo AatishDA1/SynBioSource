@@ -21,11 +21,8 @@
       >
         Download <i class="bi bi-download"></i>
       </a>
-    </div>
-
-    <!-- Edit Option -->
-    {% if request.user.id == datasetInfo.owner.id %}
-    <div class="text-center mb-4">
+      {% if request.user.id == datasetInfo.owner.id or request.user.is_moderator
+      %}
       <a
         type="button"
         class="btn btn-login mt-3"
@@ -33,8 +30,6 @@
       >
         Edit <i class="bi bi-pen"></i>
       </a>
-    </div>
-    <div class="text-center mb-4">
       <a
         type="button"
         class="btn btn-login mt-3"
@@ -42,30 +37,11 @@
       >
         Delete <i class="bi bi-trash"></i>
       </a>
+      {% endif %}
     </div>
-    {% elif request.user.is_moderator %}
-    <div class="text-center mb-4">
-      <a
-        type="button"
-        class="btn btn-login mt-3"
-        href="/dataset/browse/edit/{{datasetInfo.id}}"
-      >
-        Edit <i class="bi bi-download"></i>
-      </a>
-    </div>
-    <div class="text-center mb-4">
-      <a
-        type="button"
-        class="btn btn-login mt-3"
-        href="/dataset/browse/delete/{{datasetInfo.id}}"
-      >
-        Delete <i class="bi bi-trash"></i>
-      </a>
-    </div>
-    {% endif %}
 
     <!-- Viewing Section -->
-    <div id="uploadInstructions" class="bg-light p-5 rounded">
+    <div id="dataset-information" class="bg-light p-5 rounded">
       <div class="row">
         <div class="col-4">
           <div
@@ -91,14 +67,16 @@
             tabindex="0"
             style="height: 800px; overflow-y: auto"
           >
-            <h4 id="item-1">Basic Info</h4>
+            <h3 id="item-1">Basic Info</h3>
             <h5 id="item-1-1">Description</h5>
             <p>{{datasetInfo.metadata_file.basic_identity.description}}</p>
             <h5 id="item-1-2">Item 1-2</h5>
+            <div id="folderStructure" class="bg-light p-5 rounded">
+              <!-- JavaScript will dynamically generate the folder tree here -->
+            </div>
+            <h3 id="item-2">Item 2</h3>
             <p>...</p>
-            <h4 id="item-2">Item 2</h4>
-            <p>...</p>
-            <h4 id="item-3">Item 3</h4>
+            <h3 id="item-3">Item 3</h3>
             <p>...</p>
             <h5 id="item-3-1">Item 3-1</h5>
             <p>...</p>
@@ -110,4 +88,46 @@
     </div>
   </div>
 </div>
+
+<!-- File Tree Script -->
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+    var folderJson = {{ datasetInfo.metadata_file.folder_structure|safe }};
+
+    function buildTree(paths) {
+      let tree = {};
+      paths.forEach((path) => {
+        path = path.split('/');
+        let current = tree;
+        for (let part of path) {
+          if (!current[part]) {
+            current[part] = {}; // Creates a nested object if it doesn't exist.
+          }
+          current = current[part]; // Goes down the tree.
+        }
+      });
+      return tree;
+    }
+
+    function createTreeDom(node, path = '') {
+      let ul = document.createElement('ul');
+      for (let key in node) {
+        let li = document.createElement('li');
+        li.textContent = key;
+        let fullPath = path + key + '/';
+        li.setAttribute('title', fullPath); // Tooltip showing the full path.
+        if (Object.keys(node[key]).length > 0) {
+          li.appendChild(createTreeDom(node[key], fullPath)); // Recursively add child lists.
+        }
+        ul.appendChild(li);
+      }
+      return ul;
+    }
+
+    var paths = Object.values(folderJson);
+    var tree = buildTree(paths);
+    var treeDom = createTreeDom(tree);
+    document.getElementById("folderStructure").appendChild(treeDom);
+  });
+</script>
 {% endblock %}

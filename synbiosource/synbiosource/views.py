@@ -91,3 +91,33 @@ def register_user(request):
     return render(request, 'auth/register.html', {
         'form':form,
         })
+
+
+def forgot_password(request):
+    """"""
+    # Checks if the user is already authenticated and redirect to the homepage if true.
+    if request.user.is_authenticated:
+         return redirect('/')
+    
+
+    if request.method == "POST":
+        email = request.POST.get("email")
+        print(email)
+        if AllUsers.objects.filter(email=email).exists():
+            print("The email exists.")
+            messages.info(request, "An email has been sent to you with instructions on how to reset your password.")
+            return redirect('/forgot-password')
+        else:
+            print("The email does not exist.")
+            messages.error(request, "The email provided does not exist in our system.", extra_tags="danger")
+            return redirect('/forgot-password')
+        
+    return render(request, 'auth/forgot_password.html')
+
+def reset_password(request):
+    """Function to reset a user's password."""
+    # Checks if the user is already authenticated and redirect to the homepage if true.
+    if request.user.is_authenticated:
+         return redirect('/')
+    
+    return render(request, 'auth/reset_password.html')

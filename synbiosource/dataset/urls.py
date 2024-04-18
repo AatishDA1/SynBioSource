@@ -8,5 +8,6 @@ urlpatterns = [
     path('browse/download/<int:dataset_id>', views.DownloadDataset, name="download-dataset"),
     path('browse/edit/<int:dataset_id>', views.EditDataset, name="edit-dataset"),
     path('browse/delete/<int:dataset_id>', views.DeleteDataset, name="delete-dataset"),
+    path('yourdatasets', views.YourDatasets, name="your-datasets"),
 ]
 

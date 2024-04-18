@@ -11,6 +11,19 @@ class DatasetRegistry(models.Model):
     metadata_file = models.JSONField()
     created_at = models.DateTimeField(default=timezone.now)
     updated_at = models.DateTimeField(auto_now=True)
+    dataset_size = models.IntegerField(default=0)
+    number_of_files = models.IntegerField(default=0)
+    average_file_size = models.FloatField(default=0)
+    # Optional fields
+    average_sheets = models.IntegerField(null=True)
+    average_resolution = models.IntegerField(null=True)
+    video_average_duration = models.FloatField(null=True)
+    audio_average_duration = models.FloatField(null=True)
+    average_bitrate = models.FloatField(null=True)
+    fasta_minimum_sequence_length = models.IntegerField(null=True)
+    fasta_maximum_sequence_length = models.IntegerField(null=True)
+    genbank_minimum_sequence_length = models.IntegerField(null=True)
+    genbank_maximum_sequence_length = models.IntegerField(null=True)
 
     def __str__(self):
         """Function to return the name of the datasets selected to the admin panel."""

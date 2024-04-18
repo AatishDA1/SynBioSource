@@ -2,7 +2,7 @@
   "basic_identity": {
     "title": "Mandatory - Title of the Dataset.",
     "description": "Mandatory - A detailed description of the dataset and its contents.",
-    "version": "Mandatory - Version of the dataset, if applicable.",
+    "version": "Mandatory - Version of the dataset, if applicable (Just put a number).",
     "changelog": "Optional - Description of changes made compared to the previous version of the dataset.",
     "keywords": "Mandatory - Minimum of 3 keywords related to this dataset in the format of keyword1, keyword2, keyword3...",
     "license": "Optional - Type of license under which the dataset is distributed."

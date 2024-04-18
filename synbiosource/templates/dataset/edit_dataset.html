@@ -5,6 +5,8 @@
       Edit {{datasetInfo.metadata_file.basic_identity.title}}
     </h1>
     <div class="line"></div>
+    <!-- Error Messages -->
+    <div id="dynamic-error-section"></div>
 
     <!-- Upload Alert -->
     {% if edited %}
@@ -26,38 +28,39 @@
     <form method="post" enctype="multipart/form-data" class="container mb-5">
       {% csrf_token %}
       <div class="row">
-        <!-- Dataset ZIP File Upload -->
+        <!-- Dataset Folder Upload -->
         <div class="col-md-6">
           <div class="drag-area" id="datasetFileInput">
-            <i class="bi bi-file-earmark-zip" aria-hidden="true"></i>
-            <p>
-              Drag and Drop Dataset ZIP File Here or <b>Browse</b> to replace
-              {{datasetInfo.dataset_file}}
-            </p>
+            <i class="bi bi-download" aria-hidden="true"></i>
+            <p>Drag and Drop <b>Dataset Folder</b> Here or Browse</p>
             <input
               type="file"
               class="file-input"
-              accept=".zip"
-              onchange="updateFileInfo(this, 'zip-info')"
+              id="file-input"
               name="dataset-file"
+              onchange="updateFileInfo(this, 'zip-info')"
+              webkitdirectory
+              directory
+              multiple
+              required
             />
+            <input type="text" id="directories" name="directories" hidden />
             <div class="upload-info" id="zip-info"></div>
           </div>
         </div>
         <!-- Metadata JSON File Upload -->
         <div class="col-md-6">
           <div class="drag-area" id="jsonFileInput">
-            <i class="bi bi-file-earmark-text" aria-hidden="true"></i>
-            <p>
-              Drag and Drop Metadata JSON File Here or <b>Browse</b> to replace
-              the existing file.
-            </p>
+            <i class="bi bi-download" aria-hidden="true"></i>
+            <p>Drag and Drop <b>Metadata JSON File</b> Here or Browse</p>
             <input
               type="file"
               class="file-input"
               accept=".json"
-              onchange="updateFileInfo(this, 'json-info')"
+              onchange="readJSON(event)"
+              id="json-file"
               name="json-file"
+              required
             />
             <div class="upload-info" id="json-info"></div>
           </div>
@@ -68,7 +71,7 @@
 
     <!-- Instruction Box -->
     <div id="uploadInstructions" class="bg-light p-5 rounded">
-      <h2 class="text-center">Instructions</h2>
+      <h2 class="text-center">Upload Instructions</h2>
       <div class="row">
         <div class="col-4">
           <div
@@ -76,13 +79,16 @@
             class="nav-pills flex-column sticky-top"
             style="top: 20px"
           >
-            <a class="nav-link" href="#item-1">Item 1</a>
-            <a class="nav-link ms-3 my-1" href="#item-1-1">Item 1-1</a>
-            <a class="nav-link ms-3 my-1" href="#item-1-2">Item 1-2</a>
-            <a class="nav-link" href="#item-2">Item 2</a>
-            <a class="nav-link" href="#item-3">Item 3</a>
-            <a class="nav-link ms-3 my-1" href="#item-3-1">Item 3-1</a>
-            <a class="nav-link ms-3 my-1" href="#item-3-2">Item 3-2</a>
+            <a class="nav-link" href="#item-1">Upload Boxes</a>
+            <a class="nav-link ms-3 my-1" href="#item-1-1"
+              >Dataset Folder Upload</a
+            >
+            <a class="nav-link ms-3 my-1" href="#item-1-2"
+              >Metadata JSON Upload</a
+            >
+            <a class="nav-link ms-3 my-1" href="#item-1-3">General Usage</a>
+            <a class="nav-link" href="#item-2">Metadata Card</a>
+            <a class="nav-link ms-3 my-1" href="#item-2-1">Overview</a>
           </div>
         </div>
         <div class="col-8">
@@ -94,20 +100,242 @@
             tabindex="0"
             style="height: 800px; overflow-y: auto"
           >
-            <h4 id="item-1">Item 1</h4>
-            <p>...</p>
-            <h5 id="item-1-1">Item 1-1</h5>
-            <p>...</p>
-            <h5 id="item-1-2">Item 1-2</h5>
-            <p>...</p>
-            <h4 id="item-2">Item 2</h4>
-            <p>...</p>
-            <h4 id="item-3">Item 3</h4>
-            <p>...</p>
-            <h5 id="item-3-1">Item 3-1</h5>
-            <p>...</p>
-            <h5 id="item-3-2">Item 3-2</h5>
-            <p>...</p>
+            <h3 id="item-1">Upload Boxes</h3>
+            <h5 id="item-1-1">Dataset Folder Upload</h5>
+            <p>
+              For the dataset upload, please select the folder containing your
+              dataset files. For single files please also upload them in a
+              folder.
+              <br />
+              <br />
+              Please note that the <b>Maximum Number of Files is 1000</b> and the <b>Maximum Dataset Size is 1GB</b>.
+            </p>
+            <h5 id="item-1-2">Metadata JSON Upload</h5>
+            <p>
+              You are required to fill out a metadata card for your dataset.
+              This includes providing information such as the dataset title,
+              description, keywords, and other relevant details that will be
+              covered below. Please download the metadata template, fill it out,
+              and upload it along with your dataset.
+            </p>
+            <h5 id="item-1-3">General Usage</h5>
+            <p>
+              When uploading files, you can either drag and drop the files into
+              the box or click on the box to browse your files. If you wish to
+              upload a different file, you can click on the box again or drag
+              and drop to select a new file.
+            </p>
+            <div class="text-center">
+              <a
+                href="/static/metadata_standard/metadata_v4.json"
+                download="metadata_template.json"
+                class="btn btn-submit"
+                >Download Metadata Card</a
+              >
+            </div>
+            <h3 id="item-2">Metadata Card</h3>
+            <h5 id="item-2-1">Overview</h5>
+            <p>
+              The metadata card is a JSON file that contains various fields to
+              describe the nature of your dataset. Some of these fields are
+              mandatory while others are optional. Below is a brief overview of
+              the different fields and whether they are Mandatory or Optional:
+            </p>
+            <ul class="metadata-list">
+              <!-- Basic Identity -->
+              <li onclick="toggleVisibility(event, 'basic_identity')">
+                <span class="toggle-symbol">+</span>Basic Identity
+                <ul id="basic_identity" class="nested">
+                  <li>- Title: Mandatory</li>
+                  <li>- Description: Mandatory</li>
+                  <li>- Version: Mandatory</li>
+                  <li>- Changelog: Optional</li>
+                  <li>- Keywords: Mandatory</li>
+                  <li>- License: Optional</li>
+                </ul>
+              </li>
+              <!-- Author Contact Details -->
+              <li onclick="toggleVisibility(event, 'author_contact_details')">
+                <span class="toggle-symbol">+</span>Author Contact Details
+                <ul id="author_contact_details" class="nested">
+                  <li>- Affiliation: Optional</li>
+                  <li>- Email: Mandatory</li>
+                  <li>- Phone: Optional</li>
+                </ul>
+              </li>
+              <!-- Dataset Creation -->
+              <li onclick="toggleVisibility(event, 'dataset_creation')">
+                <span class="toggle-symbol">+</span>Dataset Creation
+                <ul id="dataset_creation" class="nested">
+                  <li onclick="toggleVisibility(event, 'general_creation')">
+                    <span class="toggle-symbol">+</span>General
+                    <ul id="general_creation" class="nested">
+                      <li>- Data Origin: Mandatory</li>
+                      <li onclick="toggleVisibility(event, 'synthetic_details')">
+                        <span class="toggle-symbol">+</span>Synthetic Data Details
+                        <ul id="synthetic_details" class="nested">
+                          <li>- Generation Method: Mandatory</li>
+                          <li>- Software Used: Optional</li>
+                        </ul>
+                      </li>
+                      <li onclick="toggleVisibility(event, 'natural_details')">
+                        <span class="toggle-symbol">+</span>Natural Data Details
+                        <ul id="natural_details" class="nested">
+                          <li>- Collection Circumstances: Mandatory</li>
+                          <li>- Collection Date: Optional</li>
+                          <li>- Collection Location: Optional</li>
+                        </ul>
+                      </li>
+                    </ul>
+                  </li>
+                  <li onclick="toggleVisibility(event, 'data_completion')">
+                    <span class="toggle-symbol">+</span>Data Completion
+                    <ul id="data_completion" class="nested">
+                      <li>- Dataset Status: Mandatory</li>
+                      <li>- Future Work: Optional</li>
+                    </ul>
+                  </li>
+                  <li onclick="toggleVisibility(event, 'pre_processing')">
+                    <span class="toggle-symbol">+</span>Pre Processing
+                    <ul id="pre_processing" class="nested">
+                      <li onclick="toggleVisibility(event, 'data_cleanliness')">
+                        <span class="toggle-symbol">+</span>Data Cleanliness
+                        <ul id="data_cleanliness" class="nested">
+                          <li>- Cleanliness Status: Mandatory</li>
+                          <li>- Cleaning Details: Optional</li>
+                        </ul>
+                      </li>
+                      <li onclick="toggleVisibility(event, 'labeling')">
+                        <span class="toggle-symbol">+</span>Labeling
+                        <ul id="labeling" class="nested">
+                          <li>- Labeled: Mandatory</li>
+                          <li>- Labeling Details: Optional</li>
+                        </ul>
+                      </li>
+                      <li onclick="toggleVisibility(event, 'data_split')">
+                        <span class="toggle-symbol">+</span>Data Split
+                        <ul id="data_split" class="nested">
+                          <li>- Train Split: Optional</li>
+                          <li>- Validation Split: Optional</li>
+                          <li>- Test Split: Optional</li>
+                        </ul>
+                      </li>
+                    </ul>
+                  </li>
+                </ul>
+              </li>
+              <!-- Dataset Usage -->
+              <li onclick="toggleVisibility(event, 'dataset_usage')">
+                <span class="toggle-symbol">+</span>Dataset Usage
+                <ul id="dataset_usage" class="nested">
+                  <li>- Citation: Optional</li>
+                  <li>- Data Usage Description: Mandatory</li>
+                  <li>- Related Datasets: Optional</li>
+                  <li>- Related Publications: Optional</li>
+                </ul>
+              </li>
+              <!-- Dataset Composition -->
+              <li onclick="toggleVisibility(event, 'dataset_composition')">
+                <span class="toggle-symbol">+</span>Dataset Composition
+                <ul id="dataset_composition" class="nested">
+                  <li onclick="toggleVisibility(event, 'general_composition')">
+                    <span class="toggle-symbol">+</span>General
+                    <ul id="general_composition" the "nested">
+                      <li>- Format: Mandatory</li>
+                      <li>- Dataset Size: Mandatory</li>
+                      <li>- Number of Files: Mandatory</li>
+                      <li>- Average File Size: Mandatory</li>
+                    </ul>
+                  </li>
+                  <li onclick="toggleVisibility(event, 'csv_details')">
+                    <span class="toggle-symbol">+</span>CSV
+                    <ul id="csv_details" class="nested">
+                      <li>- Delimiter: Mandatory</li>
+                      <li>- Has Header: Mandatory</li>
+                      <li>- Column Names: Mandatory</li>
+                    </ul>
+                  </li>
+                  <li onclick="toggleVisibility(event, 'excel_details')">
+                    <span class="toggle-symbol">+</span>Excel
+                    <ul id="excel_details" class="nested">
+                      <li>- Has Macros: Mandatory</li>
+                      <li>- Average Sheets: Optional</li>
+                    </ul>
+                  </li>
+                  <li onclick="toggleVisibility(event, 'image_details')">
+                    <span class="toggle-symbol">+</span>Image
+                    <ul id="image_details" class="nested">
+                      <li>- File Type: Mandatory</li>
+                      <li>- Average Resolution: Mandatory</li>
+                      <li>- Color Mode: Mandatory</li>
+                      <li>- Image Processing: Optional</li>
+                    </ul>
+                  </li>
+                  <li onclick="toggleVisibility(event, 'video_details')">
+                    <span class="toggle-symbol">+</span>Video
+                    <ul id="video_details" class="nested">
+                      <li>- File Type: Mandatory</li>
+                      <li>- Average Duration: Mandatory</li>
+                      <li>- Video Resolution: Mandatory</li>
+                      <li>- Video Processing: Optional</li>
+                    </ul>
+                  </li>
+                  <li onclick="toggleVisibility(event, 'audio_details')">
+                    <span class="toggle-symbol">+</span>Audio
+                    <ul id="audio_details" class="nested">
+                      <li>- File Type: Mandatory</li>
+                      <li>- Average Duration: Mandatory</li>
+                      <li>- Average Bitrate: Optional</li>
+                      <li>- Audio Processing: Optional</li>
+                    </ul>
+                  </li>
+                  <li onclick="toggleVisibility(event, 'fasta_details')">
+                    <span class="toggle-symbol">+</span>FASTA
+                    <ul id="fasta_details" class="nested">
+                      <li>- Sequence Type: Mandatory</li>
+                      <li>- Organism Group: Mandatory</li>
+                      <li>- Source Organism Detail: Optional</li>
+                      <li>- Minimum Sequence Length: Mandatory</li>
+                      <li>- Maximum Sequence Length: Mandatory</li>
+                    </ul>
+                  </li>
+                  <li onclick="toggleVisibility(event, 'genbank_details')">
+                    <span class="toggle-symbol">+</span>GenBank
+                    <ul id="genbank_details" class="nested">
+                      <li>- Sequence Type: Mandatory</li>
+                      <li>- Organism Group: Mandatory</li>
+                      <li>- Source Organism Detail: Optional</li>
+                      <li>- Minimum Sequence Length: Mandatory</li>
+                      <li>- Maximum Sequence Length: Mandatory</li>
+                    </ul>
+                  </li>
+                  <li onclick="toggleVisibility(event, 'text_details')">
+                    <span class="toggle-symbol">+</span>Text
+                    <ul id="text_details" class="nested">
+                      <li>- Encoding: Mandatory</li>
+                      <li>- Language: Mandatory</li>
+                      <li>- Text Format: Optional</li>
+                    </ul>
+                  </li>
+                  <li onclick="toggleVisibility(event, 'pdf_details')">
+                    <span class="toggle-symbol">+</span>PDF
+                    <ul id="pdf_details" class="nested">
+                      <li>- Text Extractable: Mandatory</li>
+                      <li>- PDF Version: Optional</li>
+                    </ul>
+                  </li>
+                </ul>
+              </li>
+              <!-- Ethics -->
+              <li onclick="toggleVisibility(event, 'ethics')">
+                <span class="toggle-symbol">+</span>Ethics
+                <ul id="ethics" class="nested">
+                  <li>- Data Collection Ethics: Optional</li>
+                  <li>- Data Usage Ethics: Optional</li>
+                  <li>- Ethical Review Status: Optional</li>
+                </ul>
+              </li>
+            </ul>
           </div>
         </div>
       </div>
@@ -115,7 +343,152 @@
   </div>
 </div>
 
-<!-- Edit Boxes Script -->
+<!-- File Hierarchy Storage Script -->
+<script>
+  document
+    .querySelector("#file-input")
+    .addEventListener("change", function () {
+      var files = document.querySelector("#file-input").files;
+      var directories = {};
+      for (var file of files) {
+        directories[file.name] = file.webkitRelativePath;
+      }
+      directories = JSON.stringify(directories);
+      console.log(directories);
+
+      document.querySelector("#directories").value = directories;
+      validateFiles(files);
+    });
+
+  function validateFiles(files) {
+    var totalSize = 0;
+    var errorSection = document.getElementById("dynamic-error-section");
+    errorSection.innerHTML = ""; // Clear previous errors
+
+    if (files.length > 1000) {
+      var errorMessage = "Sorry, you cannot upload more than 1000 files.";
+      errorSection.innerHTML += `
+          <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <div class="text-center">
+              <i class="bi bi-exclamation-triangle-fill"></i>
+              <strong>${errorMessage}</strong>
+              <button
+                type="button"
+                class="btn-close"
+                data-bs-dismiss="alert"
+                aria-label="Close"
+              ></button>
+            </div>
+          </div>
+        `;
+      document.querySelector("#file-input").value = ""; // Clear the selected files
+      return false;
+    }
+
+    for (var i = 0; i < files.length; i++) {
+      totalSize += files[i].size;
+    }
+
+    if (totalSize > 1073741824) {
+      // 1GB in bytes
+      var errorMessage = "Sorry, the total dataset size cannot exceed 1GB.";
+      errorSection.innerHTML += `
+          <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <div class="text-center">
+              <i class="bi bi-exclamation-triangle-fill"></i>
+              <strong>${errorMessage}</strong>
+              <button
+                type="button"
+                class="btn-close"
+                data-bs-dismiss="alert"
+                aria-label="Close"
+              ></button>
+            </div>
+          </div>
+        `;
+      document.querySelector("#file-input").value = ""; // Clear the selected files
+      return false;
+    }
+  }
+</script>
+
+<!-- JSON Validation Script -->
+<script>
+  function readJSON() {
+    const fileInput = document.getElementById("json-file");
+    const file = fileInput.files[0];
+
+    const reader = new FileReader();
+
+    reader.onload = function (event) {
+      const fileContent = event.target.result;
+
+      // Clear previous errors.
+      document.getElementById("dynamic-error-section").innerHTML = "";
+
+      try {
+        const jsonObj = JSON.parse(fileContent);
+
+        if (validateJSON(jsonObj)) {
+          updateFileInfo(fileInput, "json-info");
+          return true;
+        } else {
+          return false;
+        }
+      } catch (e) {
+        console.log(e);
+        document.getElementById("dynamic-error-section").insertAdjacentHTML(
+          "beforeend",
+          `
+          <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <div class="text-center">
+            <i class="bi bi-exclamation-triangle-fill"></i>
+              <strong>Could not parse the JSON File, please ensure the format is correct.</strong>
+              <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+          </div>
+        `
+        );
+
+        return false;
+      }
+    };
+
+    reader.readAsText(file);
+  }
+
+  function validateJSON(obj) {
+    let errors = [];
+
+    if (!obj.basic_identity?.title) {
+      errors.push("Your dataset metadata is missing the Title");
+    }
+
+    if (errors.length > 0) {
+      errors.forEach((error) => {
+        document.getElementById("dynamic-error-section").insertAdjacentHTML(
+          "beforeend",
+          `
+      <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        <div class="text-center">
+          <i class="bi bi-exclamation-triangle-fill"></i>
+          <strong>${error}</strong>
+          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+      </div>
+    `
+        );
+      });
+
+      // Clears input field if the value is incorrect.
+      document.getElementById("json-file").value = "";
+      return false;
+    }
+    return true;
+  }
+</script>
+
+<!-- Upload Boxes Script -->
 <script>
   function updateFileInfo(input, infoId) {
     const infoDiv = document.getElementById(infoId);
@@ -125,15 +498,22 @@
 
     if (input.files && input.files[0]) {
       const file = input.files[0];
-      let iconClass = file.name.endsWith(".zip")
-        ? "bi-file-earmark-zip"
-        : "bi-file-earmark-text";
 
-      // Update the display for file info
-      infoDiv.innerHTML = `<div class="file-display d-flex flex-column align-items-center justify-content-center">
-                                  <i class="bi ${iconClass} mb-2"></i>
-                                  <span>${file.name}</span>
-                               </div>`;
+      // Determine the type of upload (folder or file) and update the display accordingly
+      if (input.getAttribute("webkitdirectory") !== null) {
+        // Folder upload
+        let folderName = file.webkitRelativePath.split("/")[0];
+        infoDiv.innerHTML = `<div class="file-display d-flex flex-column align-items-center justify-content-center">
+                            <i class="bi bi-folder mb-2"></i>
+                            <span>${folderName}</span>
+                         </div>`;
+      } else {
+        // File upload
+        infoDiv.innerHTML = `<div class="file-display d-flex flex-column align-items-center justify-content-center">
+                            <i class="bi bi-file-earmark-text mb-2"></i>
+                            <span>${file.name}</span>
+                         </div>`;
+      }
 
       // Style adjustments
       infoDiv.style.position = "absolute";
@@ -148,7 +528,7 @@
 
       parentDiv.classList.add("file-uploaded");
     } else {
-      // Reset to default if no file is selected
+      // Reset to default if no file or folder is selected
       defaultText.style.display = "";
       defaultIcon.style.display = "";
       infoDiv.innerHTML = "";
@@ -156,5 +536,27 @@
     }
   }
 </script>
+
+<!-- Expandable List Script -->
+<script>
+  function toggleVisibility(event, id) {
+    event.stopPropagation(); // Prevent event bubbling to parent elements
+    var element = document.getElementById(id);
+    var trigger = event.currentTarget;
+    var triggerSymbol = trigger.getElementsByClassName('toggle-symbol')[0];
+
+    if (element.style.display === 'block') {
+      element.style.display = 'none';
+      if (triggerSymbol) {
+        triggerSymbol.textContent = '+';
+      }
+    } else {
+      element.style.display = 'block';
+      if (triggerSymbol) {
+        triggerSymbol.textContent = '-';
+      }
+    }
+  }
+  </script>
 
 {% endblock %}

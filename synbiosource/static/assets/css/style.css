@@ -379,6 +379,23 @@ h5 {
   padding-right: 1rem;
 }
 
+.nested {
+  display: none;
+  list-style-type: none; /* Remove bullet points */
+  padding-left: 20px; /* Indent nested lists */
+}
+
+.metadata-list li {
+  cursor: pointer;
+  list-style-type: none; 
+}
+
+.toggle-symbol {
+  color: #0a4746; 
+  font-weight: bold;
+  margin-right: 5px;
+}
+
 /* View Datasets Page */
 /* File Tree */
 #folderStructure ul {

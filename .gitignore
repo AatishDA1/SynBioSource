@@ -1,4 +1,4 @@
 .env
-mediafiles/
-s3_config/
-s3_staticfiles/
+synbiosource/mediafiles/
+synbiosource/s3_config/
+synbiosource/s3_staticfiles/

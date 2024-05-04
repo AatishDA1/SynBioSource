@@ -478,9 +478,9 @@
 
     <!-- Datasets List -->
     <div class="dataset-list">
-      <!-- Example Dataset Entry as Button -->
+      <!-- Dataset Entry as Button -->
       {% for item in selected_datasets %}
-      <div class="dataset-card" onclick="viewDetail({{item.id}})">
+      <div class="{% if request.user.id == item.owner.id %}your-dataset-card{% else %}dataset-card{% endif %}" onclick="viewDetail({{item.id}})">
         <div class="card">
           <div class="card-body">
             <h5 class="card-title">
@@ -497,7 +497,6 @@
         </div>
       </div>
       {% endfor %}
-      <!-- Repeat the entry for each dataset -->
     </div>
 
     <!-- Pagination -->

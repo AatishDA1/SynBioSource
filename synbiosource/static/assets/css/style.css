@@ -266,7 +266,17 @@ h5 {
 }
 
 .dataset-card:hover {
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+}
+
+.your-dataset-card {
+  margin-bottom: 30px;
+  cursor: pointer;
+}
+
+.your-dataset-card:hover {
+  box-shadow: 0 5px 10px  #0e747253;
+  border-radius: 0.25rem;
 }
 
 .padding {

@@ -1,7 +1,7 @@
 {% extends "base.html" %} {% block content %}
 <div class="main-content">
   <div class="container mt-5">
-    <h1 class="text-center padding">Your Datasets</h1>
+    <h1 class="text-center padding">{{request.session.full_name}}'s Datasets</h1>
     <div class="line"></div>
 
     <!-- Filtering Section -->
@@ -478,9 +478,9 @@
 
     <!-- Datasets List -->
     <div class="dataset-list">
-      <!-- Example Dataset Entry as Button -->
+      <!-- Dataset Entry as Button -->
       {% for item in selected_datasets %}
-      <div class="dataset-card" onclick="viewDetail({{item.id}})">
+      <div class="your-dataset-card" onclick="viewDetail({{item.id}})">
         <div class="card">
           <div class="card-body">
             <h5 class="card-title">
@@ -490,14 +490,12 @@
               {{item.metadata_file.basic_identity.description}}
             </p>
             <div class="d-flex justify-content-between">
-              <small>Author: {{item.owner.full_name}}</small>
               <small>Downloads: {{item.download_count}}</small>
             </div>
           </div>
         </div>
       </div>
       {% endfor %}
-      <!-- Repeat the entry for each dataset -->
     </div>
 
     <!-- Pagination -->

@@ -71,8 +71,7 @@
     },
     "text": {
       "encoding": "Mandatory - Character encoding used in text files ('UTF-8'/ 'UTF-16'/ 'UTF-32'/ 'ASCII'/ 'Other').",
-      "language": "Mandatory - Predominant language of text files (e.g., English, Spanish, Chinese).",
-      "text_format": "Optional - Format of text files (e.g., plain text, markdown, HTML)."
+      "language": "Mandatory - Predominant language of text files (e.g., English, Spanish, Chinese)."
     },
     "pdf": {
       "text_extractable": "Mandatory - Indicates whether text is extractable across PDF files ('Yes'/ 'No'/ 'N/A).",

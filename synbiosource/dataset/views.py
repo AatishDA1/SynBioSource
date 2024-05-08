@@ -220,7 +220,6 @@ def BrowseDatasets(request):
      # Text
     encoding=''
     language=''
-    text_format=''
      # PDF
     text_extractable=''
     pdf_version=''
@@ -285,7 +284,6 @@ def BrowseDatasets(request):
          # Text
         encoding=request.POST.get('encoding')
         language=request.POST.get('language')
-        text_format=request.POST.get('text_format')
          # PDF
         text_extractable=request.POST.get('text_extractable')
         pdf_version=request.POST.get('pdf_version')
@@ -332,7 +330,6 @@ def BrowseDatasets(request):
             genbank_minimum_sequence_length == '' and genbank_maximum_sequence_length == '' and \
             encoding == '' and \
             language == '' and \
-            text_format == '' and \
             text_extractable == '' and \
             pdf_version == '':
          datasets=DatasetRegistry.objects.all().order_by('id')
@@ -445,8 +442,6 @@ def BrowseDatasets(request):
             query = query & Q(metadata_file__dataset_composition__text__encoding__icontains=encoding)
         if language and language!='':
             query = query & Q(metadata_file__dataset_composition__text__language__icontains=language)
-        if text_format and text_format!='':
-            query = query & Q(metadata_file__dataset_composition__text__text_format__icontains=text_format)
          # PDF
         if text_extractable:
             query = query & Q(metadata_file__dataset_composition__pdf__text_extractable__icontains=text_extractable)
@@ -736,7 +731,6 @@ def YourDatasets(request):
      # Text
     encoding=''
     language=''
-    text_format=''
      # PDF
     text_extractable=''
     pdf_version=''
@@ -801,7 +795,6 @@ def YourDatasets(request):
          # Text
         encoding=request.POST.get('encoding')
         language=request.POST.get('language')
-        text_format=request.POST.get('text_format')
          # PDF
         text_extractable=request.POST.get('text_extractable')
         pdf_version=request.POST.get('pdf_version')
@@ -848,7 +841,6 @@ def YourDatasets(request):
             genbank_minimum_sequence_length == '' and genbank_maximum_sequence_length == '' and \
             encoding == '' and \
             language == '' and \
-            text_format == '' and \
             text_extractable == '' and \
             pdf_version == '':
          
@@ -963,9 +955,7 @@ def YourDatasets(request):
             query = query & Q(metadata_file__dataset_composition__text__encoding__icontains=encoding)
         if language and language!='':
             query = query & Q(metadata_file__dataset_composition__text__language__icontains=language)
-        if text_format and text_format!='':
-            query = query & Q(metadata_file__dataset_composition__text__text_format__icontains=text_format)
-         # PDF
+        # PDF
         if text_extractable:
             query = query & Q(metadata_file__dataset_composition__pdf__text_extractable__icontains=text_extractable)
         if pdf_version and pdf_version!='':

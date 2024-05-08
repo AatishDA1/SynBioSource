@@ -29,6 +29,7 @@ urlpatterns = [
     path('forgot-password',views.forgot_password, name="forgot-password"),
     path('reset-password/<str:token>',views.reset_password, name="reset-password"),
     path('dataset/',include('dataset.urls'),),
+    path('api/dataset/',include('api.urls'),),
 ]
 
 # To enable the use of static files. 

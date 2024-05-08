@@ -44,6 +44,8 @@ INSTALLED_APPS = [
     'dashboard',
     'dataset',
     'storages',
+    'api',
+    'rest_framework',
 ]
 
 MIDDLEWARE = [
@@ -185,3 +187,9 @@ EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER')  
 EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')     
+
+# Rest Framework settings
+REST_FRAMEWORK = {
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+    'PAGE_SIZE': 10
+}

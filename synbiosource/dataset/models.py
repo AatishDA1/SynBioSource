@@ -11,6 +11,8 @@ class DatasetRegistry(models.Model):
     metadata_file = models.JSONField()
     created_at = models.DateTimeField(default=timezone.now)
     updated_at = models.DateTimeField(auto_now=True)
+    
+    # Metadata Extracted Numerical Fields
     dataset_size = models.IntegerField(default=0)
     number_of_files = models.IntegerField(default=0)
     average_file_size = models.FloatField(default=0)

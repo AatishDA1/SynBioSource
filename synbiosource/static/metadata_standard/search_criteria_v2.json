@@ -1,29 +1,17 @@
 {
   "basic_identity": {
     "title": "Mandatory - Title of the Dataset.",
-    "description": "Mandatory - A detailed description of the dataset and its contents.",
-    "version": "Mandatory - Version of the dataset as a float value.",
-    "changelog": "Optional - Description of changes made compared to the previous version of the dataset.",
-    "keywords": "Mandatory - Minimum of 3 keywords related to this dataset in the format of a list ('keyword1', 'keyword2', 'keyword3'...)",
-    "license": "Mandatory - Type of license under which the dataset is distributed."
-  },
-  "author_contact_details": {
-    "affiliation": "Optional - Affiliation of the author.",
-    "email": "Mandatory - Email address of the author.",
-    "phone": "Optional - Phone number of the author."
+    "keywords": "Mandatory - Minimum of 3 keywords related to this dataset in the format of keyword1, keyword2, keyword3..."
   },
   "dataset_creation": {
     "general": {
       "data_origin": "Mandatory - Indicates whether the data is ('Synthetically Generated'/ 'Naturally Obtained'/ 'Other').",
       "synthetic_data_details": {
-        "generation_method": "Mandatory - Method used for generating synthetic data, if applicable.",
-        "software_used": "Mandatory - Details of any software or tools used for generating synthetic data.",
-        "related_publications": "Optional - Citations or links to publications that are directly related to the synthetic data generation."
+        "software_used": "Mandatory - Details of any software or tools used for generating synthetic data."
       },
       "natural_data_details": {
         "study_type": "Mandatory - Type of study conducted ('Observational' / 'Experimental' / 'Clinical Trial' / 'Field Study' / 'Laboratory Study' / 'Survey Research' / 'Longitudinal Study' / 'Cross-Sectional Study' / 'Case Study' / 'Other').",
         "experimental_setup": {
-          "general_description": "Mandatory - General description of the study, outlining its main objectives and methodology.",
           "instrumentation": "Optional - Specific instruments and technologies used to collect the data.",
           "protocols": "Optional - List any common protocols used during the experiment.",
           "study_start_date": "Mandatory - Date when the experiment commenced.",
@@ -31,34 +19,22 @@
         },
         "sample_information": {
           "number_of_samples": "Optional - Total number of samples collected and analyzed in the study.",
-          "sample_types": "Optional - Description of the types of samples collected, such as biological tissues, environmental specimens, clinical samples, etc., including specific details when applicable.",
           "participants": {
-            "total_participants": "Optional - Total number of participants involved in the study, if applicable.",
-            "demographic_data": "Optional - Information about the demographic characteristics of the participants (age range, gender, ethnicity, etc.).",
-            "selection_criteria": "Optional - Criteria used for selecting participants, including any inclusion or exclusion criteria.",
-            "health_status": "Optional - Health status or medical conditions of participants relevant to the study."
+            "total_participants": "Optional - Total number of participants involved in the study, if applicable."
           }
-        },
-        "experimental_conditions": {
-          "experiment_location": "Mandatory - Location where the experiment was conducted, including specific site details and environmental conditions, if relevant.",
-          "experiment_conditions": "Optional - Detailed conditions under which the experiment was performed, such as temperature, lighting, and other relevant environmental parameters."
-        },
-        "related_publications": "Optional - Citations or links to publications that are directly related to the dataset's usage."
+        }
       }
     },
     "data_completion": {
-      "dataset_status": "Mandatory - Indicates if the dataset is final or will be further worked on ('Complete'/ 'In Progress'/ 'Abandoned & Incomplete'/ 'Other').",
-      "future_work": "Optional - Description of any planned future work or improvements to be made on the dataset."
+      "dataset_status": "Mandatory - Indicates if the dataset is final or will be further worked on ('Complete'/ 'In Progress'/ 'Abandoned & Incomplete'/ 'Other')."
     },
     "pre_processing": {
       "raw_data": "Mandatory - Is this the raw data or has it undergone any pre-processing ('Yes'/ 'No').",
       "data_cleanliness": {
-        "cleanliness_status": "Mandatory - Indicates the cleanliness of the data ('Clean'/ 'Partially Clean'/ 'Unclean'/ 'N/A').",
-        "cleaning_details": "Optional - Description of the cleaning process applied to the dataset (e.g., methods used, types of errors corrected)."
+        "cleanliness_status": "Mandatory - Indicates the cleanliness of the data ('Clean'/ 'Partially Clean'/ 'Unclean'/ 'N/A')."
       },
       "labeling": {
-        "labeled": "Mandatory - Indicates whether the data is labeled ('Yes'/ 'No'/ 'N/A').",
-        "labeling_details": "Optional - Description of the labeling process and the types of labels used."
+        "labeled": "Mandatory - Indicates whether the data is labeled ('Yes'/ 'No'/ 'N/A')."
       },
       "data_split": {
         "train_split": "Optional - Percentage of data used for training in machine learning datasets.",
@@ -67,27 +43,20 @@
       }
     }
   },
-  "dataset_usage": {
-    "citation": "Optional - Recommended citation for the dataset.",
-    "data_usage_description": "Mandatory - Description of how the data can be used, including any restrictions or guidelines.",
-    "related_datasets": "Optional - Links to related datasets.",
-    "related_publications": "Optional - Links or references to any papers related to the dataset's usage."
-  },
   "dataset_composition": {
     "general": {
-      "format": "Mandatory - File format ('CSV'/ 'Excel'/ 'Image'/ 'Video'/ 'Audio'/ 'FASTA'/ 'GenBank'/ 'Text'/ 'PDF'/ 'Matlab'/ 'Other').",
+      "format": "Mandatory - File format ('CSV'/ 'Excel'/ 'Image'/ 'Video'/ 'Audio'/ 'FASTA'/ 'GenBank'/ 'Text'/ 'PDF'/ 'Other').",
       "dataset_size": "Mandatory - Size of the dataset, typically in KB.",
       "number_of_files": "Mandatory - Total number of files.",
-      "average_file_size": "Mandatory - Average file size across files in KB."
+      "average_file_size": "Mandatory - Average file size across files of this type in KB."
     },
     "csv": {
       "delimiter": "Mandatory - Delimiter used in CSV files ('Comma'/ 'Colon'/ 'Semicolon'/ 'Other').",
-      "has_header": "Mandatory - Indicates if CSV files have a header row ('Yes'/ 'No').",
-      "column_names": "Mandatory - List of column names in CSV files (e.g., ['column1', 'column2', 'column3'])."
+      "has_header": "Mandatory - Indicates if CSV files have a header row ('Yes'/ 'No')."
     },
     "excel": {
       "has_macros": "Mandatory - Indicates if Excel files contain macros ('Yes'/ 'No').",
-      "average_sheets": "Mandatory - Average number of sheets across Excel files."
+      "average_sheets": "Optional - Average number of sheets across Excel files."
     },
     "image": {
       "file_type": "Mandatory - File type of images ('JPEG'/ 'PNG'/ 'GIF'/ 'TIFF'/ 'BMP'/ 'Other').",
@@ -111,18 +80,15 @@
       "general_info": {
         "sequence_type": "Mandatory - List of predominant sequence types in the FASTA files ('DNA'/ 'RNA'/ 'cDNA'/ 'Amino Acid'/ 'Other').",
         "organism_group": "Mandatory - List of organisms represented ('Bacteria'/ 'Virus'/ 'Eukaryote'/ 'Archaea'/ 'Organelles'/ 'Other').",
-        "specific_species": "Optional - List of the specific species or strains represented in the FASTA files.",
         "minimum_sequence_length": "Mandatory - Minimum sequence length.",
         "maximum_sequence_length": "Mandatory - Maximum sequence length."
       },
       "sequencing_info": {
         "sequencing_method": "Mandatory - Main sequencing technologies used ('Illumina'/ 'PacBio SMRT'/ 'Nanopore Sequencing'/ 'Sanger'/ 'Ion Torrent'/ 'Pyrosequencing'/ 'SOLiD Sequencing'/ 'Other').",
         "coverage_depth": "Optional - Average depth of coverage, crucial for assessing data quality as an Integer.",
-        "assembly_details": "Optional - Description of assembly algorithms and parameters used in generating the genome assembly.",
         "error_rate": "Optional - Estimated error rate of the sequence data as a percentage (Float)."
       },
       "further_source_details": {
-        "source_organism_info": "Optional - Detailed information on the source organisms used, including any unique genetic or phenotypic characteristics. This includes both naturally occurring and engineered traits.",
         "NCBI_Taxonomy_ID": "Optional - The National Center for Biotechnology Information (NCBI) Taxonomy IDs, if applicable.",
         "GenBank_Accession_Number": "Optional - The GenBank accession number associated with the genomic sequences of the organisms, if applicable.",
         "UniProt_ID": "Optional - The Universal Protein Resource (UniProt) IDs, if applicable."
@@ -132,40 +98,27 @@
       "general_info": {
         "sequence_type": "Mandatory - List of predominant sequence types in the FASTA files ('DNA'/ 'RNA'/ 'cDNA'/ 'Amino Acid'/ 'Other').",
         "organism_group": "Mandatory - List of organisms represented ('Bacteria'/ 'Virus'/ 'Eukaryote'/ 'Archaea'/ 'Organelles'/ 'Other').",
-        "specific_species": "Optional - List of the specific species or strains represented in the GenBank files.",
         "minimum_sequence_length": "Mandatory - Minimum sequence length.",
         "maximum_sequence_length": "Mandatory - Maximum sequence length."
       },
       "sequencing_info": {
         "sequencing_method": "Mandatory - Main sequencing technologies used ('Illumina'/ 'PacBio SMRT'/ 'Nanopore Sequencing'/ 'Sanger'/ 'Ion Torrent'/ 'Pyrosequencing'/ 'SOLiD Sequencing'/ 'Other').",
         "coverage_depth": "Optional - Average depth of coverage, crucial for assessing data quality as an Integer.",
-        "assembly_details": "Optional - Description of assembly algorithms and parameters used in generating the genome assembly.",
         "error_rate": "Optional - Estimated error rate of the sequence data as a percentage (Float)."
       },
       "further_source_details": {
-        "source_organism_info": "Optional - Detailed information on the source organisms used, including any unique genetic or phenotypic characteristics. This includes both naturally occurring and engineered traits.",
         "NCBI_Taxonomy_ID": "Optional - The National Center for Biotechnology Information (NCBI) Taxonomy IDs, if applicable.",
         "GenBank_Accession_Number": "Optional - The GenBank accession number associated with the genomic sequences of the organisms, if applicable.",
         "UniProt_ID": "Optional - The Universal Protein Resource (UniProt) IDs, if applicable."
       }
-    },
-    "matlab": {
-      "matlab_version": "Mandatory - Version of MATLAB used to generate the data (e.g., R2019b).",
-      "variables_stored": "Mandatory - Types of variables stored in the file ('Matrix', 'Cell Array', 'Structure', 'Table', 'Function Handle', 'Time Series', 'Other').",
-      "toolboxes_used": "Optional - List of MATLAB toolboxes used in the data generation process."
     },
     "text": {
       "encoding": "Mandatory - Character encoding used in text files ('UTF-8'/ 'UTF-16'/ 'UTF-32'/ 'ASCII'/ 'Other').",
       "language": "Mandatory - Predominant language of text files (e.g., English, Spanish, Chinese)."
     },
     "pdf": {
-      "text_extractable": "Mandatory - Indicates whether text is extractable across PDF files ('Yes'/ 'No'/ 'N/A').",
+      "text_extractable": "Mandatory - Indicates whether text is extractable across PDF files ('Yes'/ 'No'/ 'N/A).",
       "pdf_version": "Optional - Version of PDF format used (e.g., 1.4, 1.7)."
     }
-  },
-  "ethics": {
-    "data_collection_ethics": "Optional - Information on ethical considerations related to data collection (e.g., consent, privacy).",
-    "data_usage_ethics": "Optional - Information on ethical considerations related to data usage (e.g., intended use, potential misuse).",
-    "ethical_review_status": "Optional - Information on whether the dataset has undergone ethical review (e.g., approved, pending, not applicable)."
   }
 }

@@ -13,10 +13,17 @@ class DatasetRegistry(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
     
     # Metadata Extracted Numerical Fields
+     # Dataset Creation
+    number_of_samples = models.IntegerField(null=True)
+    total_participants = models.IntegerField(null=True)
+
+     # Dataset Composition
+      # General fields within Composition
     dataset_size = models.IntegerField(default=0)
     number_of_files = models.IntegerField(default=0)
     average_file_size = models.FloatField(default=0)
-    # Optional fields
+      
+      # Optional fields withing Composition
     average_sheets = models.IntegerField(null=True)
     average_resolution = models.IntegerField(null=True)
     video_average_duration = models.FloatField(null=True)
@@ -24,8 +31,12 @@ class DatasetRegistry(models.Model):
     average_bitrate = models.FloatField(null=True)
     fasta_minimum_sequence_length = models.IntegerField(null=True)
     fasta_maximum_sequence_length = models.IntegerField(null=True)
+    fasta_coverage_depth = models.IntegerField(null=True)
+    fasta_error_rate = models.FloatField(null=True)
     genbank_minimum_sequence_length = models.IntegerField(null=True)
     genbank_maximum_sequence_length = models.IntegerField(null=True)
+    genbank_coverage_depth = models.IntegerField(null=True)
+    genbank_error_rate = models.FloatField(null=True)
 
     def __str__(self):
         """Function to return the name of the datasets selected to the admin panel."""

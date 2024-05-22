@@ -5,7 +5,7 @@
   },
   "dataset_creation": {
     "general": {
-      "data_origin": "Mandatory - Indicates whether the data is ('Synthetically Generated'/ 'Naturally Obtained'/ 'Other').",
+      "data_origin": "Mandatory - Indicates whether the data is ('Synthetically-Generated'/ 'Naturally-Obtained'/ 'Other').",
       "synthetic_data_details": {
         "software_used": "Mandatory - Details of any software or tools used for generating synthetic data."
       },
@@ -14,8 +14,8 @@
         "experimental_setup": {
           "instrumentation": "Optional - Specific instruments and technologies used to collect the data.",
           "protocols": "Optional - List any common protocols used during the experiment.",
-          "study_start_date": "Mandatory - Date when the experiment commenced in the form dd/mm/yyyy.",
-          "study_end_date": "Mandatory - Date when the experiment concluded in the form dd/mm/yyyy."
+          "study_start_date": "Mandatory - Date when the experiment commenced in the form mm/dd/yyyy.",
+          "study_end_date": "Mandatory - Date when the experiment concluded in the form mm/dd/yyyy."
         },
         "sample_information": {
           "number_of_samples": "Optional - Total number of samples collected and analyzed in the study.",
@@ -111,6 +111,11 @@
         "GenBank_Accession_Number": "Optional - The GenBank accession number associated with the genomic sequences of the organisms, if applicable.",
         "UniProt_ID": "Optional - The Universal Protein Resource (UniProt) IDs, if applicable."
       }
+    },
+    "matlab": {
+      "matlab_version": "Mandatory - Version of MATLAB used to generate the data (e.g., R2019b).",
+      "variables_stored": "Mandatory - Types of variables stored in the file ('Matrix', 'Cell Array', 'Structure', 'Table', 'Function Handle', 'Time Series', 'Other').",
+      "toolboxes_used": "Optional - List of MATLAB toolboxes used in the data generation process."
     },
     "text": {
       "encoding": "Mandatory - Character encoding used in text files ('UTF-8'/ 'UTF-16'/ 'UTF-32'/ 'ASCII'/ 'Other').",

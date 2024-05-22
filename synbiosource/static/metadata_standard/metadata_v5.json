@@ -14,7 +14,7 @@
   },
   "dataset_creation": {
     "general": {
-      "data_origin": "Mandatory - Indicates whether the data is ('Synthetically Generated'/ 'Naturally Obtained'/ 'Other').",
+      "data_origin": "Mandatory - Indicates whether the data is ('Synthetically-Generated'/ 'Naturally-Obtained'/ 'Other').",
       "synthetic_data_details": {
         "generation_method": "Mandatory - Method used for generating synthetic data, if applicable.",
         "software_used": "Mandatory - Details of any software or tools used for generating synthetic data.",
@@ -26,8 +26,8 @@
           "general_description": "Mandatory - General description of the study, outlining its main objectives and methodology.",
           "instrumentation": "Optional - Specific instruments and technologies used to collect the data.",
           "protocols": "Optional - List any common protocols used during the experiment.",
-          "study_start_date": "Mandatory - Date when the experiment commenced in the form dd/mm/yyyy.",
-          "study_end_date": "Mandatory - Date when the experiment concluded in the form dd/mm/yyyy."
+          "study_start_date": "Mandatory - Date when the experiment commenced in the form mm/dd/yyyy.",
+          "study_end_date": "Mandatory - Date when the experiment concluded in the form mm/dd/yyyy."
         },
         "sample_information": {
           "number_of_samples": "Optional - Total number of samples collected and analyzed in the study.",

@@ -73,6 +73,17 @@ def UploadDataset(request):
         )
 
         # Processes and stores numerical fields from the metadata.
+         # General
+        try:
+            if valid_number(metadata['dataset_creation']['general']['number_of_samples']):
+                data.number_of_samples=valid_number(metadata['dataset_creation']['general']['number_of_samples'])
+        except KeyError:
+            pass
+        try:
+            if valid_number(metadata['dataset_creation']['general']['total_participants']):
+                data.total_participants=valid_number(metadata['dataset_creation']['general']['total_participants'])
+        except KeyError:
+            pass
         try:
             if valid_number(metadata['dataset_composition']['general']['dataset_size']):
                 data.dataset_size=valid_number(metadata['dataset_composition']['general']['dataset_size'])
@@ -88,6 +99,8 @@ def UploadDataset(request):
                 data.average_file_size=valid_number(metadata['dataset_composition']['general']['average_file_size'])
         except KeyError:
             pass
+        
+         # Other File Types
         try:
             if valid_number(metadata['dataset_composition']['excel']['average_sheets']):
                 data.average_sheets=valid_number(metadata['dataset_composition']['excel']['average_sheets'])
@@ -113,26 +126,52 @@ def UploadDataset(request):
                 data.average_bitrate=valid_number(metadata['dataset_composition']['audio']['average_bitrate'])
         except KeyError:
             pass
+        
+         # FASTA
         try:
-            if valid_number(metadata['dataset_composition']['fasta']['minimum_sequence_length']):
-                data.fasta_minimum_sequence_length=valid_number(metadata['dataset_composition']['fasta']['minimum_sequence_length'])
+            if valid_number(metadata['dataset_composition']['fasta']['general_info']['minimum_sequence_length']):
+                data.fasta_minimum_sequence_length=valid_number(metadata['dataset_composition']['fasta']['general_info']['minimum_sequence_length'])
         except KeyError:
             pass
         try:
-            if valid_number(metadata['dataset_composition']['fasta']['maximum_sequence_length']):
-                data.fasta_maximum_sequence_length=valid_number(metadata['dataset_composition']['fasta']['maximum_sequence_length'])
+            if valid_number(metadata['dataset_composition']['fasta']['general_info']['maximum_sequence_length']):
+                data.fasta_maximum_sequence_length=valid_number(metadata['dataset_composition']['fasta']['general_info']['maximum_sequence_length'])
         except KeyError:
             pass
         try:
-            if valid_number(metadata['dataset_composition']['genbank']['minimum_sequence_length']):
-                data.genbank_minimum_sequence_length=valid_number(metadata['dataset_composition']['genbank']['minimum_sequence_length'])
+            if valid_number(metadata['dataset_composition']['fasta']['sequencing_info']['coverage_depth']):
+                data.fasta_coverage_depth=valid_number(metadata['dataset_composition']['fasta']['sequencing_info']['coverage_depth'])
         except KeyError:
             pass
         try:
-            if valid_number(metadata['dataset_composition']['genbank']['maximum_sequence_length']):
-                data.genbank_maximum_sequence_length=valid_number(metadata['dataset_composition']['genbank']['maximum_sequence_length'])
+            if valid_number(metadata['dataset_composition']['fasta']['sequencing_info']['error_rate']):
+                data.fasta_error_rate=valid_number(metadata['dataset_composition']['fasta']['sequencing_info']['error_rate'])
         except KeyError:
             pass
+        
+         # GenBank
+        try:
+            if valid_number(metadata['dataset_composition']['genbank']['general_info']['minimum_sequence_length']):
+                data.genbank_minimum_sequence_length=valid_number(metadata['dataset_composition']['genbank']['general_info']['minimum_sequence_length'])
+        except KeyError:
+            pass
+        try:
+            if valid_number(metadata['dataset_composition']['genbank']['general_info']['maximum_sequence_length']):
+                data.genbank_maximum_sequence_length=valid_number(metadata['dataset_composition']['genbank']['general_info']['maximum_sequence_length'])
+        except KeyError:
+            pass
+        try:
+            if valid_number(metadata['dataset_composition']['genbank']['sequencing_info']['coverage_depth']):
+                data.genbank_coverage_depth=valid_number(metadata['dataset_composition']['genbank']['sequencing_info']['coverage_depth'])
+        except KeyError:
+            pass
+        try:
+            if valid_number(metadata['dataset_composition']['genbank']['sequencing_info']['error_rate']):
+                data.genbank_error_rate=valid_number(metadata['dataset_composition']['genbank']['sequencing_info']['error_rate'])
+        except KeyError:
+            pass
+        
+        # Saves the dataset to the database.
         data.save()
         
         
@@ -165,7 +204,18 @@ def BrowseDatasets(request):
 
     # Initializes variables relating to the datasets' creation.
     data_origin = ''
+    software_used = ''
+    study_type = ''
+    instrumentation = ''
+    protocols = ''
+    study_start_date = ''
+    study_end_date = ''
+    min_number_of_samples = ''
+    max_number_of_samples = ''
+    min_participants = ''
+    max_participants = ''
     dataset_status = ''
+    raw_data = ''
     cleanliness_status = ''
     labeled_status = ''
     train_split = ''
@@ -209,14 +259,34 @@ def BrowseDatasets(request):
     audio_processing=''
      # FASTA
     fasta_sequence_type=''
-    fasta_organism_type=''
+    fasta_organism_group=''
     fasta_minimum_sequence_length=''
     fasta_maximum_sequence_length=''
+    fasta_sequencing_method=''
+    fasta_min_coverage_depth=''
+    fasta_max_coverage_depth=''
+    fasta_min_error_rate=''
+    fasta_max_error_rate=''
+    fasta_NCBI_Taxonomy_ID=''
+    fasta_GenBank_Accession_Number=''
+    fasta_UniProt_ID=''
      # GenBank
     genbank_sequence_type=''
-    genbank_organism_type=''
+    genbank_organism_group=''
     genbank_minimum_sequence_length=''
     genbank_maximum_sequence_length=''
+    genbank_sequencing_method=''
+    genbank_min_coverage_depth=''
+    genbank_max_coverage_depth=''
+    genbank_min_error_rate=''
+    genbank_max_error_rate=''
+    genbank_NCBI_Taxonomy_ID=''
+    genbank_GenBank_Accession_Number=''
+    genbank_UniProt_ID=''
+     # Matlab
+    matlab_version=''
+    variables_stored=''
+    toolboxes_used=''
      # Text
     encoding=''
     language=''
@@ -229,7 +299,18 @@ def BrowseDatasets(request):
         keyword=request.POST.get('keyword')
         # Dataset Creation
         data_origin=request.POST.get('data_origin')
+        software_used=request.POST.get('software_used')
+        study_type=request.POST.get('study_type')
+        instrumentation=request.POST.get('instrumentation')
+        protocols=request.POST.get('protocols')
+        study_start_date=request.POST.get('study_start_date')
+        study_end_date=request.POST.get('study_end_date')
+        min_number_of_samples=request.POST.get('min_number_of_samples')
+        max_number_of_samples=request.POST.get('max_number_of_samples')
+        min_participants=request.POST.get('min_participants')
+        max_participants=request.POST.get('max_participants')
         dataset_status=request.POST.get('dataset_status')
+        raw_data=request.POST.get('raw_data')
         cleanliness_status=request.POST.get('data_cleanliness')
         labeled_status=request.POST.get('labeled')
         train_split=request.POST.get('train_split')
@@ -271,16 +352,36 @@ def BrowseDatasets(request):
         min_bitrate=request.POST.get('min_bitrate')
         max_bitrate=request.POST.get('max_bitrate')
         audio_processing=request.POST.get('audio_processing')
-        # FASTA
+         # FASTA
         fasta_sequence_type=request.POST.get('fasta_sequence_type')
-        fasta_organism_type=request.POST.get('fasta_organism_type')
+        fasta_organism_group=request.POST.get('fasta_organism_group')
         fasta_minimum_sequence_length=request.POST.get('fasta_minimum_sequence_length')
         fasta_maximum_sequence_length=request.POST.get('fasta_maximum_sequence_length')
+        fasta_sequencing_method=request.POST.get('fasta_sequencing_method')
+        fasta_min_coverage_depth=request.POST.get('fasta_min_coverage_depth')
+        fasta_max_coverage_depth=request.POST.get('fasta_max_coverage_depth')
+        fasta_min_error_rate=request.POST.get('fasta_min_error_rate')
+        fasta_max_error_rate=request.POST.get('fasta_max_error_rate')
+        fasta_NCBI_Taxonomy_ID=request.POST.get('fasta_NCBI_Taxonomy_ID')
+        fasta_GenBank_Accession_Number=request.POST.get('fasta_GenBank_Accession_Number')
+        fasta_UniProt_ID=request.POST.get('fasta_UniProt_ID')
          # GenBank
         genbank_sequence_type=request.POST.get('genbank_sequence_type')
-        genbank_organism_type=request.POST.get('genbank_organism_type')
+        genbank_organism_group=request.POST.get('genbank_organism_group')
         genbank_minimum_sequence_length=request.POST.get('genbank_minimum_sequence_length')
         genbank_maximum_sequence_length=request.POST.get('genbank_maximum_sequence_length')
+        genbank_sequencing_method=request.POST.get('genbank_sequencing_method')
+        genbank_min_coverage_depth=request.POST.get('genbank_min_coverage_depth')
+        genbank_max_coverage_depth=request.POST.get('genbank_max_coverage_depth')
+        genbank_min_error_rate=request.POST.get('genbank_min_error_rate')
+        genbank_max_error_rate=request.POST.get('genbank_max_error_rate')
+        genbank_NCBI_Taxonomy_ID=request.POST.get('genbank_NCBI_Taxonomy_ID')
+        genbank_GenBank_Accession_Number=request.POST.get('genbank_GenBank_Accession_Number')
+        genbank_UniProt_ID=request.POST.get('genbank_UniProt_ID')
+         # Matlab
+        matlab_version=request.POST.get('matlab_version')
+        variables_stored=request.POST.get('variables_stored')
+        toolboxes_used=request.POST.get('toolboxes_used')
          # Text
         encoding=request.POST.get('encoding')
         language=request.POST.get('language')
@@ -296,7 +397,16 @@ def BrowseDatasets(request):
     # If no search parameters are specified, returns all datasets.
     if   keyword == '' and \
             data_origin == '' and \
+            software_used == '' and \
+            study_type == '' and \
+            instrumentation == '' and \
+            protocols == '' and \
+            study_start_date == '' and \
+            study_end_date == '' and \
+            min_number_of_samples == '' and max_number_of_samples == '' and \
+            min_participants == '' and max_participants == '' and \
             dataset_status == '' and \
+            raw_data == '' and \
             cleanliness_status == '' and \
             labeled_status == '' and \
             train_split == '' and \
@@ -323,11 +433,22 @@ def BrowseDatasets(request):
             min_bitrate == '' and max_bitrate == '' and \
             audio_processing == '' and \
             fasta_sequence_type == '' and \
-            fasta_organism_type == '' and \
+            fasta_organism_group == '' and \
             fasta_minimum_sequence_length == '' and fasta_maximum_sequence_length == '' and \
+            fasta_sequencing_method == '' and \
+            fasta_min_coverage_depth == '' and fasta_max_coverage_depth == '' and \
+            fasta_min_error_rate == '' and fasta_max_error_rate == '' and \
+            fasta_NCBI_Taxonomy_ID == '' and fasta_GenBank_Accession_Number == '' and fasta_UniProt_ID == '' and \
             genbank_sequence_type == '' and \
-            genbank_organism_type == '' and \
+            genbank_organism_group == '' and \
             genbank_minimum_sequence_length == '' and genbank_maximum_sequence_length == '' and \
+            genbank_sequencing_method == '' and \
+            genbank_min_coverage_depth == '' and genbank_max_coverage_depth == '' and \
+            genbank_min_error_rate == '' and genbank_max_error_rate == '' and \
+            genbank_NCBI_Taxonomy_ID == '' and genbank_GenBank_Accession_Number == '' and genbank_UniProt_ID == '' and \
+            matlab_version == '' and \
+            variables_stored == '' and \
+            toolboxes_used == '' and \
             encoding == '' and \
             language == '' and \
             text_extractable == '' and \
@@ -343,8 +464,28 @@ def BrowseDatasets(request):
         # Dataset Creation
         if data_origin:
             query = query & Q(metadata_file__dataset_creation__general__data_origin__icontains=data_origin)
+        if software_used:
+            query = query & Q(metadata_file__dataset_creation__synthetic_data_details__software_used__icontains=software_used)
+        if study_type:
+            query = query & Q(metadata_file__dataset_creation__natural_data_details__study_type__icontains=study_type)
+        if instrumentation:
+            query = query & Q(metadata_file__dataset_creation__natural_data_details__experimental_setup__instrumentation__icontains=instrumentation)
+        if study_start_date:
+            query = query & Q(metadata_file__dataset_creation__natural_data_details__experimental_setup__study_start_date__icontains=study_start_date)
+        if study_end_date:
+            query = query & Q(metadata_file__dataset_creation__natural_data_details__experimental_setup__study_end_date__icontains=study_end_date)
+        if min_number_of_samples and min_number_of_samples!='':
+            query = query & Q(number_of_samples__gte=min_number_of_samples)
+        if max_number_of_samples and max_number_of_samples!='':
+            query = query & Q(number_of_samples__lte=max_number_of_samples)
+        if min_participants and min_participants!='':
+            query = query & Q(total_participants__gte=min_participants)
+        if max_participants and max_participants!='':
+            query = query & Q(total_participants__lte=max_participants)
         if dataset_status:
             query = query & Q(metadata_file__dataset_creation__data_completion__dataset_status__icontains=dataset_status)
+        if raw_data:
+            query = query & Q(metadata_file__dataset_creation__pre_processing__raw_data__icontains=raw_data)
         if cleanliness_status:
             query = query & Q(metadata_file__dataset_creation__pre_processing__data_cleanliness__cleanliness_status__icontains=cleanliness_status)
         if labeled_status:
@@ -421,23 +562,62 @@ def BrowseDatasets(request):
             query = query & Q(metadata_file__dataset_composition__audio__audio_processing__icontains=audio_processing)
          # FASTA
         if fasta_sequence_type:
-            query = query & Q(metadata_file__dataset_composition__fasta__sequence_type__icontains=fasta_sequence_type)
-        if fasta_organism_type:
-            query = query & Q(metadata_file__dataset_composition__fasta__organism_type__icontains=fasta_organism_type)
+            query = query & Q(metadata_file__dataset_composition__fasta__general_info__sequence_type__icontains=fasta_sequence_type)
+        if fasta_organism_group:
+            query = query & Q(metadata_file__dataset_composition__fasta__general_info__organism_group__icontains=fasta_organism_group)
         if fasta_minimum_sequence_length and fasta_minimum_sequence_length!='':
             query = query & Q(fasta_minimum_sequence_length__gte=fasta_minimum_sequence_length)
         if fasta_maximum_sequence_length and fasta_maximum_sequence_length!='':
             query = query & Q(fasta_maximum_sequence_length__lte=fasta_maximum_sequence_length)
+        if fasta_sequencing_method:
+            query = query & Q(metadata_file__dataset_composition__fasta__sequencing_info__sequencing_method__icontains=fasta_sequencing_method)
+        if fasta_min_coverage_depth and fasta_min_coverage_depth!='':
+            query = query & Q(fasta_coverage_depth__gte=fasta_min_coverage_depth)
+        if fasta_max_coverage_depth and fasta_max_coverage_depth!='':
+            query = query & Q(fasta_coverage_depth__lte=fasta_max_coverage_depth)
+        if fasta_min_error_rate and fasta_min_error_rate!='':
+            query = query & Q(fasta_error_rate__gte=fasta_min_error_rate)
+        if fasta_max_error_rate and fasta_max_error_rate!='':
+            query = query & Q(fasta_error_rate__lte=fasta_max_error_rate)
+        if fasta_NCBI_Taxonomy_ID:
+            query = query & Q(metadata_file__dataset_composition__fasta__further_source_details__NCBI_Taxonomy_ID__icontains=fasta_NCBI_Taxonomy_ID)
+        if fasta_GenBank_Accession_Number:
+            query = query & Q(metadata_file__dataset_composition__fasta__further_source_details__GenBank_Accession_Number__icontains=fasta_GenBank_Accession_Number)
+        if fasta_UniProt_ID:
+            query = query & Q(metadata_file__dataset_composition__fasta__further_source_details__UniProt_ID__icontains=fasta_UniProt_ID)
          # GenBank
         if genbank_sequence_type:
-            query = query & Q(metadata_file__dataset_composition__genbank__sequence_type__icontains=genbank_sequence_type)
-        if genbank_organism_type:
-            query = query & Q(metadata_file__dataset_composition__genbank__organism_type__icontains=genbank_organism_type)
+            query = query & Q(metadata_file__dataset_composition__genbank__general_info__sequence_type__icontains=genbank_sequence_type)
+        if genbank_organism_group:
+            query = query & Q(metadata_file__dataset_composition__genbank__general_info__organism_group__icontains=genbank_organism_group)
         if genbank_minimum_sequence_length and genbank_minimum_sequence_length!='':
             query = query & Q(genbank_minimum_sequence_length__gte=genbank_minimum_sequence_length)
         if genbank_maximum_sequence_length and genbank_maximum_sequence_length!='':
             query = query & Q(genbank_maximum_sequence_length__lte=genbank_maximum_sequence_length)
-        # Text
+        if genbank_sequencing_method:
+            query = query & Q(metadata_file__dataset_composition__genbank__sequencing_info__sequencing_method__icontains=genbank_sequencing_method)
+        if genbank_min_coverage_depth and genbank_min_coverage_depth!='':
+            query = query & Q(genbank_coverage_depth__gte=genbank_min_coverage_depth)
+        if genbank_max_coverage_depth and genbank_max_coverage_depth!='':
+            query = query & Q(genbank_coverage_depth__lte=genbank_max_coverage_depth)
+        if genbank_min_error_rate and genbank_min_error_rate!='':
+            query = query & Q(genbank_error_rate__gte=genbank_min_error_rate)
+        if genbank_max_error_rate and genbank_max_error_rate!='':
+            query = query & Q(genbank_error_rate__lte=genbank_max_error_rate)
+        if genbank_NCBI_Taxonomy_ID:
+            query = query & Q(metadata_file__dataset_composition__genbank__further_source_details__NCBI_Taxonomy_ID__icontains=genbank_NCBI_Taxonomy_ID)
+        if genbank_GenBank_Accession_Number:
+            query = query & Q(metadata_file__dataset_composition__genbank__further_source_details__GenBank_Accession_Number__icontains=genbank_GenBank_Accession_Number)
+        if genbank_UniProt_ID:
+            query = query & Q(metadata_file__dataset_composition__genbank__further_source_details__UniProt_ID__icontains=genbank_UniProt_ID)
+         # Matlab
+        if matlab_version:
+            query = query & Q(metadata_file__dataset_composition__matlab__matlab_version__icontains=matlab_version)
+        if variables_stored:
+            query = query & Q(metadata_file__dataset_composition__matlab__variables_stored__icontains=variables_stored)
+        if toolboxes_used:
+            query = query & Q(metadata_file__dataset_composition__matlab__toolboxes_used__icontains=toolboxes_used)
+         # Text
         if encoding:
             query = query & Q(metadata_file__dataset_composition__text__encoding__icontains=encoding)
         if language and language!='':
@@ -563,6 +743,17 @@ def EditDataset(request, dataset_id):
             data.metadata_file= metadata
 
             # Processes and stores numerical fields from the metadata.
+             # General
+            try:
+                if valid_number(metadata['dataset_creation']['general']['number_of_samples']):
+                    data.number_of_samples=valid_number(metadata['dataset_creation']['general']['number_of_samples'])
+            except KeyError:
+                pass
+            try:
+                if valid_number(metadata['dataset_creation']['general']['total_participants']):
+                    data.total_participants=valid_number(metadata['dataset_creation']['general']['total_participants'])
+            except KeyError:
+                pass
             try:
                 if valid_number(metadata['dataset_composition']['general']['dataset_size']):
                     data.dataset_size=valid_number(metadata['dataset_composition']['general']['dataset_size'])
@@ -578,6 +769,8 @@ def EditDataset(request, dataset_id):
                     data.average_file_size=valid_number(metadata['dataset_composition']['general']['average_file_size'])
             except KeyError:
                 pass
+            
+             # Other File Types
             try:
                 if valid_number(metadata['dataset_composition']['excel']['average_sheets']):
                     data.average_sheets=valid_number(metadata['dataset_composition']['excel']['average_sheets'])
@@ -603,26 +796,51 @@ def EditDataset(request, dataset_id):
                     data.average_bitrate=valid_number(metadata['dataset_composition']['audio']['average_bitrate'])
             except KeyError:
                 pass
+            
+             # FASTA
             try:
-                if valid_number(metadata['dataset_composition']['fasta']['minimum_sequence_length']):
-                    data.fasta_minimum_sequence_length=valid_number(metadata['dataset_composition']['fasta']['minimum_sequence_length'])
+                if valid_number(metadata['dataset_composition']['fasta']['general_info']['minimum_sequence_length']):
+                    data.fasta_minimum_sequence_length=valid_number(metadata['dataset_composition']['fasta']['general_info']['minimum_sequence_length'])
             except KeyError:
                 pass
             try:
-                if valid_number(metadata['dataset_composition']['fasta']['maximum_sequence_length']):
-                    data.fasta_maximum_sequence_length=valid_number(metadata['dataset_composition']['fasta']['maximum_sequence_length'])
+                if valid_number(metadata['dataset_composition']['fasta']['general_info']['maximum_sequence_length']):
+                    data.fasta_maximum_sequence_length=valid_number(metadata['dataset_composition']['fasta']['general_info']['maximum_sequence_length'])
             except KeyError:
                 pass
             try:
-                if valid_number(metadata['dataset_composition']['genbank']['minimum_sequence_length']):
-                    data.genbank_minimum_sequence_length=valid_number(metadata['dataset_composition']['genbank']['minimum_sequence_length'])
+                if valid_number(metadata['dataset_composition']['fasta']['sequencing_info']['coverage_depth']):
+                    data.fasta_coverage_depth=valid_number(metadata['dataset_composition']['fasta']['sequencing_info']['coverage_depth'])
             except KeyError:
                 pass
             try:
-                if valid_number(metadata['dataset_composition']['genbank']['maximum_sequence_length']):
-                    data.genbank_maximum_sequence_length=valid_number(metadata['dataset_composition']['genbank']['maximum_sequence_length'])
+                if valid_number(metadata['dataset_composition']['fasta']['sequencing_info']['error_rate']):
+                    data.fasta_error_rate=valid_number(metadata['dataset_composition']['fasta']['sequencing_info']['error_rate'])
             except KeyError:
                 pass
+            
+             # GenBank
+            try:
+                if valid_number(metadata['dataset_composition']['genbank']['general_info']['minimum_sequence_length']):
+                    data.genbank_minimum_sequence_length=valid_number(metadata['dataset_composition']['genbank']['general_info']['minimum_sequence_length'])
+            except KeyError:
+                pass
+            try:
+                if valid_number(metadata['dataset_composition']['genbank']['general_info']['maximum_sequence_length']):
+                    data.genbank_maximum_sequence_length=valid_number(metadata['dataset_composition']['genbank']['general_info']['maximum_sequence_length'])
+            except KeyError:
+                pass
+            try:
+                if valid_number(metadata['dataset_composition']['genbank']['sequencing_info']['coverage_depth']):
+                    data.genbank_coverage_depth=valid_number(metadata['dataset_composition']['genbank']['sequencing_info']['coverage_depth'])
+            except KeyError:
+                pass
+            try:
+                if valid_number(metadata['dataset_composition']['genbank']['sequencing_info']['error_rate']):
+                    data.genbank_error_rate=valid_number(metadata['dataset_composition']['genbank']['sequencing_info']['error_rate'])
+            except KeyError:
+                pass
+        
         # Saves the changes to the dataset.
         data.save()
 
@@ -676,7 +894,18 @@ def YourDatasets(request):
 
     # Initializes variables relating to the datasets' creation.
     data_origin = ''
+    software_used = ''
+    study_type = ''
+    instrumentation = ''
+    protocols = ''
+    study_start_date = ''
+    study_end_date = ''
+    min_number_of_samples = ''
+    max_number_of_samples = ''
+    min_participants = ''
+    max_participants = ''
     dataset_status = ''
+    raw_data = ''
     cleanliness_status = ''
     labeled_status = ''
     train_split = ''
@@ -720,14 +949,34 @@ def YourDatasets(request):
     audio_processing=''
      # FASTA
     fasta_sequence_type=''
-    fasta_organism_type=''
+    fasta_organism_group=''
     fasta_minimum_sequence_length=''
     fasta_maximum_sequence_length=''
+    fasta_sequencing_method=''
+    fasta_min_coverage_depth=''
+    fasta_max_coverage_depth=''
+    fasta_min_error_rate=''
+    fasta_max_error_rate=''
+    fasta_NCBI_Taxonomy_ID=''
+    fasta_GenBank_Accession_Number=''
+    fasta_UniProt_ID=''
      # GenBank
     genbank_sequence_type=''
-    genbank_organism_type=''
+    genbank_organism_group=''
     genbank_minimum_sequence_length=''
     genbank_maximum_sequence_length=''
+    genbank_sequencing_method=''
+    genbank_min_coverage_depth=''
+    genbank_max_coverage_depth=''
+    genbank_min_error_rate=''
+    genbank_max_error_rate=''
+    genbank_NCBI_Taxonomy_ID=''
+    genbank_GenBank_Accession_Number=''
+    genbank_UniProt_ID=''
+     # Matlab
+    matlab_version=''
+    variables_stored=''
+    toolboxes_used=''
      # Text
     encoding=''
     language=''
@@ -740,7 +989,18 @@ def YourDatasets(request):
         keyword=request.POST.get('keyword')
         # Dataset Creation
         data_origin=request.POST.get('data_origin')
+        software_used=request.POST.get('software_used')
+        study_type=request.POST.get('study_type')
+        instrumentation=request.POST.get('instrumentation')
+        protocols=request.POST.get('protocols')
+        study_start_date=request.POST.get('study_start_date')
+        study_end_date=request.POST.get('study_end_date')
+        min_number_of_samples=request.POST.get('min_number_of_samples')
+        max_number_of_samples=request.POST.get('max_number_of_samples')
+        min_participants=request.POST.get('min_participants')
+        max_participants=request.POST.get('max_participants')
         dataset_status=request.POST.get('dataset_status')
+        raw_data=request.POST.get('raw_data')
         cleanliness_status=request.POST.get('data_cleanliness')
         labeled_status=request.POST.get('labeled')
         train_split=request.POST.get('train_split')
@@ -782,16 +1042,36 @@ def YourDatasets(request):
         min_bitrate=request.POST.get('min_bitrate')
         max_bitrate=request.POST.get('max_bitrate')
         audio_processing=request.POST.get('audio_processing')
-        # FASTA
+         # FASTA
         fasta_sequence_type=request.POST.get('fasta_sequence_type')
-        fasta_organism_type=request.POST.get('fasta_organism_type')
+        fasta_organism_group=request.POST.get('fasta_organism_group')
         fasta_minimum_sequence_length=request.POST.get('fasta_minimum_sequence_length')
         fasta_maximum_sequence_length=request.POST.get('fasta_maximum_sequence_length')
+        fasta_sequencing_method=request.POST.get('fasta_sequencing_method')
+        fasta_min_coverage_depth=request.POST.get('fasta_min_coverage_depth')
+        fasta_max_coverage_depth=request.POST.get('fasta_max_coverage_depth')
+        fasta_min_error_rate=request.POST.get('fasta_min_error_rate')
+        fasta_max_error_rate=request.POST.get('fasta_max_error_rate')
+        fasta_NCBI_Taxonomy_ID=request.POST.get('fasta_NCBI_Taxonomy_ID')
+        fasta_GenBank_Accession_Number=request.POST.get('fasta_GenBank_Accession_Number')
+        fasta_UniProt_ID=request.POST.get('fasta_UniProt_ID')
          # GenBank
         genbank_sequence_type=request.POST.get('genbank_sequence_type')
-        genbank_organism_type=request.POST.get('genbank_organism_type')
+        genbank_organism_group=request.POST.get('genbank_organism_group')
         genbank_minimum_sequence_length=request.POST.get('genbank_minimum_sequence_length')
         genbank_maximum_sequence_length=request.POST.get('genbank_maximum_sequence_length')
+        genbank_sequencing_method=request.POST.get('genbank_sequencing_method')
+        genbank_min_coverage_depth=request.POST.get('genbank_min_coverage_depth')
+        genbank_max_coverage_depth=request.POST.get('genbank_max_coverage_depth')
+        genbank_min_error_rate=request.POST.get('genbank_min_error_rate')
+        genbank_max_error_rate=request.POST.get('genbank_max_error_rate')
+        genbank_NCBI_Taxonomy_ID=request.POST.get('genbank_NCBI_Taxonomy_ID')
+        genbank_GenBank_Accession_Number=request.POST.get('genbank_GenBank_Accession_Number')
+        genbank_UniProt_ID=request.POST.get('genbank_UniProt_ID')
+         # Matlab
+        matlab_version=request.POST.get('matlab_version')
+        variables_stored=request.POST.get('variables_stored')
+        toolboxes_used=request.POST.get('toolboxes_used')
          # Text
         encoding=request.POST.get('encoding')
         language=request.POST.get('language')
@@ -807,7 +1087,16 @@ def YourDatasets(request):
     # If no search parameters are specified, returns all datasets.
     if   keyword == '' and \
             data_origin == '' and \
+            software_used == '' and \
+            study_type == '' and \
+            instrumentation == '' and \
+            protocols == '' and \
+            study_start_date == '' and \
+            study_end_date == '' and \
+            min_number_of_samples == '' and max_number_of_samples == '' and \
+            min_participants == '' and max_participants == '' and \
             dataset_status == '' and \
+            raw_data == '' and \
             cleanliness_status == '' and \
             labeled_status == '' and \
             train_split == '' and \
@@ -834,11 +1123,22 @@ def YourDatasets(request):
             min_bitrate == '' and max_bitrate == '' and \
             audio_processing == '' and \
             fasta_sequence_type == '' and \
-            fasta_organism_type == '' and \
+            fasta_organism_group == '' and \
             fasta_minimum_sequence_length == '' and fasta_maximum_sequence_length == '' and \
+            fasta_sequencing_method == '' and \
+            fasta_min_coverage_depth == '' and fasta_max_coverage_depth == '' and \
+            fasta_min_error_rate == '' and fasta_max_error_rate == '' and \
+            fasta_NCBI_Taxonomy_ID == '' and fasta_GenBank_Accession_Number == '' and fasta_UniProt_ID == '' and \
             genbank_sequence_type == '' and \
-            genbank_organism_type == '' and \
+            genbank_organism_group == '' and \
             genbank_minimum_sequence_length == '' and genbank_maximum_sequence_length == '' and \
+            genbank_sequencing_method == '' and \
+            genbank_min_coverage_depth == '' and genbank_max_coverage_depth == '' and \
+            genbank_min_error_rate == '' and genbank_max_error_rate == '' and \
+            genbank_NCBI_Taxonomy_ID == '' and genbank_GenBank_Accession_Number == '' and genbank_UniProt_ID == '' and \
+            matlab_version == '' and \
+            variables_stored == '' and \
+            toolboxes_used == '' and \
             encoding == '' and \
             language == '' and \
             text_extractable == '' and \
@@ -856,8 +1156,28 @@ def YourDatasets(request):
         # Dataset Creation
         if data_origin:
             query = query & Q(metadata_file__dataset_creation__general__data_origin__icontains=data_origin)
+        if software_used:
+            query = query & Q(metadata_file__dataset_creation__synthetic_data_details__software_used__icontains=software_used)
+        if study_type:
+            query = query & Q(metadata_file__dataset_creation__natural_data_details__study_type__icontains=study_type)
+        if instrumentation:
+            query = query & Q(metadata_file__dataset_creation__natural_data_details__experimental_setup__instrumentation__icontains=instrumentation)
+        if study_start_date:
+            query = query & Q(metadata_file__dataset_creation__natural_data_details__experimental_setup__study_start_date__icontains=study_start_date)
+        if study_end_date:
+            query = query & Q(metadata_file__dataset_creation__natural_data_details__experimental_setup__study_end_date__icontains=study_end_date)
+        if min_number_of_samples and min_number_of_samples!='':
+            query = query & Q(number_of_samples__gte=min_number_of_samples)
+        if max_number_of_samples and max_number_of_samples!='':
+            query = query & Q(number_of_samples__lte=max_number_of_samples)
+        if min_participants and min_participants!='':
+            query = query & Q(total_participants__gte=min_participants)
+        if max_participants and max_participants!='':
+            query = query & Q(total_participants__lte=max_participants)
         if dataset_status:
             query = query & Q(metadata_file__dataset_creation__data_completion__dataset_status__icontains=dataset_status)
+        if raw_data:
+            query = query & Q(metadata_file__dataset_creation__pre_processing__raw_data__icontains=raw_data)
         if cleanliness_status:
             query = query & Q(metadata_file__dataset_creation__pre_processing__data_cleanliness__cleanliness_status__icontains=cleanliness_status)
         if labeled_status:
@@ -934,22 +1254,61 @@ def YourDatasets(request):
             query = query & Q(metadata_file__dataset_composition__audio__audio_processing__icontains=audio_processing)
          # FASTA
         if fasta_sequence_type:
-            query = query & Q(metadata_file__dataset_composition__fasta__sequence_type__icontains=fasta_sequence_type)
-        if fasta_organism_type:
-            query = query & Q(metadata_file__dataset_composition__fasta__organism_type__icontains=fasta_organism_type)
+            query = query & Q(metadata_file__dataset_composition__fasta__general_info__sequence_type__icontains=fasta_sequence_type)
+        if fasta_organism_group:
+            query = query & Q(metadata_file__dataset_composition__fasta__general_info__organism_group__icontains=fasta_organism_group)
         if fasta_minimum_sequence_length and fasta_minimum_sequence_length!='':
             query = query & Q(fasta_minimum_sequence_length__gte=fasta_minimum_sequence_length)
         if fasta_maximum_sequence_length and fasta_maximum_sequence_length!='':
             query = query & Q(fasta_maximum_sequence_length__lte=fasta_maximum_sequence_length)
+        if fasta_sequencing_method:
+            query = query & Q(metadata_file__dataset_composition__fasta__sequencing_info__sequencing_method__icontains=fasta_sequencing_method)
+        if fasta_min_coverage_depth and fasta_min_coverage_depth!='':
+            query = query & Q(fasta_coverage_depth__gte=fasta_min_coverage_depth)
+        if fasta_max_coverage_depth and fasta_max_coverage_depth!='':
+            query = query & Q(fasta_coverage_depth__lte=fasta_max_coverage_depth)
+        if fasta_min_error_rate and fasta_min_error_rate!='':
+            query = query & Q(fasta_error_rate__gte=fasta_min_error_rate)
+        if fasta_max_error_rate and fasta_max_error_rate!='':
+            query = query & Q(fasta_error_rate__lte=fasta_max_error_rate)
+        if fasta_NCBI_Taxonomy_ID:
+            query = query & Q(metadata_file__dataset_composition__fasta__further_source_details__NCBI_Taxonomy_ID__icontains=fasta_NCBI_Taxonomy_ID)
+        if fasta_GenBank_Accession_Number:
+            query = query & Q(metadata_file__dataset_composition__fasta__further_source_details__GenBank_Accession_Number__icontains=fasta_GenBank_Accession_Number)
+        if fasta_UniProt_ID:
+            query = query & Q(metadata_file__dataset_composition__fasta__further_source_details__UniProt_ID__icontains=fasta_UniProt_ID)
          # GenBank
         if genbank_sequence_type:
-            query = query & Q(metadata_file__dataset_composition__genbank__sequence_type__icontains=genbank_sequence_type)
-        if genbank_organism_type:
-            query = query & Q(metadata_file__dataset_composition__genbank__organism_type__icontains=genbank_organism_type)
+            query = query & Q(metadata_file__dataset_composition__genbank__general_info__sequence_type__icontains=genbank_sequence_type)
+        if genbank_organism_group:
+            query = query & Q(metadata_file__dataset_composition__genbank__general_info__organism_group__icontains=genbank_organism_group)
         if genbank_minimum_sequence_length and genbank_minimum_sequence_length!='':
             query = query & Q(genbank_minimum_sequence_length__gte=genbank_minimum_sequence_length)
         if genbank_maximum_sequence_length and genbank_maximum_sequence_length!='':
             query = query & Q(genbank_maximum_sequence_length__lte=genbank_maximum_sequence_length)
+        if genbank_sequencing_method:
+            query = query & Q(metadata_file__dataset_composition__genbank__sequencing_info__sequencing_method__icontains=genbank_sequencing_method)
+        if genbank_min_coverage_depth and genbank_min_coverage_depth!='':
+            query = query & Q(genbank_coverage_depth__gte=genbank_min_coverage_depth)
+        if genbank_max_coverage_depth and genbank_max_coverage_depth!='':
+            query = query & Q(genbank_coverage_depth__lte=genbank_max_coverage_depth)
+        if genbank_min_error_rate and genbank_min_error_rate!='':
+            query = query & Q(genbank_error_rate__gte=genbank_min_error_rate)
+        if genbank_max_error_rate and genbank_max_error_rate!='':
+            query = query & Q(genbank_error_rate__lte=genbank_max_error_rate)
+        if genbank_NCBI_Taxonomy_ID:
+            query = query & Q(metadata_file__dataset_composition__genbank__further_source_details__NCBI_Taxonomy_ID__icontains=genbank_NCBI_Taxonomy_ID)
+        if genbank_GenBank_Accession_Number:
+            query = query & Q(metadata_file__dataset_composition__genbank__further_source_details__GenBank_Accession_Number__icontains=genbank_GenBank_Accession_Number)
+        if genbank_UniProt_ID:
+            query = query & Q(metadata_file__dataset_composition__genbank__further_source_details__UniProt_ID__icontains=genbank_UniProt_ID)
+         # Matlab
+        if matlab_version:
+            query = query & Q(metadata_file__dataset_composition__matlab__matlab_version__icontains=matlab_version)
+        if variables_stored:
+            query = query & Q(metadata_file__dataset_composition__matlab__variables_stored__icontains=variables_stored)
+        if toolboxes_used:
+            query = query & Q(metadata_file__dataset_composition__matlab__toolboxes_used__icontains=toolboxes_used)
         # Text
         if encoding:
             query = query & Q(metadata_file__dataset_composition__text__encoding__icontains=encoding)

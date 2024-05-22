@@ -39,10 +39,10 @@
             <!-- Dataset Creation & Preprocessing -->
             <div class="w-100 mt-2"></div>
             <h5 class="mb-3 w-100">Dataset Creation & Preprocessing</h5>
-            <select name="data_origin" class="form-select" style="width: 49%;">
+            <select name="data_origin" class="form-select" style="width: 49%;" id="data-origin" onchange="toggleDataOriginOptions()">
               <option hidden value="">Data Origin</option>
-              <option value="Synthetically Generated">Synthetically Generated</option>
-              <option value="Naturally Obtained">Naturally Obtained</option>
+              <option value="Synthetically-Generated">Synthetically Generated</option>
+              <option value="Naturally-Obtained">Naturally Obtained</option>
               <option value="Other">Other</option>
             </select>
             <select name="dataset_status" class="form-select" style="width: 49%;">
@@ -52,14 +52,19 @@
               <option value="Abandoned & Incomplete">Abandoned & Incomplete</option>
               <option value="Other">Other</option>
             </select>
-            <select name="data_cleanliness" class="form-select" style="width: 49%;">
+            <select name="raw_data" class="form-select" style="width: 32.25%;">
+              <option hidden value="">Raw Data</option>
+              <option value="Yes">Yes</option>
+              <option value="No">No</option>
+            </select>
+            <select name="data_cleanliness" class="form-select" style="width: 32.25%;">
               <option hidden value="">Data Cleanliness</option>
               <option value="Clean">Clean</option>
               <option value="Partially Clean">Partially Clean</option>
               <option value="Unclean">Unclean</option>
               <option value="N/A">N/A</option>
             </select>
-            <select name="labeled" class="form-select" style="width: 49%;">
+            <select name="labeled" class="form-select" style="width: 32.25%;">
               <option hidden value="">Labeled</option>
               <option value="Yes">Yes</option>
               <option value="No">No</option>
@@ -93,6 +98,104 @@
               style="width: 32.25%;"
             />
 
+            <!-- Data Origin Options: Synthetically Generated -->
+            <div class="Synthetically-Generated data-origin-options w-100 mt-2" style="display: none;">
+              <h5 class="mb-3">Synthetic Data Details</h5>
+              <div class="d-flex flex-wrap" style="gap: 0.5rem 1rem">
+                <input
+                  type="text"
+                  class="form-control"
+                  placeholder="Software Used for Data Generation"
+                  name="software_used"
+                  style="width: 100%;"
+                />
+              </div>
+            </div>
+
+            <!-- Data Origin Options: Naturally Obtained -->
+            <div class="Naturally-Obtained data-origin-options w-100 mt-2" style="display: none;">
+              <h5 class="mb-3">Natural Data Details</h5>
+              <div class="d-flex flex-wrap" style="gap: 0.5rem 1rem">
+                <select name="study_type" class="form-select" style="width: 49%;">
+                  <option hidden value="">Type of Study</option>
+                  <option value="Observational">Observational</option>
+                  <option value="Experimental">Experimental</option>
+                  <option value="Clinical Trial">Clinical Trial</option>
+                  <option value="Field Study">Field Study</option>
+                  <option value="Laboratory Study">Laboratory Study</option>
+                  <option value="Survey Research">Survey Research</option>
+                  <option value="Longitudinal Study">Longitudinal Study</option>
+                  <option value="Cross-Sectional Study">Cross-Sectional Study</option>
+                  <option value="Case Study">Case Study</option>
+                  <option value="Other">Other</option>
+                </select>
+                <input
+                  type="date"
+                  class="form-control"
+                  name="study_start_date"
+                  style="width: 23.9%;"
+                  data-toggle="tooltip" 
+                  data-placement="top" 
+                  title="Study Start Date"
+                />
+                <input
+                  type="date"
+                  class="form-control"
+                  name="study_end_date"
+                  style="width: 23.9%;"
+                  data-toggle="tooltip" 
+                  data-placement="top" 
+                  title="Study End Date"
+                />
+                <input
+                  type="text"
+                  class="form-control"
+                  placeholder="Instrumentation Used"
+                  name="instrumentation"
+                  style="width: 49%;"
+                />
+                <input
+                  type="text"
+                  class="form-control"
+                  placeholder="Protocols Used"
+                  name="protocols"
+                  style="width: 49%;"
+                />
+                <input
+                  type="number"
+                  min="0"
+                  class="form-control"
+                  placeholder="Minimum Number of Samples"
+                  name="min_number_of_samples"
+                  style="width: 23.9%;"
+                />
+                <input
+                  type="number"
+                  min="0"
+                  class="form-control"
+                  placeholder="Maxmum Number of Samples"
+                  name="max_number_of_samples"
+                  style="width: 23.9%;"
+                />
+                <input
+                  type="number"
+                  min="0"
+                  class="form-control"
+                  placeholder="Minimum Number of Participants"
+                  name="min_participants"
+                  style="width: 23.9%;"
+                />
+                <input
+                  type="number"
+                  min="0"
+                  class="form-control"
+                  placeholder="Maximum Number of Participants"
+                  name="max_participants"
+                  style="width: 23.9%;"
+                />
+              </div>
+            </div>
+
             <!-- Dataset Composition -->
             <div class="w-100 mt-2"></div>
             <h5 class="mb-3 w-100">Dataset Composition</h5>
@@ -105,6 +208,7 @@
               <option value="Audio">Audio</option>
               <option value="FASTA">FASTA</option>
               <option value="GenBank">GenBank</option>
+              <option value="Matlab">Matlab</option>
               <option value="Text">Text</option>
               <option value="PDF">PDF</option>
               <option value="Other">Other</option>
@@ -386,8 +490,26 @@
                   <option value="Organelles">Organelles</option>
                   <option value="Other">Other</option>
                 </select>
-                <input type="number" min="0" class="form-control" placeholder="Minimum Sequence Length" name="fasta_minimum_sequence_length" style="width: 49%;">
-                <input type="number" min="0" class="form-control" placeholder="Maximum Sequence Length" name="fasta_maximum_sequence_length" style="width: 49%;">
+                <select name="fasta_sequencing_method" class="form-select" style="width: 49%;">
+                  <option hidden value="">Sequencing Method</option>
+                  <option value="Illumina">Illumina</option>
+                  <option value="PacBio SMRT">PacBio SMRT</option>
+                  <option value="Nanopore Sequencing">Nanopore Sequencing</option>
+                  <option value="Sanger">Sanger</option>
+                  <option value="Ion Torrent">Ion Torrent</option>
+                  <option value="Pyrosequencing">Pyrosequencing</option>
+                  <option value="SOLiD Sequencing">SOLiD Sequencing</option>
+                  <option value="Other">Other</option>
+                </select>
+                <input type="number" min="0" class="form-control" placeholder="Minimum Sequence Length" name="fasta_minimum_sequence_length" style="width: 23.9%;">
+                <input type="number" min="0" class="form-control" placeholder="Maximum Sequence Length" name="fasta_maximum_sequence_length" style="width: 23.9%;">
+                <input type="number" class="form-control" placeholder="Minimum Coverage Depth" name="fasta_min_coverage_depth" style="width: 23.9%;">
+                <input type="number" class="form-control" placeholder="Maximum Coverage Depth" name="fasta_max_coverage_depth" style="width: 23.9%;">
+                <input type="number" step="0.01" class="form-control" placeholder="Minimum Error Rate (%)" name="fasta_min_error_rate" style="width: 23.9%;">
+                <input type="number" step="0.01" class="form-control" placeholder="Maximum Error Rate (%)" name="fasta_max_error_rate" style="width: 23.9%;">
+                <input type="text" class="form-control" placeholder="NCBI Taxonomy ID" name="fasta_NCBI_Taxonomy_ID" style="width: 32.25%;">
+                <input type="text" class="form-control" placeholder="GenBank Accession Number" name="fasta_GenBank_Accession_Number" style="width: 32.25%;">
+                <input type="text" class="form-control" placeholder="UniProt ID" name="fasta_UniProt_ID" style="width: 32.25%;">
               </div>
             </div>
 
@@ -398,7 +520,7 @@
                 <select name="genbank_sequence_type" class="form-select" style="width: 49%;">
                   <option hidden value="">Sequence Type</option>
                   <option value="DNA">DNA</option>
-                  <option value="RNA">RNA</option>
+                  <option value="RNA">RNA</option
                   <option value="cDNA">cDNA</option>
                   <option value="Amino Acid">Amino Acid</option>
                   <option value="Plasmid">Plasmid</option>
@@ -413,8 +535,45 @@
                   <option value="Organelles">Organelles</option>
                   <option value="Other">Other</option>
                 </select>
-                <input type="number" min="0" class="form-control" placeholder="Minimum Sequence Length" name="genbank_minimum_sequence_length" style="width: 49%;">
-                <input type="number" min="0" class="form-control" placeholder="Maximum Sequence Length" name="genbank_maximum_sequence_length" style="width: 49%;">
+                <select name="genbank_sequencing_method" class="form-select" style="width: 49%;">
+                  <option hidden value="">Sequencing Method</option>
+                  <option value="Illumina">Illumina</option>
+                  <option value="PacBio SMRT">PacBio SMRT</option>
+                  <option value="Nanopore Sequencing">Nanopore Sequencing</option>
+                  <option value="Sanger">Sanger</option>
+                  <option value="Ion Torrent">Ion Torrent</option>
+                  <option value="Pyrosequencing">Pyrosequencing</option>
+                  <option value="SOLiD Sequencing">SOLiD Sequencing</option>
+                  <option value="Other">Other</option>
+                </select>
+                <input type="number" min="0" class="form-control" placeholder="Minimum Sequence Length" name="genbank_minimum_sequence_length" style="width: 23.9%;">
+                <input type="number" min="0" class="form-control" placeholder="Maximum Sequence Length" name="genbank_maximum_sequence_length" style="width: 23.9%;">
+                <input type="number" class="form-control" placeholder="Minimum Coverage Depth" name="genbank_min_coverage_depth" style="width: 23.9%;">
+                <input type="number" class="form-control" placeholder="Maximum Coverage Depth" name="genbank_max_coverage_depth" style="width: 23.9%;">
+                <input type="number" step="0.01" class="form-control" placeholder="Minimum Error Rate (%)" name="genbank_min_error_rate" style="width: 23.9%;">
+                <input type="number" step="0.01" class="form-control" placeholder="Maximum Error Rate (%)" name="genbank_max_error_rate" style="width: 23.9%;">
+                <input type="text" class="form-control" placeholder="NCBI Taxonomy ID" name="genbank_NCBI_Taxonomy_ID" style="width: 32.25%;">
+                <input type="text" class="form-control" placeholder="GenBank Accession Number" name="genbank_GenBank_Accession_Number" style="width: 32.25%;">
+                <input type="text" class="form-control" placeholder="UniProt ID" name="genbank_UniProt_ID" style="width: 32.25%;">
+              </div>
+            </div>
+            
+            <!-- Matlab Options -->
+            <div class="Matlab file-type-options w-100 mt-2" style="display: none;">
+              <h5 class="mb-3 w-100">Matlab Options</h5>
+              <div class="d-flex flex-wrap" style="gap: 0.5rem 1rem">
+                <input type="text" class="form-control" placeholder="Matlab Version" name="matlab_version" style="width: 49%;">
+                <select name="variables_stored" class="form-select" style="width: 49%;">
+                  <option hidden value="">Variable Types stored</option>
+                  <option value="Matrix">Matrix</option>
+                  <option value="Cell Array">Cell Array</option>
+                  <option value="Structure">Structure</option>
+                  <option value="Table">Table</option>
+                  <option value="Function Handle">Function Handle</option>
+                  <option value="Time Series">Time Series</option>
+                  <option value="Other">Other</option>
+                </select>
+                <input type="text" class="form-control" placeholder="Toolboxes Used" name="toolboxes_used" style="width: 49%;">
               </div>
             </div>
 
@@ -549,36 +708,68 @@
 
 <!-- Pagination Script -->
 <script>
+  // Function to handle pagination change events.
   function handlePageChange(event) {
-    event.preventDefault();
+    event.preventDefault(); // Prevent the default form submit behavior.
+    // Redirect the browser to the current page with a new query parameter for 'count'.
     window.location.href =
       window.location.pathname + "?count=" + event.target.value;
   }
 
+  // Function to navigate to the detail view of a specific dataset item.
   function viewDetail(id) {
+    // Redirects the browser to the dataset browse page with the specific ID appended to the URL.
     window.location.href = "/dataset/browse/" + id;
   }
 </script>
+
 <!-- File Type Options Script -->
 <script>
+  // Function to toggle visibility of file type specific options.
   function toggleFileTypeOptions() {
+    // Retrieve the selected value from the file format dropdown.
     const fileType = document.getElementById('file-format').value;
+    // Select all elements with the class 'file-type-options'.
     const fileTypeOptions = document.querySelectorAll('.file-type-options');
+    // Loop through each option element.
     fileTypeOptions.forEach(option => {
+      // Check if the option element's class list contains the selected file type.
       if (option.classList.contains(fileType)) {
-        option.style.display = 'block';
+        option.style.display = 'block'; // Show the option if it matches the selected file type.
       } else {
-        option.style.display = 'none';
+        option.style.display = 'none';  // Hide the option if it does not match.
       }
     });
   }
 </script>
+
+<!-- Data Origin Options Script -->
+<script>
+  // Function to toggle visibility of data origin specific options.
+  function toggleDataOriginOptions() {
+    // Retrieve the selected value from the data origin dropdown.
+    const dataOrigin = document.getElementById('data-origin').value;
+    // Select all elements with the class 'data-origin-options'.
+    const dataOriginOptions = document.querySelectorAll('.data-origin-options');
+    // Loop through each option element.
+    dataOriginOptions.forEach(option => {
+      // Check if the option element's class list contains the selected data origin.
+      if (option.classList.contains(dataOrigin)) {
+        option.style.display = 'block'; // Show the option if it matches the selected data origin.
+      } else {  
+        option.style.display = 'none'; // Hide the option if it does not match.
+      }
+    });
+  }
+</script>
+
 <!-- Clear Filters Script -->
 <script>
-function clearFilters() {
-  var form = document.querySelector('form');
-  form.reset();
-  form.submit();
-}
+  // Function to clear all filters applied in the form
+  function clearFilters() {
+    var form = document.querySelector('form'); // Select the form element
+    form.reset(); // Reset all form fields to their initial values
+    form.submit(); // Submit the form, effectively applying the reset/clear
+  }
 </script>
 {% endblock %}

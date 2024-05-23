@@ -10,6 +10,14 @@ h5 {
   margin: 20px auto;
 }
 
+h3 {
+  font-weight: bold;
+}
+
+h4 {
+  font-style: italic;
+}
+
 :root {
   --header-height: 80px;
   --footer-height: 60px;
@@ -275,7 +283,7 @@ h5 {
 }
 
 .your-dataset-card:hover {
-  box-shadow: 0 5px 10px  #0e747253;
+  box-shadow: 0 5px 10px #0e747253;
   border-radius: 0.25rem;
 }
 
@@ -397,17 +405,23 @@ h5 {
 
 .metadata-list li {
   cursor: pointer;
-  list-style-type: none; 
+  list-style-type: none;
 }
 
 .toggle-symbol {
-  color: #0a4746; 
+  color: #0a4746;
   font-weight: bold;
   margin-right: 5px;
 }
 
 /* View Datasets Page */
 /* File Tree */
+button {
+  color: #0a4746;
+  font-weight: bold;
+  transform: translateY(-21.5%);
+}
+
 #folderStructure ul {
   list-style-type: none;
   padding-left: 20px;

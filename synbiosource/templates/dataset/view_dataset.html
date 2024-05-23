@@ -51,113 +51,607 @@
       <div data-bs-spy="scroll" data-bs-target="#instructions-navbar" data-bs-smooth-scroll="true" class="uploadInstructions" tabindex="0" style="height: 800px; overflow-y: auto">
         <div class="row">
           <div class="col-4">
+            <!-- Navbar -->
             <div id="instructions-navbar" class="nav-pills flex-column sticky-top" style="top: 20px">
-              <!-- Basic Info -->
-              <a class="nav-link" href="#item-1">Basic Info</a>
-              <a class="nav-link ms-3 my-1" href="#item-1-1">Description</a>
-              <a class="nav-link ms-3 my-1" href="#item-1-2">Keywords</a>
-              <a class="nav-link ms-3 my-1" href="#item-1-3">License</a>
-              <a class="nav-link ms-3 my-1" href="#item-1-4">Changelog</a>
-              <a class="nav-link ms-3 my-1" href="#item-1-5">Dataset File Structure</a>
+              <!-- Basic Identity -->
+              {% if datasetInfo.metadata_file.basic_identity %}
+                {% if datasetInfo.metadata_file.basic_identity.description and 'Optional' not in datasetInfo.metadata_file.basic_identity.description or datasetInfo.metadata_file.basic_identity.keywords and 'Optional' not in datasetInfo.metadata_file.basic_identity.keywords or datasetInfo.metadata_file.basic_identity.license and 'Optional' not in datasetInfo.metadata_file.basic_identity.license or datasetInfo.metadata_file.basic_identity.changelog and 'Optional' not in datasetInfo.metadata_file.basic_identity.changelog %}
+                  <a class="nav-link" href="#item-1">Basic Information</a>
+                {% endif %}
+                {% if datasetInfo.metadata_file.basic_identity.description and 'Optional' not in datasetInfo.metadata_file.basic_identity.description %}
+                  <a class="nav-link ms-3 my-1" href="#item-1-1">Description</a>
+                {% endif %}
+                {% if datasetInfo.metadata_file.basic_identity.keywords and 'Optional' not in datasetInfo.metadata_file.basic_identity.keywords %}
+                  <a class="nav-link ms-3 my-1" href="#item-1-2">Keywords</a>
+                {% endif %}
+                {% if datasetInfo.metadata_file.basic_identity.license and 'Optional' not in datasetInfo.metadata_file.basic_identity.license %}
+                  <a class="nav-link ms-3 my-1" href="#item-1-3">License</a>
+                {% endif %}
+                {% if datasetInfo.metadata_file.basic_identity.changelog and 'Optional' not in datasetInfo.metadata_file.basic_identity.changelog %}
+                  <a class="nav-link ms-3 my-1" href="#item-1-4">Changelog</a>
+                {% endif %}
+                <a class="nav-link ms-3 my-1" href="#item-1-5">Dataset File Structure</a>
+              {% endif %}
 
               <!-- Author Contact Details -->
-              <a class="nav-link" href="#item-2">Author Contact Details</a>
-              <a class="nav-link ms-3 my-1" href="#item-2-1">Email</a>
-              <a class="nav-link ms-3 my-1" href="#item-2-2">Affiliation</a>
-              <a class="nav-link ms-3 my-1" href="#item-2-3">Phone</a>
-
+              {% if datasetInfo.metadata_file.author_contact_details %}
+                {% if datasetInfo.metadata_file.author_contact_details.email and 'Optional' not in datasetInfo.metadata_file.author_contact_details.email or datasetInfo.metadata_file.author_contact_details.affiliation and 'Optional' not in datasetInfo.metadata_file.author_contact_details.affiliation or datasetInfo.metadata_file.author_contact_details.phone and 'Optional' not in datasetInfo.metadata_file.author_contact_details.phone %}
+                  <a class="nav-link" href="#item-2">Author Contact Details</a>
+                {% endif %}
+                {% if datasetInfo.metadata_file.author_contact_details.email and 'Optional' not in datasetInfo.metadata_file.author_contact_details.email %}
+                  <a class="nav-link ms-3 my-1" href="#item-2-1">Email</a>
+                {% endif %}
+                {% if datasetInfo.metadata_file.author_contact_details.affiliation and 'Optional' not in datasetInfo.metadata_file.author_contact_details.affiliation %}
+                  <a class="nav-link ms-3 my-1" href="#item-2-2">Affiliation</a>
+                {% endif %}
+                {% if datasetInfo.metadata_file.author_contact_details.phone and 'Optional' not in datasetInfo.metadata_file.author_contact_details.phone %}
+                  <a class="nav-link ms-3 my-1" href="#item-2-3">Phone</a>
+                {% endif %}
+              {% endif %}
+              
               <!-- Dataset Creation -->
-              <a class="nav-link" href="#item-3">Dataset Creation</a>
-              <a class="nav-link ms-3 my-1" href="#item-3-1">General Info</a>
-              <a class="nav-link ms-3 my-1" href="#item-3-1-1">Data Origin</a>
-              <a class="nav-link ms-3 my-1" href="#item-3-1-2">Synthetic Data Details</a>
-              <a class="nav-link ms-3 my-1" href="#item-3-1-3">Natural Data Details</a>
-              <a class="nav-link ms-3 my-1" href="#item-3-2">Data Completion</a>
-              <a class="nav-link ms-3 my-1" href="#item-3-3">Pre-processing</a>
+              {% if datasetInfo.metadata_file.dataset_creation %}
+                {% if datasetInfo.metadata_file.dataset_creation.general.data_origin and 'Optional' not in datasetInfo.metadata_file.dataset_creation.general.data_origin %}
+                  <a class="nav-link" href="#item-3">Dataset Creation</a>
+                  <a class="nav-link ms-3 my-1" href="#item-3-1">General</a>
+                  <a class="nav-link ms-3 my-1" href="#item-3-1-1">Data Origin</a>
+                {% endif %}
+                {% if 'Synthetically-Generated' in datasetInfo.metadata_file.dataset_creation.general.data_origin and datasetInfo.metadata_file.dataset_creation.general.synthetic_data_details %}
+                  <a class="nav-link ms-3 my-1" href="#item-3-1-2">Synthetic Data Details</a>
+                {% endif %}
+                {% if 'Naturally-Obtained' in datasetInfo.metadata_file.dataset_creation.general.data_origin and datasetInfo.metadata_file.dataset_creation.general.natural_data_details %}
+                  <a class="nav-link ms-3 my-1" href="#item-3-1-3">Natural Data Details</a>
+                {% endif %}
+                {% if datasetInfo.metadata_file.dataset_creation.data_completion %}
+                  <a class="nav-link ms-3 my-1" href="#item-3-2">Data Completion</a>
+                {% endif %}
+                {% if datasetInfo.metadata_file.dataset_creation.pre_processing %}
+                  <a class="nav-link ms-3 my-1" href="#item-3-3">Pre Processing</a>
+                {% endif %}
+              {% endif %}
 
               <!-- Dataset Usage -->
-              <a class="nav-link" href="#item-4">Dataset Usage</a>
-              <a class="nav-link ms-3 my-1" href="#item-4-1">Usage Description</a>
-              <a class="nav-link ms-3 my-1" href="#item-4-2">Citation</a>
-              <a class="nav-link ms-3 my-1" href="#item-4-3">Related Datasets</a>
+              {% if datasetInfo.metadata_file.dataset_usage %}
+                {% if datasetInfo.metadata_file.dataset_usage.data_usage_description and 'Optional' not in datasetInfo.metadata_file.dataset_usage.data_usage_description or datasetInfo.metadata_file.dataset_usage.citation and 'Optional' not in datasetInfo.metadata_file.dataset_usage.citation or datasetInfo.metadata_file.dataset_usage.related_datasets and 'Optional' not in datasetInfo.metadata_file.dataset_usage.related_datasets or datasetInfo.metadata_file.dataset_usage.related_publications and 'Optional' not in datasetInfo.metadata_file.dataset_usage.related_publications %}
+                  <a class="nav-link" href="#item-4">Dataset Usage</a>
+                {% endif %}
+                {% if datasetInfo.metadata_file.dataset_usage.data_usage_description and 'Optional' not in datasetInfo.metadata_file.dataset_usage.data_usage_description %}
+                  <a class="nav-link ms-3 my-1" href="#item-4-2">Data Usage Description</a>
+                {% endif %}
+                {% if datasetInfo.metadata_file.dataset_usage.citation and 'Optional' not in datasetInfo.metadata_file.dataset_usage.citation %}
+                  <a class="nav-link ms-3 my-1" href="#item-4-1">Citation</a>
+                {% endif %}
+                {% if datasetInfo.metadata_file.dataset_usage.related_datasets and 'Optional' not in datasetInfo.metadata_file.dataset_usage.related_datasets %}
+                  <a class="nav-link ms-3 my-1" href="#item-4-3">Related Datasets</a>
+                {% endif %}
+                {% if datasetInfo.metadata_file.dataset_usage.related_publications and 'Optional' not in datasetInfo.metadata_file.dataset_usage.related_publications %}
+                  <a class="nav-link ms-3 my-1" href="#item-4-4">Related Publications</a>
+                {% endif %}
+              {% endif %}
 
               <!-- Dataset Composition -->
-              <a class="nav-link" href="#item-5">Dataset Composition</a>
-              <a class="nav-link ms-3 my-1" href="#item-5-1">General Info</a>
-              <a class="nav-link ms-3 my-1" href="#item-5-2">CSV Details</a>
-              <a class="nav-link ms-3 my-1" href="#item-5-3">Excel Details</a>
-
-              <!-- Ethics -->
-              <a class="nav-link" href="#item-6">Ethics</a>
-              <a class="nav-link ms-3 my-1" href="#item-6-1">Data Collection Ethics</a>
-              <a class="nav-link ms-3 my-1" href="#item-6-2">Data Usage Ethics</a>
-              <a class="nav-link ms-3 my-1" href="#item-6-3">Ethical Review Status</a>
+              {% if datasetInfo.metadata_file.dataset_composition %}
+                {% if datasetInfo.metadata_file.dataset_composition.general %}
+                  {% if datasetInfo.metadata_file.dataset_composition.general.format and 'Optional' not in datasetInfo.metadata_file.dataset_composition.general.format or datasetInfo.metadata_file.dataset_composition.general.dataset_size and 'Optional' not in datasetInfo.metadata_file.dataset_composition.general.dataset_size or datasetInfo.metadata_file.dataset_composition.general.number_of_files and 'Optional' not in datasetInfo.metadata_file.dataset_composition.general.number_of_files or datasetInfo.metadata_file.dataset_composition.general.average_file_size and 'Optional' not in datasetInfo.metadata_file.dataset_composition.general.average_file_size %}
+                    <a class="nav-link" href="#item-5">Dataset Composition</a>
+                    <a class="nav-link ms-3 my-1" href="#item-5-1">General</a>
+                  {% endif %}
+                {% endif %}
+                {% if 'CSV' in datasetInfo.metadata_file.dataset_composition.general.format %}
+                  <a class="nav-link ms-3 my-1" href="#item-5-2">CSV</a>
+                {% endif %}
+                {% if 'Excel' in datasetInfo.metadata_file.dataset_composition.general.format %}
+                  <a class="nav-link ms-3 my-1" href="#item-5-3">Excel</a>
+                {% endif %}
+                {% if 'Image' in datasetInfo.metadata_file.dataset_composition.general.format %}
+                  <a class="nav-link ms-3 my-1" href="#item-5-4">Image</a>
+                {% endif %}
+                {% if 'Video' in datasetInfo.metadata_file.dataset_composition.general.format %}
+                  <a class="nav-link ms-3 my-1" href="#item-5-5">Video</a>
+                {% endif %}
+                {% if 'Audio' in datasetInfo.metadata_file.dataset_composition.general.format %}
+                  <a class="nav-link ms-3 my-1" href="#item-5-6">Audio</a>
+                {% endif %}
+                {% if 'FASTA' in datasetInfo.metadata_file.dataset_composition.general.format %}
+                  <a class="nav-link ms-3 my-1" href="#item-5-7">FASTA</a>
+                {% endif %}
+                {% if 'GenBank' in datasetInfo.metadata_file.dataset_composition.general.format %}
+                  <a class="nav-link ms-3 my-1" href="#item-5-8">GenBank</a>
+                {% endif %}
+                {% if 'Matlab' in datasetInfo.metadata_file.dataset_composition.general.format %}
+                  <a class="nav-link ms-3 my-1" href="#item-5-9">Matlab</a>
+                {% endif %}
+                {% if 'Text' in datasetInfo.metadata_file.dataset_composition.general.format %}
+                  <a class="nav-link ms-3 my-1" href="#item-5-10">Text</a>
+                {% endif %}
+                {% if 'PDF' in datasetInfo.metadata_file.dataset_composition.general.format %}
+                  <a class="nav-link ms-3 my-1" href="#item-5-11">PDF</a>
+                {% endif %}
+              {% endif %}
+              {% if datasetInfo.metadata_file.ethics %}
+                {% if datasetInfo.metadata_file.ethics.data_collection_ethics and 'Optional' not in datasetInfo.metadata_file.ethics.data_collection_ethics or datasetInfo.metadata_file.ethics.data_usage_ethics and 'Optional' not in datasetInfo.metadata_file.ethics.data_usage_ethics or datasetInfo.metadata_file.ethics.ethical_review_status and 'Optional' not in datasetInfo.metadata_file.ethics.ethical_review_status %}
+                  <a class="nav-link" href="#item-6">Ethics</a>
+                {% endif %}
+                {% if datasetInfo.metadata_file.ethics.data_collection_ethics and 'Optional' not in datasetInfo.metadata_file.ethics.data_collection_ethics %}
+                  <a class="nav-link ms-3 my-1" href="#item-6-1">Data Collection Ethics</a>
+                {% endif %}
+                {% if datasetInfo.metadata_file.ethics.data_usage_ethics and 'Optional' not in datasetInfo.metadata_file.ethics.data_usage_ethics %}
+                  <a class="nav-link ms-3 my-1" href="#item-6-2">Data Usage Ethics</a>
+                {% endif %}
+                {% if datasetInfo.metadata_file.ethics.ethical_review_status and 'Optional' not in datasetInfo.metadata_file.ethics.ethical_review_status %}
+                  <a class="nav-link ms-3 my-1" href="#item-6-3">Ethical Review Status</a>
+                {% endif %}
+              {% endif %}
             </div>
           </div>
+
+          <!-- Main Content -->
           <div class="col-8">
-            <!-- Basic Info -->
-            <h3 id="item-1">Basic Info</h3>
-            <h5 id="item-1-1">Description</h5>
-            <p>{{ datasetInfo.metadata_file.basic_identity.description }}</p>
-            <h5 id="item-1-2">Keywords</h5>
-            <p>{{ datasetInfo.metadata_file.basic_identity.keywords }}</p>
-            <h5 id="item-1-3">License</h5>
-            <p>{{ datasetInfo.metadata_file.basic_identity.license }}</p>
-            <h5 id="item-1-4">Changelog</h5>
-            <p>{{ datasetInfo.metadata_file.basic_identity.changelog }}</p>
+            <!-- Basic Identity -->
+            {% if datasetInfo.metadata_file.basic_identity.description and 'Optional' not in datasetInfo.metadata_file.basic_identity.description or datasetInfo.metadata_file.basic_identity.keywords and 'Optional' not in datasetInfo.metadata_file.basic_identity.keywords or datasetInfo.metadata_file.basic_identity.license and 'Optional' not in datasetInfo.metadata_file.basic_identity.license or datasetInfo.metadata_file.basic_identity.changelog and 'Optional' not in datasetInfo.metadata_file.basic_identity.changelog %}
+              <h3 id="item-1">Basic Information</h3>
+            {% endif %}
+            {% if datasetInfo.metadata_file.basic_identity.description and 'Optional' not in datasetInfo.metadata_file.basic_identity.description %}
+              <h5 id="item-1-1">Description</h5>
+              <p>{{ datasetInfo.metadata_file.basic_identity.description }}</p>
+            {% endif %}
+            {% if datasetInfo.metadata_file.basic_identity.keywords and 'Optional' not in datasetInfo.metadata_file.basic_identity.keywords %}
+              <h5 id="item-1-2">Keywords</h5>
+              <p>{{ datasetInfo.metadata_file.basic_identity.keywords }}</p>
+            {% endif %}
+            {% if datasetInfo.metadata_file.basic_identity.license and 'Optional' not in datasetInfo.metadata_file.basic_identity.license %}
+              <h5 id="item-1-3">License</h5>
+              <p>{{ datasetInfo.metadata_file.basic_identity.license }}</p>
+            {% endif %}
+            {% if datasetInfo.metadata_file.basic_identity.changelog and 'Optional' not in datasetInfo.metadata_file.basic_identity.changelog %}
+              <h5 id="item-1-4">Changelog</h5>
+              <p>{{ datasetInfo.metadata_file.basic_identity.changelog }}</p>
+            {% endif %}
             <h5 id="item-1-5">Dataset File Structure</h5>
             <div id="folderStructure" class="bg-light rounded"></div>
 
             <!-- Author Contact Details -->
-            <h3 id="item-2">Author Contact Details</h3>
-            <h5 id="item-2-1">Email</h5>
-            <p>{{ datasetInfo.metadata_file.author_contact_details.email }}</p>
-            <h5 id="item-2-2">Affiliation</h5>
-            <p>{{ datasetInfo.metadata_file.author_contact_details.affiliation }}</p>
-            <h5 id="item-2-3">Phone</h5>
-            <p>{{ datasetInfo.metadata_file.author_contact_details.phone }}</p>
+            {% if datasetInfo.metadata_file.author_contact_details.email and 'Optional' not in datasetInfo.metadata_file.author_contact_details.email or datasetInfo.metadata_file.author_contact_details.affiliation and 'Optional' not in datasetInfo.metadata_file.author_contact_details.affiliation or datasetInfo.metadata_file.author_contact_details.phone and 'Optional' not in datasetInfo.metadata_file.author_contact_details.phone %}
+              <h3 id="item-2">Author Contact Details</h3>
+            {% endif %}
+            {% if datasetInfo.metadata_file.author_contact_details.email and 'Optional' not in datasetInfo.metadata_file.author_contact_details.email %}
+              <h5 id="item-2-1">Email</h5>
+              <p>{{ datasetInfo.metadata_file.author_contact_details.email }}</p>
+            {% endif %}
+            {% if datasetInfo.metadata_file.author_contact_details.affiliation and 'Optional' not in datasetInfo.metadata_file.author_contact_details.affiliation %}
+              <h5 id="item-2-2">Affiliation</h5>
+              <p>{{ datasetInfo.metadata_file.author_contact_details.affiliation }}</p>
+            {% endif %}
+            {% if datasetInfo.metadata_file.author_contact_details.phone and 'Optional' not in datasetInfo.metadata_file.author_contact_details.phone %}
+              <h5 id="item-2-3">Phone</h5>
+              <p>{{ datasetInfo.metadata_file.author_contact_details.phone }}</p>
+            {% endif %}
 
             <!-- Dataset Creation -->
-            <h3 id="item-3">Dataset Creation</h3>
-            <h4 id="item-3-1">General Info</h4>
-            <h5 id="item-3-1-1">Data Origin</h5>
-            <p>{{ datasetInfo.metadata_file.dataset_creation.general.data_origin }}</p>
-            <h5 id="item-3-1-2">Synthetic Data Details</h5>
-            <p>{{ datasetInfo.metadata_file.dataset_creation.general.synthetic_data_details.generation_method }}</p>
-            <h5 id="item-3-1-3">Natural Data Details</h5>
-            <p>{{ datasetInfo.metadata_file.dataset_creation.general.natural_data_details.collection_circumstances }}</p>
-            <h4 id="item-3-2">Data Completion</h4>
-            <p>{{ datasetInfo.metadata_file.dataset_creation.data_completion.dataset_status }}</p>
-            <h4 id="item-3-3">Pre-processing</h4>
-            <p>{{ datasetInfo.metadata_file.dataset_creation.pre_processing.data_cleanliness.cleanliness_status }}</p>
+            {% if datasetInfo.metadata_file.dataset_creation.general.data_origin and 'Optional' not in datasetInfo.metadata_file.dataset_creation.general.data_origin %}
+              <h3 id="item-3">Dataset Creation</h3>
+              <h4 id="item-3-1">General</h4>
+            {% endif %}
+            {% if datasetInfo.metadata_file.dataset_creation.general.data_origin and 'Optional' not in datasetInfo.metadata_file.dataset_creation.general.data_origin %}
+              <h5 id="item-3-1-1">Data Origin</h5>
+              <p>{{ datasetInfo.metadata_file.dataset_creation.general.data_origin }}</p>
+              {% if 'Synthetically-Generated' in datasetInfo.metadata_file.dataset_creation.general.data_origin and datasetInfo.metadata_file.dataset_creation.general.synthetic_data_details %}
+                <h5 id="item-3-1-2">Synthetic Data Details</h5>
+                {% if datasetInfo.metadata_file.dataset_creation.general.synthetic_data_details.generation_method and 'Optional' not in datasetInfo.metadata_file.dataset_creation.general.synthetic_data_details.generation_method %}
+                  <p><strong>Generation Method:</strong> {{ datasetInfo.metadata_file.dataset_creation.general.synthetic_data_details.generation_method }}</p>
+                {% endif %}
+                {% if datasetInfo.metadata_file.dataset_creation.general.synthetic_data_details.software_used and 'Optional' not in datasetInfo.metadata_file.dataset_creation.general.synthetic_data_details.software_used %}
+                  <p><strong>Software Used:</strong> {{ datasetInfo.metadata_file.dataset_creation.general.synthetic_data_details.software_used }}</p>
+                {% endif %}
+                {% if datasetInfo.metadata_file.dataset_creation.general.synthetic_data_details.related_publications and 'Optional' not in datasetInfo.metadata_file.dataset_creation.general.synthetic_data_details.related_publications %}
+                  <p><strong>Related Publications:</strong> {{ datasetInfo.metadata_file.dataset_creation.general.synthetic_data_details.related_publications }}</p>
+                {% endif %}
+              {% endif %}
+              {% if 'Naturally-Obtained' in datasetInfo.metadata_file.dataset_creation.general.data_origin and datasetInfo.metadata_file.dataset_creation.general.natural_data_details %}
+                <h5 id="item-3-1-3">Natural Data Details</h5>
+                {% if datasetInfo.metadata_file.dataset_creation.general.natural_data_details.study_type and 'Optional' not in datasetInfo.metadata_file.dataset_creation.general.natural_data_details.study_type %}
+                  <p><strong>Study Type:</strong> {{ datasetInfo.metadata_file.dataset_creation.general.natural_data_details.study_type }}</p>
+                {% endif %}
+                {% if datasetInfo.metadata_file.dataset_creation.general.natural_data_details.experimental_setup.general_description and 'Optional' not in datasetInfo.metadata_file.dataset_creation.general.natural_data_details.experimental_setup.general_description %}
+                  <h5>Experimental Setup</h5>
+                  <p><strong>General Description:</strong> {{ datasetInfo.metadata_file.dataset_creation.general.natural_data_details.experimental_setup.general_description }}</p>
+                  {% if datasetInfo.metadata_file.dataset_creation.general.natural_data_details.experimental_setup.instrumentation and 'Optional' not in datasetInfo.metadata_file.dataset_creation.general.natural_data_details.experimental_setup.instrumentation %}
+                    <p><strong>Instrumentation:</strong> {{ datasetInfo.metadata_file.dataset_creation.general.natural_data_details.experimental_setup.instrumentation }}</p>
+                  {% endif %}
+                  {% if datasetInfo.metadata_file.dataset_creation.general.natural_data_details.experimental_setup.protocols and 'Optional' not in datasetInfo.metadata_file.dataset_creation.general.natural_data_details.experimental_setup.protocols %}
+                    <p><strong>Protocols:</strong> {{ datasetInfo.metadata_file.dataset_creation.general.natural_data_details.experimental_setup.protocols }}</p>
+                  {% endif %}
+                  {% if datasetInfo.metadata_file.dataset_creation.general.natural_data_details.experimental_setup.study_start_date and 'Optional' not in datasetInfo.metadata_file.dataset_creation.general.natural_data_details.experimental_setup.study_start_date %}
+                    <p><strong>Study Start Date:</strong> {{ datasetInfo.metadata_file.dataset_creation.general.natural_data_details.experimental_setup.study_start_date }}</p>
+                  {% endif %}
+                  {% if datasetInfo.metadata_file.dataset_creation.general.natural_data_details.experimental_setup.study_end_date and 'Optional' not in datasetInfo.metadata_file.dataset_creation.general.natural_data_details.experimental_setup.study_end_date %}
+                    <p><strong>Study End Date:</strong> {{ datasetInfo.metadata_file.dataset_creation.general.natural_data_details.experimental_setup.study_end_date }}</p>
+                  {% endif %}
+                {% endif %}
+                {% if datasetInfo.metadata_file.dataset_creation.general.natural_data_details.sample_information %}
+                  <h5>Sample Information</h5>
+                  {% if datasetInfo.metadata_file.dataset_creation.general.natural_data_details.sample_information.number_of_samples and 'Optional' not in datasetInfo.metadata_file.dataset_creation.general.natural_data_details.sample_information.number_of_samples %}
+                    <p><strong>Number of Samples:</strong> {{ datasetInfo.metadata_file.dataset_creation.general.natural_data_details.sample_information.number_of_samples }}</p>
+                  {% endif %}
+                  {% if datasetInfo.metadata_file.dataset_creation.general.natural_data_details.sample_information.sample_types and 'Optional' not in datasetInfo.metadata_file.dataset_creation.general.natural_data_details.sample_information.sample_types %}
+                    <p><strong>Sample Types:</strong> {{ datasetInfo.metadata_file.dataset_creation.general.natural_data_details.sample_information.sample_types }}</p>
+                  {% endif %}
+                  {% if datasetInfo.metadata_file.dataset_creation.general.natural_data_details.sample_information.participants %}
+                    <h5>Participants</h5>
+                    {% if datasetInfo.metadata_file.dataset_creation.general.natural_data_details.sample_information.participants.total_participants and 'Optional' not in datasetInfo.metadata_file.dataset_creation.general.natural_data_details.sample_information.participants.total_participants %}
+                      <p><strong>Total Participants:</strong> {{ datasetInfo.metadata_file.dataset_creation.general.natural_data_details.sample_information.participants.total_participants }}</p>
+                    {% endif %}
+                    {% if datasetInfo.metadata_file.dataset_creation.general.natural_data_details.sample_information.participants.demographic_data and 'Optional' not in datasetInfo.metadata_file.dataset_creation.general.natural_data_details.sample_information.participants.demographic_data %}
+                      <p><strong>Demographic Data:</strong> {{ datasetInfo.metadata_file.dataset_creation.general.natural_data_details.sample_information.participants.demographic_data }}</p>
+                    {% endif %}
+                    {% if datasetInfo.metadata_file.dataset_creation.general.natural_data_details.sample_information.participants.selection_criteria and 'Optional' not in datasetInfo.metadata_file.dataset_creation.general.natural_data_details.sample_information.participants.selection_criteria %}
+                      <p><strong>Selection Criteria:</strong> {{ datasetInfo.metadata_file.dataset_creation.general.natural_data_details.sample_information.participants.selection_criteria }}</p>
+                    {% endif %}
+                    {% if datasetInfo.metadata_file.dataset_creation.general.natural_data_details.sample_information.participants.health_status and 'Optional' not in datasetInfo.metadata_file.dataset_creation.general.natural_data_details.sample_information.participants.health_status %}
+                      <p><strong>Health Status:</strong> {{ datasetInfo.metadata_file.dataset_creation.general.natural_data_details.sample_information.participants.health_status }}</p>
+                    {% endif %}
+                  {% endif %}
+                {% endif %}
+                {% if datasetInfo.metadata_file.dataset_creation.general.natural_data_details.experimental_conditions %}
+                  <h5>Experimental Conditions</h5>
+                  {% if datasetInfo.metadata_file.dataset_creation.general.natural_data_details.experimental_conditions.experiment_location and 'Optional' not in datasetInfo.metadata_file.dataset_creation.general.natural_data_details.experimental_conditions.experiment_location %}
+                    <p><strong>Experiment Location:</strong> {{ datasetInfo.metadata_file.dataset_creation.general.natural_data_details.experimental_conditions.experiment_location }}</p>
+                  {% endif %}
+                  {% if datasetInfo.metadata_file.dataset_creation.general.natural_data_details.experimental_conditions.experiment_conditions and 'Optional' not in datasetInfo.metadata_file.dataset_creation.general.natural_data_details.experimental_conditions.experiment_conditions %}
+                    <p><strong>Experiment Conditions:</strong> {{ datasetInfo.metadata_file.dataset_creation.general.natural_data_details.experimental_conditions.experiment_conditions }}</p>
+                  {% endif %}
+                {% endif %}
+                {% if datasetInfo.metadata_file.dataset_creation.general.natural_data_details.related_publications and 'Optional' not in datasetInfo.metadata_file.dataset_creation.general.natural_data_details.related_publications %}
+                  <p><strong>Related Publications:</strong> {{ datasetInfo.metadata_file.dataset_creation.general.natural_data_details.related_publications }}</p>
+                {% endif %}
+              {% endif %}
+            {% endif %}
+            {% if datasetInfo.metadata_file.dataset_creation.data_completion %}
+              {% if datasetInfo.metadata_file.dataset_creation.data_completion.dataset_status and 'Optional' not in datasetInfo.metadata_file.dataset_creation.data_completion.dataset_status or datasetInfo.metadata_file.dataset_creation.data_completion.future_work and 'Optional' not in datasetInfo.metadata_file.dataset_creation.data_completion.future_work %}
+                <h4 id="item-3-2">Data Completion</h4>
+              {% endif %}
+              {% if datasetInfo.metadata_file.dataset_creation.data_completion.dataset_status and 'Optional' not in datasetInfo.metadata_file.dataset_creation.data_completion.dataset_status %}
+                <h5 id="item-3-2-1">Dataset Status</h5>
+                <p>{{ datasetInfo.metadata_file.dataset_creation.data_completion.dataset_status }}</p>
+              {% endif %}
+              {% if datasetInfo.metadata_file.dataset_creation.data_completion.future_work and 'Optional' not in datasetInfo.metadata_file.dataset_creation.data_completion.future_work %}
+                <h5 id="item-3-2-2">Future Work</h5>
+                <p>{{ datasetInfo.metadata_file.dataset_creation.data_completion.future_work }}</p>
+              {% endif %}
+            {% endif %}
+            {% if datasetInfo.metadata_file.dataset_creation.pre_processing %}
+              {% if datasetInfo.metadata_file.dataset_creation.pre_processing.raw_data and 'Optional' not in datasetInfo.metadata_file.dataset_creation.pre_processing.raw_data or datasetInfo.metadata_file.dataset_creation.pre_processing.data_cleanliness.cleanliness_status and 'Optional' not in datasetInfo.metadata_file.dataset_creation.pre_processing.data_cleanliness.cleanliness_status or datasetInfo.metadata_file.dataset_creation.pre_processing.data_cleanliness.cleaning_details and 'Optional' not in datasetInfo.metadata_file.dataset_creation.pre_processing.data_cleanliness.cleaning_details or datasetInfo.metadata_file.dataset_creation.pre_processing.labeling.labeled and 'Optional' not in datasetInfo.metadata_file.dataset_creation.pre_processing.labeling.labeled or datasetInfo.metadata_file.dataset_creation.pre_processing.labeling.labeling_details and 'Optional' not in datasetInfo.metadata_file.dataset_creation.pre_processing.labeling.labeling_details or datasetInfo.metadata_file.dataset_creation.pre_processing.data_split.train_split and 'Optional' not in datasetInfo.metadata_file.dataset_creation.pre_processing.data_split.train_split or datasetInfo.metadata_file.dataset_creation.pre_processing.data_split.validation_split and 'Optional' not in datasetInfo.metadata_file.dataset_creation.pre_processing.data_split.validation_split or datasetInfo.metadata_file.dataset_creation.pre_processing.data_split.test_split and 'Optional' not in datasetInfo.metadata_file.dataset_creation.pre_processing.data_split.test_split %}
+                <h4 id="item-3-3">Pre Processing</h4>
+              {% endif %}
+              {% if datasetInfo.metadata_file.dataset_creation.pre_processing.raw_data and 'Optional' not in datasetInfo.metadata_file.dataset_creation.pre_processing.raw_data %}
+                <h5 id="item-3-3-1">Raw Data</h5>
+                <p>{{ datasetInfo.metadata_file.dataset_creation.pre_processing.raw_data }}</p>
+              {% endif %}
+              {% if datasetInfo.metadata_file.dataset_creation.pre_processing.data_cleanliness %}
+                {% if datasetInfo.metadata_file.dataset_creation.pre_processing.data_cleanliness.cleanliness_status and 'Optional' not in datasetInfo.metadata_file.dataset_creation.pre_processing.data_cleanliness.cleanliness_status or datasetInfo.metadata_file.dataset_creation.pre_processing.data_cleanliness.cleaning_details and 'Optional' not in datasetInfo.metadata_file.dataset_creation.pre_processing.data_cleanliness.cleaning_details %}
+                  <h5>Data Cleanliness</h5>
+                {% endif %}
+                {% if datasetInfo.metadata_file.dataset_creation.pre_processing.data_cleanliness.cleanliness_status and 'Optional' not in datasetInfo.metadata_file.dataset_creation.pre_processing.data_cleanliness.cleanliness_status %}
+                  <p><strong>Cleanliness Status:</strong> {{ datasetInfo.metadata_file.dataset_creation.pre_processing.data_cleanliness.cleanliness_status }}</p>
+                {% endif %}
+                {% if datasetInfo.metadata_file.dataset_creation.pre_processing.data_cleanliness.cleaning_details and 'Optional' not in datasetInfo.metadata_file.dataset_creation.pre_processing.data_cleanliness.cleaning_details %}
+                  <p><strong>Cleaning Details:</strong> {{ datasetInfo.metadata_file.dataset_creation.pre_processing.data_cleanliness.cleaning_details }}</p>
+                {% endif %}
+              {% endif %}
+              {% if datasetInfo.metadata_file.dataset_creation.pre_processing.labeling %}
+                {% if datasetInfo.metadata_file.dataset_creation.pre_processing.labeling.labeled and 'Optional' not in datasetInfo.metadata_file.dataset_creation.pre_processing.labeling.labeled or datasetInfo.metadata_file.dataset_creation.pre_processing.labeling.labeling_details and 'Optional' not in datasetInfo.metadata_file.dataset_creation.pre_processing.labeling.labeling_details %}
+                  <h5>Labeling</h5>
+                {% endif %}
+                {% if datasetInfo.metadata_file.dataset_creation.pre_processing.labeling.labeled and 'Optional' not in datasetInfo.metadata_file.dataset_creation.pre_processing.labeling.labeled %}
+                  <p><strong>Labeled:</strong> {{ datasetInfo.metadata_file.dataset_creation.pre_processing.labeling.labeled }}</p>
+                {% endif %}
+                {% if datasetInfo.metadata_file.dataset_creation.pre_processing.labeling.labeling_details and 'Optional' not in datasetInfo.metadata_file.dataset_creation.pre_processing.labeling.labeling_details %}
+                  <p><strong>Labeling Details:</strong> {{ datasetInfo.metadata_file.dataset_creation.pre_processing.labeling.labeling_details }}</p>
+                {% endif %}
+              {% endif %}
+              {% if datasetInfo.metadata_file.dataset_creation.pre_processing.data_split %}
+                {% if datasetInfo.metadata_file.dataset_creation.pre_processing.data_split.train_split and 'Optional' not in datasetInfo.metadata_file.dataset_creation.pre_processing.data_split.train_split or datasetInfo.metadata_file.dataset_creation.pre_processing.data_split.validation_split and 'Optional' not in datasetInfo.metadata_file.dataset_creation.pre_processing.data_split.validation_split or datasetInfo.metadata_file.dataset_creation.pre_processing.data_split.test_split and 'Optional' not in datasetInfo.metadata_file.dataset_creation.pre_processing.data_split.test_split %}
+                  <h5>Data Split</h5>
+                {% endif %}
+                {% if datasetInfo.metadata_file.dataset_creation.pre_processing.data_split.train_split and 'Optional' not in datasetInfo.metadata_file.dataset_creation.pre_processing.data_split.train_split %}
+                  <p><strong>Train Split:</strong> {{ datasetInfo.metadata_file.dataset_creation.pre_processing.data_split.train_split }}</p>
+                {% endif %}
+                {% if datasetInfo.metadata_file.dataset_creation.pre_processing.data_split.validation_split and 'Optional' not in datasetInfo.metadata_file.dataset_creation.pre_processing.data_split.validation_split %}
+                  <p><strong>Validation Split:</strong> {{ datasetInfo.metadata_file.dataset_creation.pre_processing.data_split.validation_split }}</p>
+                {% endif %}
+                {% if datasetInfo.metadata_file.dataset_creation.pre_processing.data_split.test_split and 'Optional' not in datasetInfo.metadata_file.dataset_creation.pre_processing.data_split.test_split %}
+                  <p><strong>Test Split:</strong> {{ datasetInfo.metadata_file.dataset_creation.pre_processing.data_split.test_split }}</p>
+                {% endif %}
+              {% endif %}
+            {% endif %}
 
             <!-- Dataset Usage -->
-            <h3 id="item-4">Dataset Usage</h3>
-            <h5 id="item-4-1">Usage Description</h5>
-            <p>{{ datasetInfo.metadata_file.dataset_usage.data_usage_description }}</p>
-            <h5 id="item-4-2">Citation</h5>
-            <p>{{ datasetInfo.metadata_file.dataset_usage.citation }}</p>
-            <h5 id="item-4-3">Related Datasets</h5>
-            <p>{{ datasetInfo.metadata_file.dataset_usage.related_datasets }}</p>
+            {% if datasetInfo.metadata_file.dataset_usage %}
+              {% if datasetInfo.metadata_file.dataset_usage.citation and 'Optional' not in datasetInfo.metadata_file.dataset_usage.citation or datasetInfo.metadata_file.dataset_usage.data_usage_description and 'Optional' not in datasetInfo.metadata_file.dataset_usage.data_usage_description or datasetInfo.metadata_file.dataset_usage.related_datasets and 'Optional' not in datasetInfo.metadata_file.dataset_usage.related_datasets or datasetInfo.metadata_file.dataset_usage.related_publications and 'Optional' not in datasetInfo.metadata_file.dataset_usage.related_publications %}
+                <h3 id="item-4">Dataset Usage</h3>
+              {% endif %}
+              {% if datasetInfo.metadata_file.dataset_usage.citation and 'Optional' not in datasetInfo.metadata_file.dataset_usage.citation %}
+                <h5 id="item-4-1">Citation</h5>
+                <p>{{ datasetInfo.metadata_file.dataset_usage.citation }}</p>
+              {% endif %}
+              {% if datasetInfo.metadata_file.dataset_usage.data_usage_description and 'Optional' not in datasetInfo.metadata_file.dataset_usage.data_usage_description %}
+                <h5 id="item-4-2">Data Usage Description</h5>
+                <p>{{ datasetInfo.metadata_file.dataset_usage.data_usage_description }}</p>
+              {% endif %}
+              {% if datasetInfo.metadata_file.dataset_usage.related_datasets and 'Optional' not in datasetInfo.metadata_file.dataset_usage.related_datasets %}
+                <h5 id="item-4-3">Related Datasets</h5>
+                <p>{{ datasetInfo.metadata_file.dataset_usage.related_datasets }}</p>
+              {% endif %}
+              {% if datasetInfo.metadata_file.dataset_usage.related_publications and 'Optional' not in datasetInfo.metadata_file.dataset_usage.related_publications %}
+                <h5 id="item-4-4">Related Publications</h5>
+                <p>{{ datasetInfo.metadata_file.dataset_usage.related_publications }}</p>
+              {% endif %}
+            {% endif %}
 
             <!-- Dataset Composition -->
-            <h3 id="item-5">Dataset Composition</h3>
-            <h4 id="item-5-1">General Info</h4>
-            <p>{{ datasetInfo.metadata_file.dataset_composition.general.format }}</p>
-            <h5 id="item-5-2">CSV Details</h5>
-            <p>{{ datasetInfo.metadata_file.dataset_composition.csv.delimiter }}</p>
-            <h5 id="item-5-3">Excel Details</h5>
-            <p>{{ datasetInfo.metadata_file.dataset_composition.excel.has_macros }}</p>
+            {% if datasetInfo.metadata_file.dataset_composition %}
+              {% if datasetInfo.metadata_file.dataset_composition.general %}
+                {% if datasetInfo.metadata_file.dataset_composition.general.format and 'Optional' not in datasetInfo.metadata_file.dataset_composition.general.format or datasetInfo.metadata_file.dataset_composition.general.dataset_size and 'Optional' not in datasetInfo.metadata_file.dataset_composition.general.dataset_size or datasetInfo.metadata_file.dataset_composition.general.number_of_files and 'Optional' not in datasetInfo.metadata_file.dataset_composition.general.number_of_files or datasetInfo.metadata_file.dataset_composition.general.average_file_size and 'Optional' not in datasetInfo.metadata_file.dataset_composition.general.average_file_size %}
+                  <h3 id="item-5">Dataset Composition</h3>
+                  <h4 id="item-5-1">General</h4>
+                {% endif %}
+                {% if datasetInfo.metadata_file.dataset_composition.general.format and 'Optional' not in datasetInfo.metadata_file.dataset_composition.general.format %}
+                  <h5 id="item-5-1-1">Format</h5>
+                  <p>{{ datasetInfo.metadata_file.dataset_composition.general.format }}</p>
+                {% endif %}
+                {% if datasetInfo.metadata_file.dataset_composition.general.dataset_size and 'Optional' not in datasetInfo.metadata_file.dataset_composition.general.dataset_size %}
+                  <h5 id="item-5-1-2">Dataset Size</h5>
+                  <p>{{ datasetInfo.metadata_file.dataset_composition.general.dataset_size }}</p>
+                {% endif %}
+                {% if datasetInfo.metadata_file.dataset_composition.general.number_of_files and 'Optional' not in datasetInfo.metadata_file.dataset_composition.general.number_of_files %}
+                  <h5 id="item-5-1-3">Number of Files</h5>
+                  <p>{{ datasetInfo.metadata_file.dataset_composition.general.number_of_files }}</p>
+                {% endif %}
+                {% if datasetInfo.metadata_file.dataset_composition.general.average_file_size and 'Optional' not in datasetInfo.metadata_file.dataset_composition.general.average_file_size %}
+                  <h5 id="item-5-1-4">Average File Size</h5>
+                  <p>{{ datasetInfo.metadata_file.dataset_composition.general.average_file_size }}</p>
+                {% endif %}
+              {% endif %}
+              {% if 'CSV' in datasetInfo.metadata_file.dataset_composition.general.format %}
+                <h4 id="item-5-2">CSV</h4>
+                {% if datasetInfo.metadata_file.dataset_composition.csv.delimiter and 'Optional' not in datasetInfo.metadata_file.dataset_composition.csv.delimiter or datasetInfo.metadata_file.dataset_composition.csv.has_header and 'Optional' not in datasetInfo.metadata_file.dataset_composition.csv.has_header or datasetInfo.metadata_file.dataset_composition.csv.column_names and 'Optional' not in datasetInfo.metadata_file.dataset_composition.csv.column_names %}
+                  <h5>CSV Details</h5>
+                {% endif %}
+                {% if datasetInfo.metadata_file.dataset_composition.csv.delimiter and 'Optional' not in datasetInfo.metadata_file.dataset_composition.csv.delimiter %}
+                  <p><strong>Delimiter:</strong> {{ datasetInfo.metadata_file.dataset_composition.csv.delimiter }}</p>
+                {% endif %}
+                {% if datasetInfo.metadata_file.dataset_composition.csv.has_header and 'Optional' not in datasetInfo.metadata_file.dataset_composition.csv.has_header %}
+                  <p><strong>Has Header:</strong> {{ datasetInfo.metadata_file.dataset_composition.csv.has_header }}</p>
+                {% endif %}
+                {% if datasetInfo.metadata_file.dataset_composition.csv.column_names and 'Optional' not in datasetInfo.metadata_file.dataset_composition.csv.column_names %}
+                  <p><strong>Column Names:</strong> {{ datasetInfo.metadata_file.dataset_composition.csv.column_names }}</p>
+                {% endif %}
+              {% endif %}
+              {% if 'Excel' in datasetInfo.metadata_file.dataset_composition.general.format %}
+                <h4 id="item-5-3">Excel</h4>
+                {% if datasetInfo.metadata_file.dataset_composition.excel.has_macros and 'Optional' not in datasetInfo.metadata_file.dataset_composition.excel.has_macros or datasetInfo.metadata_file.dataset_composition.excel.average_sheets and 'Optional' not in datasetInfo.metadata_file.dataset_composition.excel.average_sheets %}
+                  <h5>Excel Details</h5>
+                {% endif %}
+                {% if datasetInfo.metadata_file.dataset_composition.excel.has_macros and 'Optional' not in datasetInfo.metadata_file.dataset_composition.excel.has_macros %}
+                  <p><strong>Has Macros:</strong> {{ datasetInfo.metadata_file.dataset_composition.excel.has_macros }}</p>
+                {% endif %}
+                {% if datasetInfo.metadata_file.dataset_composition.excel.average_sheets and 'Optional' not in datasetInfo.metadata_file.dataset_composition.excel.average_sheets %}
+                  <p><strong>Average Sheets:</strong> {{ datasetInfo.metadata_file.dataset_composition.excel.average_sheets }}</p>
+                {% endif %}
+              {% endif %}
+              {% if 'Image' in datasetInfo.metadata_file.dataset_composition.general.format %}
+                <h4 id="item-5-4">Image</h4>
+                {% if datasetInfo.metadata_file.dataset_composition.image.file_type and 'Optional' not in datasetInfo.metadata_file.dataset_composition.image.file_type or datasetInfo.metadata_file.dataset_composition.image.average_resolution and 'Optional' not in datasetInfo.metadata_file.dataset_composition.image.average_resolution or datasetInfo.metadata_file.dataset_composition.image.color_mode and 'Optional' not in datasetInfo.metadata_file.dataset_composition.image.color_mode or datasetInfo.metadata_file.dataset_composition.image.image_processing and 'Optional' not in datasetInfo.metadata_file.dataset_composition.image.image_processing %}
+                  <h5>Image Details</h5>
+                {% endif %}
+                {% if datasetInfo.metadata_file.dataset_composition.image.file_type and 'Optional' not in datasetInfo.metadata_file.dataset_composition.image.file_type %}
+                  <p><strong>File Type:</strong> {{ datasetInfo.metadata_file.dataset_composition.image.file_type }}</p>
+                {% endif %}
+                {% if datasetInfo.metadata_file.dataset_composition.image.average_resolution and 'Optional' not in datasetInfo.metadata_file.dataset_composition.image.average_resolution %}
+                  <p><strong>Average Resolution:</strong> {{ datasetInfo.metadata_file.dataset_composition.image.average_resolution }}</p>
+                {% endif %}
+                {% if datasetInfo.metadata_file.dataset_composition.image.color_mode and 'Optional' not in datasetInfo.metadata_file.dataset_composition.image.color_mode %}
+                  <p><strong>Color Mode:</strong> {{ datasetInfo.metadata_file.dataset_composition.image.color_mode }}</p>
+                {% endif %}
+                {% if datasetInfo.metadata_file.dataset_composition.image.image_processing and 'Optional' not in datasetInfo.metadata_file.dataset_composition.image.image_processing %}
+                  <p><strong>Image Processing:</strong> {{ datasetInfo.metadata_file.dataset_composition.image.image_processing }}</p>
+                {% endif %}
+              {% endif %}
+              {% if 'Video' in datasetInfo.metadata_file.dataset_composition.general.format %}
+                <h4 id="item-5-5">Video</h4>
+                {% if datasetInfo.metadata_file.dataset_composition.video.file_type and 'Optional' not in datasetInfo.metadata_file.dataset_composition.video.file_type or datasetInfo.metadata_file.dataset_composition.video.average_duration and 'Optional' not in datasetInfo.metadata_file.dataset_composition.video.average_duration or datasetInfo.metadata_file.dataset_composition.video.video_resolution and 'Optional' not in datasetInfo.metadata_file.dataset_composition.video.video_resolution or datasetInfo.metadata_file.dataset_composition.video.video_processing and 'Optional' not in datasetInfo.metadata_file.dataset_composition.video.video_processing %}
+                  <h5>Video Details</h5>
+                {% endif %}
+                {% if datasetInfo.metadata_file.dataset_composition.video.file_type and 'Optional' not in datasetInfo.metadata_file.dataset_composition.video.file_type %}
+                  <p><strong>File Type:</strong> {{ datasetInfo.metadata_file.dataset_composition.video.file_type }}</p>
+                {% endif %}
+                {% if datasetInfo.metadata_file.dataset_composition.video.average_duration and 'Optional' not in datasetInfo.metadata_file.dataset_composition.video.average_duration %}
+                  <p><strong>Average Duration:</strong> {{ datasetInfo.metadata_file.dataset_composition.video.average_duration }}</p>
+                {% endif %}
+                {% if datasetInfo.metadata_file.dataset_composition.video.video_resolution and 'Optional' not in datasetInfo.metadata_file.dataset_composition.video.video_resolution %}
+                  <p><strong>Video Resolution:</strong> {{ datasetInfo.metadata_file.dataset_composition.video.video_resolution }}</p>
+                {% endif %}
+                {% if datasetInfo.metadata_file.dataset_composition.video.video_processing and 'Optional' not in datasetInfo.metadata_file.dataset_composition.video.video_processing %}
+                  <p><strong>Video Processing:</strong> {{ datasetInfo.metadata_file.dataset_composition.video.video_processing }}</p>
+                {% endif %}
+              {% endif %}
+              {% if 'Audio' in datasetInfo.metadata_file.dataset_composition.general.format %}
+                <h4 id="item-5-6">Audio</h4>
+                {% if datasetInfo.metadata_file.dataset_composition.audio.file_type and 'Optional' not in datasetInfo.metadata_file.dataset_composition.audio.file_type or datasetInfo.metadata_file.dataset_composition.audio.average_duration and 'Optional' not in datasetInfo.metadata_file.dataset_composition.audio.average_duration or datasetInfo.metadata_file.dataset_composition.audio.average_bitrate and 'Optional' not in datasetInfo.metadata_file.dataset_composition.audio.average_bitrate or datasetInfo.metadata_file.dataset_composition.audio.audio_processing and 'Optional' not in datasetInfo.metadata_file.dataset_composition.audio.audio_processing %}
+                  <h5>Audio Details</h5>
+                {% endif %}
+                {% if datasetInfo.metadata_file.dataset_composition.audio.file_type and 'Optional' not in datasetInfo.metadata_file.dataset_composition.audio.file_type %}
+                  <p><strong>File Type:</strong> {{ datasetInfo.metadata_file.dataset_composition.audio.file_type }}</p>
+                {% endif %}
+                {% if datasetInfo.metadata_file.dataset_composition.audio.average_duration and 'Optional' not in datasetInfo.metadata_file.dataset_composition.audio.average_duration %}
+                  <p><strong>Average Duration:</strong> {{ datasetInfo.metadata_file.dataset_composition.audio.average_duration }}</p>
+                {% endif %}
+                {% if datasetInfo.metadata_file.dataset_composition.audio.average_bitrate and 'Optional' not in datasetInfo.metadata_file.dataset_composition.audio.average_bitrate %}
+                  <p><strong>Average Bitrate:</strong> {{ datasetInfo.metadata_file.dataset_composition.audio.average_bitrate }}</p>
+                {% endif %}
+                {% if datasetInfo.metadata_file.dataset_composition.audio.audio_processing and 'Optional' not in datasetInfo.metadata_file.dataset_composition.audio.audio_processing %}
+                  <p><strong>Audio Processing:</strong> {{ datasetInfo.metadata_file.dataset_composition.audio.audio_processing }}</p>
+                {% endif %}
+              {% endif %}
+              {% if 'FASTA' in datasetInfo.metadata_file.dataset_composition.general.format %}
+                <h4 id="item-5-7">FASTA</h4>
+                {% if datasetInfo.metadata_file.dataset_composition.fasta.general_info.sequence_type and 'Optional' not in datasetInfo.metadata_file.dataset_composition.fasta.general_info.sequence_type or datasetInfo.metadata_file.dataset_composition.fasta.general_info.organism_group and 'Optional' not in datasetInfo.metadata_file.dataset_composition.fasta.general_info.organism_group or datasetInfo.metadata_file.dataset_composition.fasta.general_info.specific_species and 'Optional' not in datasetInfo.metadata_file.dataset_composition.fasta.general_info.specific_species or datasetInfo.metadata_file.dataset_composition.fasta.general_info.minimum_sequence_length and 'Optional' not in datasetInfo.metadata_file.dataset_composition.fasta.general_info.minimum_sequence_length or datasetInfo.metadata_file.dataset_composition.fasta.general_info.maximum_sequence_length and 'Optional' not in datasetInfo.metadata_file.dataset_composition.fasta.general_info.maximum_sequence_length or datasetInfo.metadata_file.dataset_composition.fasta.sequencing_info.sequencing_method and 'Optional' not in datasetInfo.metadata_file.dataset_composition.fasta.sequencing_info.sequencing_method or datasetInfo.metadata_file.dataset_composition.fasta.sequencing_info.coverage_depth and 'Optional' not in datasetInfo.metadata_file.dataset_composition.fasta.sequencing_info.coverage_depth or datasetInfo.metadata_file.dataset_composition.fasta.sequencing_info.assembly_details and 'Optional' not in datasetInfo.metadata_file.dataset_composition.fasta.sequencing_info.assembly_details or datasetInfo.metadata_file.dataset_composition.fasta.sequencing_info.error_rate and 'Optional' not in datasetInfo.metadata_file.dataset_composition.fasta.sequencing_info.error_rate or datasetInfo.metadata_file.dataset_composition.fasta.further_source_details.source_organism_info and 'Optional' not in datasetInfo.metadata_file.dataset_composition.fasta.further_source_details.source_organism_info or datasetInfo.metadata_file.dataset_composition.fasta.further_source_details.NCBI_Taxonomy_ID and 'Optional' not in datasetInfo.metadata_file.dataset_composition.fasta.further_source_details.NCBI_Taxonomy_ID or datasetInfo.metadata_file.dataset_composition.fasta.further_source_details.GenBank_Accession_Number and 'Optional' not in datasetInfo.metadata_file.dataset_composition.fasta.further_source_details.GenBank_Accession_Number or datasetInfo.metadata_file.dataset_composition.fasta.further_source_details.UniProt_ID and 'Optional' not in datasetInfo.metadata_file.dataset_composition.fasta.further_source_details.UniProt_ID %}
+                  <h5>FASTA Details</h5>
+                {% endif %}
+                {% if datasetInfo.metadata_file.dataset_composition.fasta.general_info.sequence_type and 'Optional' not in datasetInfo.metadata_file.dataset_composition.fasta.general_info.sequence_type %}
+                  <p><strong>Sequence Type:</strong> {{ datasetInfo.metadata_file.dataset_composition.fasta.general_info.sequence_type }}</p>
+                {% endif %}
+                {% if datasetInfo.metadata_file.dataset_composition.fasta.general_info.organism_group and 'Optional' not in datasetInfo.metadata_file.dataset_composition.fasta.general_info.organism_group %}
+                  <p><strong>Organism Group:</strong> {{ datasetInfo.metadata_file.dataset_composition.fasta.general_info.organism_group }}</p>
+                {% endif %}
+                {% if datasetInfo.metadata_file.dataset_composition.fasta.general_info.specific_species and 'Optional' not in datasetInfo.metadata_file.dataset_composition.fasta.general_info.specific_species %}
+                  <p><strong>Specific Species:</strong> {{ datasetInfo.metadata_file.dataset_composition.fasta.general_info.specific_species }}</p>
+                {% endif %}
+                {% if datasetInfo.metadata_file.dataset_composition.fasta.general_info.minimum_sequence_length and 'Optional' not in datasetInfo.metadata_file.dataset_composition.fasta.general_info.minimum_sequence_length %}
+                  <p><strong>Minimum Sequence Length:</strong> {{ datasetInfo.metadata_file.dataset_composition.fasta.general_info.minimum_sequence_length }}</p>
+                {% endif %}
+                {% if datasetInfo.metadata_file.dataset_composition.fasta.general_info.maximum_sequence_length and 'Optional' not in datasetInfo.metadata_file.dataset_composition.fasta.general_info.maximum_sequence_length %}
+                  <p><strong>Maximum Sequence Length:</strong> {{ datasetInfo.metadata_file.dataset_composition.fasta.general_info.maximum_sequence_length }}</p>
+                {% endif %}
+                {% if datasetInfo.metadata_file.dataset_composition.fasta.sequencing_info.sequencing_method and 'Optional' not in datasetInfo.metadata_file.dataset_composition.fasta.sequencing_info.sequencing_method %}
+                  <p><strong>Sequencing Method:</strong> {{ datasetInfo.metadata_file.dataset_composition.fasta.sequencing_info.sequencing_method }}</p>
+                {% endif %}
+                {% if datasetInfo.metadata_file.dataset_composition.fasta.sequencing_info.coverage_depth and 'Optional' not in datasetInfo.metadata_file.dataset_composition.fasta.sequencing_info.coverage_depth %}
+                  <p><strong>Coverage Depth:</strong> {{ datasetInfo.metadata_file.dataset_composition.fasta.sequencing_info.coverage_depth }}</p>
+                {% endif %}
+                {% if datasetInfo.metadata_file.dataset_composition.fasta.sequencing_info.assembly_details and 'Optional' not in datasetInfo.metadata_file.dataset_composition.fasta.sequencing_info.assembly_details %}
+                  <p><strong>Assembly Details:</strong> {{ datasetInfo.metadata_file.dataset_composition.fasta.sequencing_info.assembly_details }}</p>
+                {% endif %}
+                {% if datasetInfo.metadata_file.dataset_composition.fasta.sequencing_info.error_rate and 'Optional' not in datasetInfo.metadata_file.dataset_composition.fasta.sequencing_info.error_rate %}
+                  <p><strong>Error Rate:</strong> {{ datasetInfo.metadata_file.dataset_composition.fasta.sequencing_info.error_rate }}</p>
+                {% endif %}
+                {% if datasetInfo.metadata_file.dataset_composition.fasta.further_source_details %}
+                  {% if datasetInfo.metadata_file.dataset_composition.fasta.further_source_details.source_organism_info and 'Optional' not in datasetInfo.metadata_file.dataset_composition.fasta.further_source_details.source_organism_info or datasetInfo.metadata_file.dataset_composition.fasta.further_source_details.NCBI_Taxonomy_ID and 'Optional' not in datasetInfo.metadata_file.dataset_composition.fasta.further_source_details.NCBI_Taxonomy_ID or datasetInfo.metadata_file.dataset_composition.fasta.further_source_details.GenBank_Accession_Number and 'Optional' not in datasetInfo.metadata_file.dataset_composition.fasta.further_source_details.GenBank_Accession_Number or datasetInfo.metadata_file.dataset_composition.fasta.further_source_details.UniProt_ID and 'Optional' not in datasetInfo.metadata_file.dataset_composition.fasta.further_source_details.UniProt_ID %}
+                    <h5>Further Source Details</h5>
+                  {% endif %}
+                  {% if datasetInfo.metadata_file.dataset_composition.fasta.further_source_details.source_organism_info and 'Optional' not in datasetInfo.metadata_file.dataset_composition.fasta.further_source_details.source_organism_info %}
+                    <p><strong>Source Organism Info:</strong> {{ datasetInfo.metadata_file.dataset_composition.fasta.further_source_details.source_organism_info }}</p>
+                  {% endif %}
+                  {% if datasetInfo.metadata_file.dataset_composition.fasta.further_source_details.NCBI_Taxonomy_ID and 'Optional' not in datasetInfo.metadata_file.dataset_composition.fasta.further_source_details.NCBI_Taxonomy_ID %}
+                    <p><strong>NCBI Taxonomy ID:</strong> {{ datasetInfo.metadata_file.dataset_composition.fasta.further_source_details.NCBI_Taxonomy_ID }}</p>
+                  {% endif %}
+                  {% if datasetInfo.metadata_file.dataset_composition.fasta.further_source_details.GenBank_Accession_Number and 'Optional' not in datasetInfo.metadata_file.dataset_composition.fasta.further_source_details.GenBank_Accession_Number %}
+                    <p><strong>GenBank Accession Number:</strong> {{ datasetInfo.metadata_file.dataset_composition.fasta.further_source_details.GenBank_Accession_Number }}</p>
+                  {% endif %}
+                  {% if datasetInfo.metadata_file.dataset_composition.fasta.further_source_details.UniProt_ID and 'Optional' not in datasetInfo.metadata_file.dataset_composition.fasta.further_source_details.UniProt_ID %}
+                    <p><strong>UniProt ID:</strong> {{ datasetInfo.metadata_file.dataset_composition.fasta.further_source_details.UniProt_ID }}</p>
+                  {% endif %}
+                {% endif %}
+              {% endif %}
+              {% if 'GenBank' in datasetInfo.metadata_file.dataset_composition.general.format %}
+                <h4 id="item-5-8">GenBank</h4>
+                {% if datasetInfo.metadata_file.dataset_composition.genbank.general_info.sequence_type and 'Optional' not in datasetInfo.metadata_file.dataset_composition.genbank.general_info.sequence_type or datasetInfo.metadata_file.dataset_composition.genbank.general_info.organism_group and 'Optional' not in datasetInfo.metadata_file.dataset_composition.genbank.general_info.organism_group or datasetInfo.metadata_file.dataset_composition.genbank.general_info.specific_species and 'Optional' not in datasetInfo.metadata_file.dataset_composition.genbank.general_info.specific_species or datasetInfo.metadata_file.dataset_composition.genbank.general_info.minimum_sequence_length and 'Optional' not in datasetInfo.metadata_file.dataset_composition.genbank.general_info.minimum_sequence_length or datasetInfo.metadata_file.dataset_composition.genbank.general_info.maximum_sequence_length and 'Optional' not in datasetInfo.metadata_file.dataset_composition.genbank.general_info.maximum_sequence_length or datasetInfo.metadata_file.dataset_composition.genbank.sequencing_info.sequencing_method and 'Optional' not in datasetInfo.metadata_file.dataset_composition.genbank.sequencing_info.sequencing_method or datasetInfo.metadata_file.dataset_composition.genbank.sequencing_info.coverage_depth and 'Optional' not in datasetInfo.metadata_file.dataset_composition.genbank.sequencing_info.coverage_depth or datasetInfo.metadata_file.dataset_composition.genbank.sequencing_info.assembly_details and 'Optional' not in datasetInfo.metadata_file.dataset_composition.genbank.sequencing_info.assembly_details or datasetInfo.metadata_file.dataset_composition.genbank.sequencing_info.error_rate and 'Optional' not in datasetInfo.metadata_file.dataset_composition.genbank.sequencing_info.error_rate or datasetInfo.metadata_file.dataset_composition.genbank.further_source_details.source_organism_info and 'Optional' not in datasetInfo.metadata_file.dataset_composition.genbank.further_source_details.source_organism_info or datasetInfo.metadata_file.dataset_composition.genbank.further_source_details.NCBI_Taxonomy_ID and 'Optional' not in datasetInfo.metadata_file.dataset_composition.genbank.further_source_details.NCBI_Taxonomy_ID or datasetInfo.metadata_file.dataset_composition.genbank.further_source_details.GenBank_Accession_Number and 'Optional' not in datasetInfo.metadata_file.dataset_composition.genbank.further_source_details.GenBank_Accession_Number or datasetInfo.metadata_file.dataset_composition.genbank.further_source_details.UniProt_ID and 'Optional' not in datasetInfo.metadata_file.dataset_composition.genbank.further_source_details.UniProt_ID %}
+                  <h5>GenBank Details</h5>
+                {% endif %}
+                {% if datasetInfo.metadata_file.dataset_composition.genbank.general_info.sequence_type and 'Optional' not in datasetInfo.metadata_file.dataset_composition.genbank.general_info.sequence_type %}
+                  <p><strong>Sequence Type:</strong> {{ datasetInfo.metadata_file.dataset_composition.genbank.general_info.sequence_type }}</p>
+                {% endif %}
+                {% if datasetInfo.metadata_file.dataset_composition.genbank.general_info.organism_group and 'Optional' not in datasetInfo.metadata_file.dataset_composition.genbank.general_info.organism_group %}
+                  <p><strong>Organism Group:</strong> {{ datasetInfo.metadata_file.dataset_composition.genbank.general_info.organism_group }}</p>
+                {% endif %}
+                {% if datasetInfo.metadata_file.dataset_composition.genbank.general_info.specific_species and 'Optional' not in datasetInfo.metadata_file.dataset_composition.genbank.general_info.specific_species %}
+                  <p><strong>Specific Species:</strong> {{ datasetInfo.metadata_file.dataset_composition.genbank.general_info.specific_species }}</p>
+                {% endif %}
+                {% if datasetInfo.metadata_file.dataset_composition.genbank.general_info.minimum_sequence_length and 'Optional' not in datasetInfo.metadata_file.dataset_composition.genbank.general_info.minimum_sequence_length %}
+                  <p><strong>Minimum Sequence Length:</strong> {{ datasetInfo.metadata_file.dataset_composition.genbank.general_info.minimum_sequence_length }}</p>
+                {% endif %}
+                {% if datasetInfo.metadata_file.dataset_composition.genbank.general_info.maximum_sequence_length and 'Optional' not in datasetInfo.metadata_file.dataset_composition.genbank.general_info.maximum_sequence_length %}
+                  <p><strong>Maximum Sequence Length:</strong> {{ datasetInfo.metadata_file.dataset_composition.genbank.general_info.maximum_sequence_length }}</p>
+                {% endif %}
+                {% if datasetInfo.metadata_file.dataset_composition.genbank.sequencing_info.sequencing_method and 'Optional' not in datasetInfo.metadata_file.dataset_composition.genbank.sequencing_info.sequencing_method %}
+                  <p><strong>Sequencing Method:</strong> {{ datasetInfo.metadata_file.dataset_composition.genbank.sequencing_info.sequencing_method }}</p>
+                {% endif %}
+                {% if datasetInfo.metadata_file.dataset_composition.genbank.sequencing_info.coverage_depth and 'Optional' not in datasetInfo.metadata_file.dataset_composition.genbank.sequencing_info.coverage_depth %}
+                  <p><strong>Coverage Depth:</strong> {{ datasetInfo.metadata_file.dataset_composition.genbank.sequencing_info.coverage_depth }}</p>
+                {% endif %}
+                {% if datasetInfo.metadata_file.dataset_composition.genbank.sequencing_info.assembly_details and 'Optional' not in datasetInfo.metadata_file.dataset_composition.genbank.sequencing_info.assembly_details %}
+                  <p><strong>Assembly Details:</strong> {{ datasetInfo.metadata_file.dataset_composition.genbank.sequencing_info.assembly_details }}</p>
+                {% endif %}
+                {% if datasetInfo.metadata_file.dataset_composition.genbank.sequencing_info.error_rate and 'Optional' not in datasetInfo.metadata_file.dataset_composition.genbank.sequencing_info.error_rate %}
+                  <p><strong>Error Rate:</strong> {{ datasetInfo.metadata_file.dataset_composition.genbank.sequencing_info.error_rate }}</p>
+                {% endif %}
+                {% if datasetInfo.metadata_file.dataset_composition.genbank.further_source_details %}
+                  {% if datasetInfo.metadata_file.dataset_composition.genbank.further_source_details.source_organism_info and 'Optional' not in datasetInfo.metadata_file.dataset_composition.genbank.further_source_details.source_organism_info or datasetInfo.metadata_file.dataset_composition.genbank.further_source_details.NCBI_Taxonomy_ID and 'Optional' not in datasetInfo.metadata_file.dataset_composition.genbank.further_source_details.NCBI_Taxonomy_ID or datasetInfo.metadata_file.dataset_composition.genbank.further_source_details.GenBank_Accession_Number and 'Optional' not in datasetInfo.metadata_file.dataset_composition.genbank.further_source_details.GenBank_Accession_Number or datasetInfo.metadata_file.dataset_composition.genbank.further_source_details.UniProt_ID and 'Optional' not in datasetInfo.metadata_file.dataset_composition.genbank.further_source_details.UniProt_ID %}
+                    <h5>Further Source Details</h5>
+                  {% endif %}
+                  {% if datasetInfo.metadata_file.dataset_composition.genbank.further_source_details.source_organism_info and 'Optional' not in datasetInfo.metadata_file.dataset_composition.genbank.further_source_details.source_organism_info %}
+                    <p><strong>Source Organism Info:</strong> {{ datasetInfo.metadata_file.dataset_composition.genbank.further_source_details.source_organism_info }}</p>
+                  {% endif %}
+                  {% if datasetInfo.metadata_file.dataset_composition.genbank.further_source_details.NCBI_Taxonomy_ID and 'Optional' not in datasetInfo.metadata_file.dataset_composition.genbank.further_source_details.NCBI_Taxonomy_ID %}
+                    <p><strong>NCBI Taxonomy ID:</strong> {{ datasetInfo.metadata_file.dataset_composition.genbank.further_source_details.NCBI_Taxonomy_ID }}</p>
+                  {% endif %}
+                  {% if datasetInfo.metadata_file.dataset_composition.genbank.further_source_details.GenBank_Accession_Number and 'Optional' not in datasetInfo.metadata_file.dataset_composition.genbank.further_source_details.GenBank_Accession_Number %}
+                    <p><strong>GenBank Accession Number:</strong> {{ datasetInfo.metadata_file.dataset_composition.genbank.further_source_details.GenBank_Accession_Number }}</p>
+                  {% endif %}
+                  {% if datasetInfo.metadata_file.dataset_composition.genbank.further_source_details.UniProt_ID and 'Optional' not in datasetInfo.metadata_file.dataset_composition.genbank.further_source_details.UniProt_ID %}
+                    <p><strong>UniProt ID:</strong> {{ datasetInfo.metadata_file.dataset_composition.genbank.further_source_details.UniProt_ID }}</p>
+                  {% endif %}
+                {% endif %}
+              {% endif %}
+            {% if 'Matlab' in datasetInfo.metadata_file.dataset_composition.general.format %}
+              <h4 id="item-5-9">Matlab</h4>
+              {% if datasetInfo.metadata_file.dataset_composition.matlab.matlab_version and 'Optional' not in datasetInfo.metadata_file.dataset_composition.matlab.matlab_version or datasetInfo.metadata_file.dataset_composition.matlab.variables_stored and 'Optional' not in datasetInfo.metadata_file.dataset_composition.matlab.variables_stored or datasetInfo.metadata_file.dataset_composition.matlab.toolboxes_used and 'Optional' not in datasetInfo.metadata_file.dataset_composition.matlab.toolboxes_used %}
+                <h5>Matlab Details</h5>
+              {% endif %}
+              {% if datasetInfo.metadata_file.dataset_composition.matlab.matlab_version and 'Optional' not in datasetInfo.metadata_file.dataset_composition.matlab.matlab_version %}
+                <p><strong>Matlab Version:</strong> {{ datasetInfo.metadata_file.dataset_composition.matlab.matlab_version }}</p>
+              {% endif %}
+              {% if datasetInfo.metadata_file.dataset_composition.matlab.variables_stored and 'Optional' not in datasetInfo.metadata_file.dataset_composition.matlab.variables_stored %}
+                <p><strong>Variables Stored:</strong> {{ datasetInfo.metadata_file.dataset_composition.matlab.variables_stored }}</p>
+              {% endif %}
+              {% if datasetInfo.metadata_file.dataset_composition.matlab.toolboxes_used and 'Optional' not in datasetInfo.metadata_file.dataset_composition.matlab.toolboxes_used %}
+                <p><strong>Toolboxes Used:</strong> {{ datasetInfo.metadata_file.dataset_composition.matlab.toolboxes_used }}</p>
+              {% endif %}
+            {% endif %}
+            {% if 'Text' in datasetInfo.metadata_file.dataset_composition.general.format %}
+              <h4 id="item-5-10">Text</h4>
+              {% if datasetInfo.metadata_file.dataset_composition.text.encoding and 'Optional' not in datasetInfo.metadata_file.dataset_composition.text.encoding or datasetInfo.metadata_file.dataset_composition.text.language and 'Optional' not in datasetInfo.metadata_file.dataset_composition.text.language %}
+                <h5>Text Details</h5>
+              {% endif %}
+              {% if datasetInfo.metadata_file.dataset_composition.text.encoding and 'Optional' not in datasetInfo.metadata_file.dataset_composition.text.encoding %}
+                <p><strong>Encoding:</strong> {{ datasetInfo.metadata_file.dataset_composition.text.encoding }}</p>
+              {% endif %}
+              {% if datasetInfo.metadata_file.dataset_composition.text.language and 'Optional' not in datasetInfo.metadata_file.dataset_composition.text.language %}
+                <p><strong>Language:</strong> {{ datasetInfo.metadata_file.dataset_composition.text.language }}</p>
+              {% endif %}
+            {% endif %}
+            {% if 'PDF' in datasetInfo.metadata_file.dataset_composition.general.format %}
+              <h4 id="item-5-11">PDF</h4>
+              {% if datasetInfo.metadata_file.dataset_composition.pdf.text_extractable and 'Optional' not in datasetInfo.metadata_file.dataset_composition.pdf.text_extractable or datasetInfo.metadata_file.dataset_composition.pdf.pdf_version and 'Optional' not in datasetInfo.metadata_file.dataset_composition.pdf.pdf_version %}
+                <h5>PDF Details</h5>
+              {% endif %}
+              {% if datasetInfo.metadata_file.dataset_composition.pdf.text_extractable and 'Optional' not in datasetInfo.metadata_file.dataset_composition.pdf.text_extractable %}
+                <p><strong>Text Extractable:</strong> {{ datasetInfo.metadata_file.dataset_composition.pdf.text_extractable }}</p>
+              {% endif %}
+              {% if datasetInfo.metadata_file.dataset_composition.pdf.pdf_version and 'Optional' not in datasetInfo.metadata_file.dataset_composition.pdf.pdf_version %}
+                <p><strong>PDF Version:</strong> {{ datasetInfo.metadata_file.dataset_composition.pdf.pdf_version }}</p>
+              {% endif %}
+            {% endif %}
+          {% endif %}
 
-            <!-- Ethics -->
-            <h3 id="item-6">Ethics</h3>
-            <h5 id="item-6-1">Data Collection Ethics</h5>
-            <p>{{ datasetInfo.metadata_file.ethics.data_collection_ethics }}</p>
-            <h5 id="item-6-2">Data Usage Ethics</h5>
-            <p>{{ datasetInfo.metadata_file.ethics.data_usage_ethics }}</p>
-            <h5 id="item-6-3">Ethical Review Status</h5>
-            <p>{{ datasetInfo.metadata_file.ethics.ethical_review_status }}</p>
-          </div>
+          <!-- Ethics -->
+          {% if datasetInfo.metadata_file.ethics %}
+            {% if datasetInfo.metadata_file.ethics.data_collection_ethics and 'Optional' not in datasetInfo.metadata_file.ethics.data_collection_ethics or datasetInfo.metadata_file.ethics.data_usage_ethics and 'Optional' not in datasetInfo.metadata_file.ethics.data_usage_ethics or datasetInfo.metadata_file.ethics.ethical_review_status and 'Optional' not in datasetInfo.metadata_file.ethics.ethical_review_status %}
+              <h3 id="item-6">Ethics</h3>
+            {% endif %}
+            {% if datasetInfo.metadata_file.ethics.data_collection_ethics and 'Optional' not in datasetInfo.metadata_file.ethics.data_collection_ethics %}
+              <h5 id="item-6-1">Data Collection Ethics</h5>
+              <p>{{ datasetInfo.metadata_file.ethics.data_collection_ethics }}</p>
+            {% endif %}
+            {% if datasetInfo.metadata_file.ethics.data_usage_ethics and 'Optional' not in datasetInfo.metadata_file.ethics.data_usage_ethics %}
+              <h5 id="item-6-2">Data Usage Ethics</h5>
+              <p>{{ datasetInfo.metadata_file.ethics.data_usage_ethics }}</p>
+            {% endif %}
+            {% if datasetInfo.metadata_file.ethics.ethical_review_status and 'Optional' not in datasetInfo.metadata_file.ethics.ethical_review_status %}
+              <h5 id="item-6-3">Ethical Review Status</h5>
+              <p>{{ datasetInfo.metadata_file.ethics.ethical_review_status }}</p>
+            {% endif %}
+          {% endif %}
         </div>
       </div>
     </div>
@@ -167,33 +661,66 @@
 <!-- File Tree Script -->
 <script>
   document.addEventListener("DOMContentLoaded", function() {
+    // Retrieve the folder structure JSON from the Django template variable and ensure it's safe to use in JS.
     var folderJson = {{ datasetInfo.metadata_file.folder_structure|safe }};
 
+    // Function to build a nested object tree from an array of file paths.
     function buildTree(paths) {
       let tree = {};
       paths.forEach((path) => {
-        path = path.split('/');
+        path = path.split('/'); // Split the path string into components.
         let current = tree;
         for (let part of path) {
           if (!current[part]) {
             current[part] = {}; // Creates a nested object if it doesn't exist.
           }
-          current = current[part]; // Goes down the tree.
+          current = current[part]; // Navigate deeper into the tree.
         }
       });
       return tree;
     }
 
+    // Function to create a DOM representation of the file tree.
     function createTreeDom(node, path = '') {
       let ul = document.createElement('ul');
+      ul.style.paddingLeft = '20px'; // Styling to indent the tree structure visually.
       for (let key in node) {
         let li = document.createElement('li');
-        li.textContent = key;
+        let span = document.createElement('span');
+        span.textContent = key; // Display the current part of the path.
+        li.appendChild(span);
+
         let fullPath = path + key + '/';
-        li.setAttribute('title', fullPath); // Tooltip showing the full path.
+        li.setAttribute('title', fullPath); // Add tooltip to show the full path.
+        li.style.position = 'relative';
+
+        // Check if the current node has children.
         if (Object.keys(node[key]).length > 0) {
+          let toggleButton = document.createElement('button');
+          toggleButton.textContent = '+';
+          toggleButton.style.position = 'absolute';
+          toggleButton.style.left = '-20px';
+          toggleButton.style.border = 'none';
+          toggleButton.style.background = 'none';
+          toggleButton.style.cursor = 'pointer';
+          toggleButton.style.color = '#0a4746'; 
+          toggleButton.style.fontWeight = 'bold'; 
+          // Event handler to toggle the visibility of child nodes.
+          toggleButton.onclick = function() {
+            let nextUl = li.querySelector('ul');
+            if (nextUl.style.display === 'none') {
+              nextUl.style.display = 'block';
+              toggleButton.textContent = '-';
+            } else {
+              nextUl.style.display = 'none';
+              toggleButton.textContent = '+';
+            }
+          };
+
+          li.insertBefore(toggleButton, span); // Insert the button before the span.
           li.appendChild(createTreeDom(node[key], fullPath)); // Recursively add child lists.
         }
+
         ul.appendChild(li);
       }
       return ul;
@@ -202,19 +729,23 @@
     var paths = Object.values(folderJson);
     var tree = buildTree(paths);
     var treeDom = createTreeDom(tree);
-    document.getElementById("folderStructure").appendChild(treeDom);
+    treeDom.style.display = 'block';
+    treeDom.querySelectorAll('ul').forEach(ul => ul.style.display = 'none'); // Initially collapse all lists.
+    treeDom.querySelectorAll('li > button').forEach(button => button.textContent = '+'); // Initialize all buttons with '+'
+    document.getElementById("folderStructure").appendChild(treeDom); // Append the tree to the designated DOM element.
   });
 </script>
 
 <!-- Share Link Script -->
 <script>
+  // Function to copy the current URL to the clipboard.
   function copyCurrentURL() {
-  const url = window.location.href; // Gets the current URL.
-  navigator.clipboard.writeText(url).then(() => {
-    alert('URL copied to clipboard!');
-  }).catch(err => {
-    console.error('Error in copying URL: ', err);
-  });
-}
+    const url = window.location.href; // Retrieves the current URL of the browser.
+    navigator.clipboard.writeText(url).then(() => {
+      alert('URL copied to clipboard!'); // Notification on successful copy.
+    }).catch(err => {
+      console.error('Error in copying URL: ', err); // Log errors if the copy fails.
+    });
+  }
 </script>
 {% endblock %}

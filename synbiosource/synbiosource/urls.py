@@ -15,10 +15,25 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path,include
+from django.urls import path, re_path, include
 from . import views
 from django.conf.urls.static import static 
-from django.conf import settings 
+from django.conf import settings
+from rest_framework import permissions
+from drf_yasg.views import get_schema_view
+from drf_yasg import openapi
+
+# Swagger API documentation configuration.
+schema_view = get_schema_view(
+    openapi.Info(
+        title="SynBioSource API",
+        default_version='v1',
+        description="API endpoints for accessing datasets from SynBioSource.",
+        contact=openapi.Contact(email="ad2320@ic.ac.uk"),
+    ),
+    public=True,
+    permission_classes=(permissions.AllowAny,),
+)
 
 urlpatterns = [
     path('', views.index, name="home"),
@@ -30,6 +45,7 @@ urlpatterns = [
     path('reset-password/<str:token>',views.reset_password, name="reset-password"),
     path('dataset/',include('dataset.urls'),),
     path('api/dataset/',include('api.urls'),),
+    re_path(r'^swagger/$', schema_view.with_ui('swagger', cache_timeout=0), name='api-documentation'),
 ]
 
 # To enable the use of static files. 

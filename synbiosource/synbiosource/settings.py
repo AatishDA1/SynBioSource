@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     'storages',
     'api',
     'rest_framework',
+    'drf_yasg',
 ]
 
 MIDDLEWARE = [

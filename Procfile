@@ -1,1 +1,1 @@
-web: gunicorn synbiosource.synbiosource.wsgi 
+web: gunicorn synbiosource.wsgi 

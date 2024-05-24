@@ -88,7 +88,20 @@
             >
             <a class="nav-link ms-3 my-1" href="#item-1-3">General Usage</a>
             <a class="nav-link" href="#item-2">Metadata Card</a>
-            <a class="nav-link ms-3 my-1" href="#item-2-1">Overview</a>
+            <a class="nav-link ms-3 my-1" href="#item-2-1"
+              >Structural Overview</a
+            >
+            <a class="nav-link ms-3 my-1" href="#item-2-2">General Usage</a>
+            <a class="nav-link ms-3 my-1" href="#item-2-3">Basic Identity</a>
+            <a class="nav-link ms-3 my-1" href="#item-2-4"
+              >Author Contact Details</a
+            >
+            <a class="nav-link ms-3 my-1" href="#item-2-5">Dataset Creation</a>
+            <a class="nav-link ms-3 my-1" href="#item-2-6">Dataset Usage</a>
+            <a class="nav-link ms-3 my-1" href="#item-2-7"
+              >Dataset Composition</a
+            >
+            <a class="nav-link ms-3 my-1" href="#item-2-8">Ethics</a>
           </div>
         </div>
         <div class="col-8">
@@ -106,9 +119,9 @@
               For the dataset upload, please select the folder containing your
               dataset files. For single files please also upload them in a
               folder.
-              <br />
-              <br />
-              Please note that the <b>Maximum Number of Files is 1000</b> and the <b>Maximum Dataset Size is 1GB</b>.
+              <br /><br />
+              Please note that the <b>Maximum Number of Files is 1000</b> and
+              the <b>Maximum Dataset Size is 1GB</b>.
             </p>
             <h5 id="item-1-2">Metadata JSON Upload</h5>
             <p>
@@ -127,436 +140,1838 @@
             </p>
             <div class="text-center">
               <a
-                href="/static/metadata_standard/metadata_v4.json"
+                href="https://synbiosource.s3.amazonaws.com/static/assets/metadata_standard/metadata_v5.json"
                 download="metadata_template.json"
                 class="btn btn-submit"
                 >Download Metadata Card</a
               >
             </div>
             <h3 id="item-2">Metadata Card</h3>
-            <h5 id="item-2-1">Overview</h5>
+            <h5 id="item-2-1">Structural Overview</h5>
             <p>
               The metadata card is a JSON file that contains various fields to
               describe the nature of your dataset. Some of these fields are
               mandatory while others are optional. Below is a brief overview of
               the different fields and whether they are Mandatory or Optional:
             </p>
-            <ul class="metadata-list">
-              <!-- Basic Identity -->
-              <li onclick="toggleVisibility(event, 'basic_identity')">
-                <span class="toggle-symbol">+</span>Basic Identity
-                <ul id="basic_identity" class="nested">
-                  <li>- Title: Mandatory</li>
-                  <li>- Description: Mandatory</li>
-                  <li>- Version: Mandatory</li>
-                  <li>- Changelog: Optional</li>
-                  <li>- Keywords: Mandatory</li>
-                  <li>- License: Optional</li>
-                </ul>
-              </li>
-              <!-- Author Contact Details -->
-              <li onclick="toggleVisibility(event, 'author_contact_details')">
-                <span class="toggle-symbol">+</span>Author Contact Details
-                <ul id="author_contact_details" class="nested">
-                  <li>- Affiliation: Optional</li>
-                  <li>- Email: Mandatory</li>
-                  <li>- Phone: Optional</li>
-                </ul>
-              </li>
-              <!-- Dataset Creation -->
-              <li onclick="toggleVisibility(event, 'dataset_creation')">
-                <span class="toggle-symbol">+</span>Dataset Creation
-                <ul id="dataset_creation" class="nested">
-                  <li onclick="toggleVisibility(event, 'general_creation')">
-                    <span class="toggle-symbol">+</span>General
-                    <ul id="general_creation" class="nested">
-                      <li>- Data Origin: Mandatory</li>
-                      <li onclick="toggleVisibility(event, 'synthetic_details')">
-                        <span class="toggle-symbol">+</span>Synthetic Data Details
-                        <ul id="synthetic_details" class="nested">
-                          <li>- Generation Method: Mandatory</li>
-                          <li>- Software Used: Optional</li>
-                        </ul>
-                      </li>
-                      <li onclick="toggleVisibility(event, 'natural_details')">
-                        <span class="toggle-symbol">+</span>Natural Data Details
-                        <ul id="natural_details" class="nested">
-                          <li>- Collection Circumstances: Mandatory</li>
-                          <li>- Collection Date: Optional</li>
-                          <li>- Collection Location: Optional</li>
-                        </ul>
-                      </li>
-                    </ul>
-                  </li>
-                  <li onclick="toggleVisibility(event, 'data_completion')">
-                    <span class="toggle-symbol">+</span>Data Completion
-                    <ul id="data_completion" class="nested">
-                      <li>- Dataset Status: Mandatory</li>
-                      <li>- Future Work: Optional</li>
-                    </ul>
-                  </li>
-                  <li onclick="toggleVisibility(event, 'pre_processing')">
-                    <span class="toggle-symbol">+</span>Pre Processing
-                    <ul id="pre_processing" class="nested">
-                      <li onclick="toggleVisibility(event, 'data_cleanliness')">
-                        <span class="toggle-symbol">+</span>Data Cleanliness
-                        <ul id="data_cleanliness" class="nested">
-                          <li>- Cleanliness Status: Mandatory</li>
-                          <li>- Cleaning Details: Optional</li>
-                        </ul>
-                      </li>
-                      <li onclick="toggleVisibility(event, 'labeling')">
-                        <span class="toggle-symbol">+</span>Labeling
-                        <ul id="labeling" class="nested">
-                          <li>- Labeled: Mandatory</li>
-                          <li>- Labeling Details: Optional</li>
-                        </ul>
-                      </li>
-                      <li onclick="toggleVisibility(event, 'data_split')">
-                        <span class="toggle-symbol">+</span>Data Split
-                        <ul id="data_split" class="nested">
-                          <li>- Train Split: Optional</li>
-                          <li>- Validation Split: Optional</li>
-                          <li>- Test Split: Optional</li>
-                        </ul>
-                      </li>
-                    </ul>
-                  </li>
-                </ul>
-              </li>
-              <!-- Dataset Usage -->
-              <li onclick="toggleVisibility(event, 'dataset_usage')">
-                <span class="toggle-symbol">+</span>Dataset Usage
-                <ul id="dataset_usage" class="nested">
-                  <li>- Citation: Optional</li>
-                  <li>- Data Usage Description: Mandatory</li>
-                  <li>- Related Datasets: Optional</li>
-                  <li>- Related Publications: Optional</li>
-                </ul>
-              </li>
-              <!-- Dataset Composition -->
-              <li onclick="toggleVisibility(event, 'dataset_composition')">
-                <span class="toggle-symbol">+</span>Dataset Composition
-                <ul id="dataset_composition" class="nested">
-                  <li onclick="toggleVisibility(event, 'general_composition')">
-                    <span class="toggle-symbol">+</span>General
-                    <ul id="general_composition" the "nested">
-                      <li>- Format: Mandatory</li>
-                      <li>- Dataset Size: Mandatory</li>
-                      <li>- Number of Files: Mandatory</li>
-                      <li>- Average File Size: Mandatory</li>
-                    </ul>
-                  </li>
-                  <li onclick="toggleVisibility(event, 'csv_details')">
-                    <span class="toggle-symbol">+</span>CSV
-                    <ul id="csv_details" class="nested">
-                      <li>- Delimiter: Mandatory</li>
-                      <li>- Has Header: Mandatory</li>
-                      <li>- Column Names: Mandatory</li>
-                    </ul>
-                  </li>
-                  <li onclick="toggleVisibility(event, 'excel_details')">
-                    <span class="toggle-symbol">+</span>Excel
-                    <ul id="excel_details" class="nested">
-                      <li>- Has Macros: Mandatory</li>
-                      <li>- Average Sheets: Optional</li>
-                    </ul>
-                  </li>
-                  <li onclick="toggleVisibility(event, 'image_details')">
-                    <span class="toggle-symbol">+</span>Image
-                    <ul id="image_details" class="nested">
-                      <li>- File Type: Mandatory</li>
-                      <li>- Average Resolution: Mandatory</li>
-                      <li>- Color Mode: Mandatory</li>
-                      <li>- Image Processing: Optional</li>
-                    </ul>
-                  </li>
-                  <li onclick="toggleVisibility(event, 'video_details')">
-                    <span class="toggle-symbol">+</span>Video
-                    <ul id="video_details" class="nested">
-                      <li>- File Type: Mandatory</li>
-                      <li>- Average Duration: Mandatory</li>
-                      <li>- Video Resolution: Mandatory</li>
-                      <li>- Video Processing: Optional</li>
-                    </ul>
-                  </li>
-                  <li onclick="toggleVisibility(event, 'audio_details')">
-                    <span class="toggle-symbol">+</span>Audio
-                    <ul id="audio_details" class="nested">
-                      <li>- File Type: Mandatory</li>
-                      <li>- Average Duration: Mandatory</li>
-                      <li>- Average Bitrate: Optional</li>
-                      <li>- Audio Processing: Optional</li>
-                    </ul>
-                  </li>
-                  <li onclick="toggleVisibility(event, 'fasta_details')">
-                    <span class="toggle-symbol">+</span>FASTA
-                    <ul id="fasta_details" class="nested">
-                      <li>- Sequence Type: Mandatory</li>
-                      <li>- Organism Group: Mandatory</li>
-                      <li>- Source Organism Detail: Optional</li>
-                      <li>- Minimum Sequence Length: Mandatory</li>
-                      <li>- Maximum Sequence Length: Mandatory</li>
-                    </ul>
-                  </li>
-                  <li onclick="toggleVisibility(event, 'genbank_details')">
-                    <span class="toggle-symbol">+</span>GenBank
-                    <ul id="genbank_details" class="nested">
-                      <li>- Sequence Type: Mandatory</li>
-                      <li>- Organism Group: Mandatory</li>
-                      <li>- Source Organism Detail: Optional</li>
-                      <li>- Minimum Sequence Length: Mandatory</li>
-                      <li>- Maximum Sequence Length: Mandatory</li>
-                    </ul>
-                  </li>
-                  <li onclick="toggleVisibility(event, 'text_details')">
-                    <span class="toggle-symbol">+</span>Text
-                    <ul id="text_details" class="nested">
-                      <li>- Encoding: Mandatory</li>
-                      <li>- Language: Mandatory</li>
-                      <li>- Text Format: Optional</li>
-                    </ul>
-                  </li>
-                  <li onclick="toggleVisibility(event, 'pdf_details')">
-                    <span class="toggle-symbol">+</span>PDF
-                    <ul id="pdf_details" class="nested">
-                      <li>- Text Extractable: Mandatory</li>
-                      <li>- PDF Version: Optional</li>
-                    </ul>
-                  </li>
-                </ul>
-              </li>
-              <!-- Ethics -->
-              <li onclick="toggleVisibility(event, 'ethics')">
-                <span class="toggle-symbol">+</span>Ethics
-                <ul id="ethics" class="nested">
-                  <li>- Data Collection Ethics: Optional</li>
-                  <li>- Data Usage Ethics: Optional</li>
-                  <li>- Ethical Review Status: Optional</li>
-                </ul>
-              </li>
-            </ul>
+
+            <h5 id="item-2-2">General Usage</h5>
+            <p>
+              You need only fill out the fields that are Mandatory. Based on
+              your selection for data origin (either Natural or Synthetic), as
+              well as for file type, you will only need to fill out the
+              respective sections. Others can be ignored.
+            </p>
+            <br />
+            <p>
+              Different fields require different input types. Some require
+              detailed descriptions, others will require you to input just a
+              value (integer or float depending on the field). For numerical
+              inputs, please don't write any units, just input the number. There
+              are also categorical fields, in which you must pick from the given
+              options. Finally,
+              <b>please leave any unused categories untouched</b>, there is no
+              need to delete them. The upload will be rejected otherwise.
+            </p>
+
+            <h5 id="item-2-3">Basic Identity</h5>
+            <p>
+              <b>Title:</b> The title of the dataset. This is a mandatory field.
+              Please provide a concise and descriptive title. <br /><br />
+              <b>Description:</b> A detailed description of the dataset and its
+              contents. This is a mandatory field. <br /><br />
+              <b>Version:</b> The version of the dataset as a float value. This
+              is a mandatory field. Enter the version number, e.g., 1.0 or 2.1.
+              <br /><br />
+              <b>Changelog:</b> Description of changes made compared to the
+              previous version of the dataset. This is an optional field.
+              <br /><br />
+              <b>Keywords:</b> Minimum of 3 keywords related to this dataset in
+              the format of a list ('keyword1', 'keyword2', 'keyword3'...). This
+              is a mandatory field. <br /><br />
+              <b>License:</b> Type of license under which the dataset is
+              distributed. This is a mandatory field. Specify the license type,
+              e.g., CC BY 4.0, MIT License.
+            </p>
+
+            <h5 id="item-2-4">Author Contact Details</h5>
+            <p>
+              <b>Affiliation:</b> The affiliation of the author. This is an
+              optional field. <br /><br />
+              <b>Email:</b> The email address of the author. This is a mandatory
+              field. <br /><br />
+              <b>Phone:</b> The phone number of the author. This is an optional
+              field.
+            </p>
+
+            <h5 id="item-2-5">Dataset Creation</h5>
+            <p>
+              <b>General:</b><br />
+              <b>Data Origin:</b> Indicates whether the data is
+              ('Synthetically-Generated'/ 'Naturally-Obtained'/ 'Other'). This
+              is a mandatory field. Select as many from the given options. Based
+              on your selections fill out the corresponding sections below.<br /><br />
+
+              <b>Synthetic Data Details:</b><br />
+              <b>Generation Method:</b> Method used for generating synthetic
+              data, if applicable. This is a mandatory field. Describe the
+              method used. <br /><br />
+              <b>Software Used:</b> Details of any software or tools used for
+              generating synthetic data. This is a mandatory field. Provide
+              names and versions of the software used. <br /><br />
+              <b>Related Publications:</b> Citations or links to publications
+              that are directly related to the synthetic data generation. This
+              is an optional field. <br /><br />
+
+              <b>Natural Data Details:</b><br />
+              <b>Study Type:</b> Type of study conducted ('Observational' /
+              'Experimental' / 'Clinical Trial' / 'Field Study' / 'Laboratory
+              Study' / 'Survey Research' / 'Longitudinal Study' /
+              'Cross-Sectional Study' / 'Case Study' / 'Other'). This is a
+              mandatory field. Select from the given options. <br /><br />
+              <b>Experimental Setup:</b><br />
+              <b>General Description:</b> General description of the study,
+              outlining its main objectives and methodology. This is a mandatory
+              field. <br /><br />
+              <b>Instrumentation:</b> Specific instruments and technologies used
+              to collect the data. This is an optional field. <br /><br />
+              <b>Protocols:</b> List any common protocols used during the
+              experiment. This is an optional field. <br /><br />
+              <b>Study Start Date:</b> Date when the experiment commenced in the
+              form mm/dd/yyyy. This is a mandatory field. <br /><br />
+              <b>Study End Date:</b> Date when the experiment concluded in the
+              form mm/dd/yyyy. This is a mandatory field. <br /><br />
+              <b>Sample Information:</b><br />
+              <b>Number of Samples:</b> Total number of samples collected and
+              analyzed in the study. This is an optional field. Please give an
+              Integer value. <br /><br />
+              <b>Sample Types:</b> Description of the types of samples
+              collected, such as biological tissues, environmental specimens,
+              clinical samples, etc., including specific details when
+              applicable. This is an optional field. <br /><br />
+              <b>Participants:</b><br />
+              <b>Total Participants:</b> Total number of participants involved
+              in the study, if applicable. This is an optional field. Please
+              give an Integer value. <br /><br />
+              <b>Demographic Data:</b> Information about the demographic
+              characteristics of the participants (age range, gender, ethnicity,
+              etc.). This is an optional field. <br /><br />
+              <b>Selection Criteria:</b> Criteria used for selecting
+              participants, including any inclusion or exclusion criteria. This
+              is an optional field. <br /><br />
+              <b>Health Status:</b> Health status or medical conditions of
+              participants relevant to the study. This is an optional field.
+              <br /><br />
+              <b>Experimental Conditions:</b><br />
+              <b>Experiment Location:</b> Location where the experiment was
+              conducted, including specific site details and environmental
+              conditions, if relevant. This is a mandatory field. <br /><br />
+              <b>Experiment Conditions:</b> Detailed conditions under which the
+              experiment was performed, such as temperature, lighting, and other
+              relevant environmental parameters. This is an optional field.
+              Describe the experimental conditions. <br /><br />
+              <b>Related Publications:</b> Citations or links to publications
+              that are directly related to the dataset's usage. This is an
+              optional field.
+            </p>
+
+            <h5 id="item-2-6">Data Completion</h5>
+            <p>
+              <b>Dataset Status:</b> Indicates if the dataset is final or will
+              be further worked on ('Complete'/ 'In Progress'/ 'Abandoned &
+              Incomplete'/ 'Other'). This is a mandatory field. Select from the
+              given options. <br /><br />
+              <b>Future Work:</b> Description of any planned future work or
+              improvements to be made on the dataset. This is an optional field.
+            </p>
+
+            <h5 id="item-2-7">Pre Processing</h5>
+            <p>
+              <b>Raw Data:</b> Is this the raw data or has it undergone any
+              pre-processing ('Yes'/ 'No'). This is a mandatory field. Select
+              'Yes' or 'No'. <br /><br />
+              <b>Data Cleanliness:</b><br />
+              <b>Cleanliness Status:</b> Indicates the cleanliness of the data
+              ('Clean'/ 'Partially Clean'/ 'Unclean'/ 'N/A'). This is a
+              mandatory field. Select from the given options. <br /><br />
+              <b>Cleaning Details:</b> Description of the cleaning process
+              applied to the dataset (e.g., methods used, types of errors
+              corrected). This is an optional field. Provide details if
+              applicable. <br /><br />
+              <b>Labeling:</b><br />
+              <b>Labeled:</b> Indicates whether the data is labeled ('Yes'/
+              'No'/ 'N/A'). This is a mandatory field. Select from the given
+              options. <br /><br />
+              <b>Labeling Details:</b> Description of the labeling process and
+              the types of labels used. This is an optional field. <br /><br />
+              <b>Data Split:</b><br />
+              <b>Train Split:</b> Percentage of data used for training in
+              machine learning datasets. This is an optional field. Provide the
+              percentage as a float or integer. <br /><br />
+              <b>Validation Split:</b> Percentage of data used for validation in
+              machine learning datasets. This is an optional field. Provide the
+              percentage as a float or integer. <br /><br />
+              <b>Test Split:</b> Percentage of data used for testing in machine
+              learning datasets. This is an optional field. Provide the
+              percentage as a float or integer.
+            </p>
+
+            <h5 id="item-2-8">Dataset Usage</h5>
+            <p>
+              <b>Citation:</b> Recommended citation for the dataset. This is an
+              optional field. <br /><br />
+              <b>Data Usage Description:</b> Description of how the data can be
+              used, including any restrictions or guidelines. This is a
+              mandatory field. <br /><br />
+              <b>Related Datasets:</b> Links to related datasets. This is an
+              optional field. <br /><br />
+              <b>Related Publications:</b> Links or references to any papers
+              related to the dataset's usage. This is an optional field.
+            </p>
+
+            <h5 id="item-2-9">Dataset Composition</h5>
+            <p>
+              <b>General:</b><br />
+              <b>Format:</b> File format ('CSV'/ 'Excel'/ 'Image'/ 'Video'/
+              'Audio'/ 'FASTA'/ 'GenBank'/ 'Text'/ 'PDF'/ 'Matlab'/ 'Other').
+              This is a mandatory field. Select from the given options.
+              <br /><br />
+              <b>Dataset Size:</b> Size of the dataset, typically in KB. This is
+              a mandatory field. Provide the size as a positive integer.
+              <br /><br />
+              <b>Number of Files:</b> Total number of files. This is a mandatory
+              field. Provide the total count as a positive integer. <br /><br />
+              <b>Average File Size:</b> Average file size across files in KB.
+              This is a mandatory field. Provide the average size as a positive
+              float or integer. <br /><br />
+
+              <b>CSV:</b><br />
+              <b>Delimiter:</b> Delimiter used in CSV files ('Comma'/ 'Colon'/
+              'Semicolon'/ 'Other'). This is a mandatory field. Select from the
+              given options. <br /><br />
+              <b>Has Header:</b> Indicates if CSV files have a header row
+              ('Yes'/ 'No'). This is a mandatory field. Select 'Yes' or 'No'.
+              <br /><br />
+              <b>Column Names:</b> List of column names in CSV files (e.g.,
+              ['column1', 'column2', 'column3']). This is a mandatory field.
+              <br /><br />
+
+              <b>Excel:</b><br />
+              <b>Has Macros:</b> Indicates if Excel files contain macros ('Yes'/
+              'No'). This is a mandatory field. Select 'Yes' or 'No'.
+              <br /><br />
+              <b>Average Sheets:</b> Average number of sheets across Excel
+              files. This is a mandatory field. Provide the average count as a
+              positive integer. <br /><br />
+
+              <b>Image:</b><br />
+              <b>File Type:</b> File type of images ('JPEG'/ 'PNG'/ 'GIF'/
+              'TIFF'/ 'BMP'/ 'Other'). This is a mandatory field. Select from
+              the given options. <br /><br />
+              <b>Average Resolution:</b> Average resolution across image files
+              in Mega Pixels. This is a mandatory field. Provide the average
+              resolution as a positive float or integer. <br /><br />
+              <b>Color Mode:</b> Color mode of images ('RGB'/ 'CMYK'/
+              'Grayscale'/ 'Other'). This is a mandatory field. Select from the
+              given options. <br /><br />
+              <b>Image Processing:</b> Description of any image processing
+              applied (e.g., normalization, augmentation). This is an optional
+              field. <br /><br />
+
+              <b>Video:</b><br />
+              <b>File Type:</b> File type of videos ('MP4'/ 'AVI'/ 'MOV'/ 'WMV'/
+              'MKV'/ 'Other'). This is a mandatory field. Select from the given
+              options. <br /><br />
+              <b>Average Duration:</b> Average duration across video files in
+              Minutes. This is a mandatory field. Provide the average duration
+              as a positive float or integer. <br /><br />
+              <b>Video Resolution:</b> Average resolution across video files
+              ('Lower than SD'/ 'SD'/ 'HD'/ 'Full HD'/ '2K'/ '4K'/ '8K'/
+              'Greater than 8K'). This is a mandatory field. Select from the
+              given options. <br /><br />
+              <b>Video Processing:</b> Description of any video processing
+              applied (e.g., frame extraction, stabilization). This is an
+              optional field. <br /><br />
+
+              <b>Audio:</b><br />
+              <b>File Type:</b> File type of audio files ('MP3'/ 'WAV'/ 'AAC'/
+              'FLAC'/ 'OGG'/ 'Other'). This is a mandatory field. Select from
+              the given options. <br /><br />
+              <b>Average Duration:</b> Average duration across audio files in
+              Minutes. This is a mandatory field. Provide the average duration
+              as a positive float or integer. <br /><br />
+              <b>Average Bitrate:</b> Average bitrate across audio files in bits
+              per second. This is an optional field. Provide the average bitrate
+              as a positive float or integer. <br /><br />
+              <b>Audio Processing:</b> Description of any audio processing
+              applied (e.g., noise reduction, normalization). This is an
+              optional field. <br /><br />
+
+              <b>FASTA:</b><br />
+              <b>General Info:</b><br />
+              <b>Sequence Type:</b> List of predominant sequence types in the
+              FASTA files ('DNA'/ 'RNA'/ 'cDNA'/ 'Amino Acid'/ 'Other'). This is
+              a mandatory field. Select from the given options. <br /><br />
+              <b>Organism Group:</b> List of organisms represented ('Bacteria'/
+              'Virus'/ 'Eukaryote'/ 'Archaea'/ 'Organelles'/ 'Other'). This is a
+              mandatory field. Select from the given options. <br /><br />
+              <b>Specific Species:</b> List of the specific species or strains
+              represented in the FASTA files. This is an optional field.
+              <br /><br />
+              <b>Minimum Sequence Length:</b> Minimum sequence length. This is a
+              mandatory field. Provide the length as a positive integer.
+              <br /><br />
+              <b>Maximum Sequence Length:</b> Maximum sequence length. This is a
+              mandatory field. Provide the length as a positive integer.
+              <br /><br />
+
+              <b>Sequencing Info:</b><br />
+              <b>Sequencing Method:</b> Main sequencing technologies used
+              ('Illumina'/ 'PacBio SMRT'/ 'Nanopore Sequencing'/ 'Sanger'/ 'Ion
+              Torrent'/ 'Pyrosequencing'/ 'SOLiD Sequencing'/ 'Other'). This is
+              a mandatory field. Select from the given options. <br /><br />
+              <b>Coverage Depth:</b> Average depth of coverage, crucial for
+              assessing data quality as an Integer. This is an optional field.
+              Provide the depth as a positive integer. <br /><br />
+              <b>Assembly Details:</b> Description of assembly algorithms and
+              parameters used in generating the genome assembly. This is an
+              optional field. <br /><br />
+              <b>Error Rate:</b> Estimated error rate of the sequence data as a
+              percentage (Float). This is an optional field. Provide the error
+              rate as a positive float. <br /><br />
+
+              <b>Further Source Details:</b><br />
+              <b>Source Organism Info:</b> Detailed information on the source
+              organisms used, including any unique genetic or phenotypic
+              characteristics. This includes both naturally occurring and
+              engineered traits. This is an optional field. <br /><br />
+              <b>NCBI Taxonomy ID:</b> The National Center for Biotechnology
+              Information (NCBI) Taxonomy IDs, if applicable. This is an
+              optional field. <br /><br />
+              <b>GenBank Accession Number:</b> The GenBank accession number
+              associated with the genomic sequences of the organisms, if
+              applicable. This is an optional field. <br /><br />
+              <b>UniProt ID:</b> The Universal Protein Resource (UniProt) IDs,
+              if applicable. This is an optional field. <br /><br />
+
+              <b>GenBank:</b><br />
+              <b>General Info:</b><br />
+              <b>Sequence Type:</b> List of predominant sequence types in the
+              GenBank files ('DNA'/ 'RNA'/ 'cDNA'/ 'Amino Acid'/ 'Other'). This
+              is a mandatory field. Select from the given options. <br /><br />
+              <b>Organism Group:</b> List of organisms represented ('Bacteria'/
+              'Virus'/ 'Eukaryote'/ 'Archaea'/ 'Organelles'/ 'Other'). This is a
+              mandatory field. Select from the given options. <br /><br />
+              <b>Specific Species:</b> List of the specific species or strains
+              represented in the GenBank files. This is an optional field.
+              <br /><br />
+              <b>Minimum Sequence Length:</b> Minimum sequence length. This is a
+              mandatory field. Provide the length as a positive integer.
+              <br /><br />
+              <b>Maximum Sequence Length:</b> Maximum sequence length. This is a
+              mandatory field. Provide the length as a positive integer.
+              <br /><br />
+
+              <b>Sequencing Info:</b><br />
+              <b>Sequencing Method:</b> Main sequencing technologies used
+              ('Illumina'/ 'PacBio SMRT'/ 'Nanopore Sequencing'/ 'Sanger'/ 'Ion
+              Torrent'/ 'Pyrosequencing'/ 'SOLiD Sequencing'/ 'Other'). This is
+              a mandatory field. Select from the given options. <br /><br />
+              <b>Coverage Depth:</b> Average depth of coverage, crucial for
+              assessing data quality as an Integer. This is an optional field.
+              Provide the depth as a positive integer. <br /><br />
+              <b>Assembly Details:</b> Description of assembly algorithms and
+              parameters used in generating the genome assembly. This is an
+              optional field. <br /><br />
+              <b>Error Rate:</b> Estimated error rate of the sequence data as a
+              percentage (Float). This is an optional field. Provide the error
+              rate as a positive float. <br /><br />
+
+              <b>Further Source Details:</b><br />
+              <b>Source Organism Info:</b> Detailed information on the source
+              organisms used, including any unique genetic or phenotypic
+              characteristics. This includes both naturally occurring and
+              engineered traits. This is an optional field. <br /><br />
+              <b>NCBI Taxonomy ID:</b> The National Center for Biotechnology
+              Information (NCBI) Taxonomy IDs, if applicable. This is an
+              optional field. <br /><br />
+              <b>GenBank Accession Number:</b> The GenBank accession number
+              associated with the genomic sequences of the organisms, if
+              applicable. This is an optional field. <br /><br />
+              <b>UniProt ID:</b> The Universal Protein Resource (UniProt) IDs,
+              if applicable. This is an optional field. <br /><br />
+
+              <b>Matlab:</b><br />
+              <b>Matlab Version:</b> Version of MATLAB used to generate the data
+              (e.g., R2019b). This is a mandatory field. <br /><br />
+              <b>Variables Stored:</b> Types of variables stored in the file
+              ('Matrix', 'Cell Array', 'Structure', 'Table', 'Function Handle',
+              'Time Series', 'Other'). This is a mandatory field. Select from
+              the given options. <br /><br />
+              <b>Toolboxes Used:</b> List of MATLAB toolboxes used in the data
+              generation process. This is an optional field. <br /><br />
+
+              <b>Text:</b><br />
+              <b>Encoding:</b> Character encoding used in text files ('UTF-8'/
+              'UTF-16'/ 'UTF-32'/ 'ASCII'/ 'Other'). This is a mandatory field.
+              Select from the given options. <br /><br />
+              <b>Language:</b> Predominant language of text files (e.g.,
+              English, Spanish, Chinese). This is a mandatory field.
+              <br /><br />
+
+              <b>PDF:</b><br />
+              <b>Text Extractable:</b> Indicates whether text is extractable
+              across PDF files ('Yes'/ 'No'/ 'N/A'). This is a mandatory field.
+              Select from the given options. <br /><br />
+              <b>PDF Version:</b> Version of PDF format used (e.g., 1.4, 1.7).
+              This is an optional field. <br /><br />
+            </p>
+
+            <h5 id="item-2-10">Ethics</h5>
+            <p>
+              <b>Data Collection Ethics:</b> Information on ethical
+              considerations related to data collection (e.g., consent,
+              privacy). This is an optional field. <br /><br />
+              <b>Data Usage Ethics:</b> Information on ethical considerations
+              related to data usage (e.g., intended use, potential misuse). This
+              is an optional field. <br /><br />
+              <b>Ethical Review Status:</b> Information on whether the dataset
+              has undergone ethical review (e.g., approved, pending, not
+              applicable). This is an optional field.
+            </p>
           </div>
         </div>
       </div>
     </div>
-  </div>
-</div>
 
-<!-- File Hierarchy Storage Script -->
-<script>
-  document
-    .querySelector("#file-input")
-    .addEventListener("change", function () {
-      var files = document.querySelector("#file-input").files;
-      var directories = {};
-      for (var file of files) {
-        directories[file.name] = file.webkitRelativePath;
-      }
-      directories = JSON.stringify(directories);
-      console.log(directories);
+    <!-- File Hierarchy Storage Script -->
+    <script>
+      // Add event listener to the file input element.
+      document
+        .querySelector("#file-input")
+        .addEventListener("change", function () {
+          var files = document.querySelector("#file-input").files; // Get the files selected by the user.
+          var directories = {};
+          // Loop over each file in the files array.
+          for (var file of files) {
+            directories[file.name] = file.webkitRelativePath; // Map file name to its relative path.
+          }
+          directories = JSON.stringify(directories); // Convert the directories object to a JSON string.
+          console.log(directories); // Log the directories JSON string to the console.
 
-      document.querySelector("#directories").value = directories;
-      validateFiles(files);
-    });
+          // Store the JSON string in a hidden input to be sent with the form.
+          document.querySelector("#directories").value = directories;
+          validateFiles(files); // Call the validateFiles function to check file restrictions.
+        });
 
-  function validateFiles(files) {
-    var totalSize = 0;
-    var errorSection = document.getElementById("dynamic-error-section");
-    errorSection.innerHTML = ""; // Clear previous errors
+      // Function to validate the selected files.
+      function validateFiles(files) {
+        var totalSize = 0;
+        var errorSection = document.getElementById("dynamic-error-section");
+        errorSection.innerHTML = ""; // Clear any previously displayed errors.
 
-    if (files.length > 1000) {
-      var errorMessage = "Sorry, you cannot upload more than 1000 files.";
-      errorSection.innerHTML += `
-          <div class="alert alert-danger alert-dismissible fade show" role="alert">
-            <div class="text-center">
-              <i class="bi bi-exclamation-triangle-fill"></i>
-              <strong>${errorMessage}</strong>
-              <button
-                type="button"
-                class="btn-close"
-                data-bs-dismiss="alert"
-                aria-label="Close"
-              ></button>
-            </div>
-          </div>
-        `;
-      document.querySelector("#file-input").value = ""; // Clear the selected files
-      return false;
-    }
-
-    for (var i = 0; i < files.length; i++) {
-      totalSize += files[i].size;
-    }
-
-    if (totalSize > 1073741824) {
-      // 1GB in bytes
-      var errorMessage = "Sorry, the total dataset size cannot exceed 1GB.";
-      errorSection.innerHTML += `
-          <div class="alert alert-danger alert-dismissible fade show" role="alert">
-            <div class="text-center">
-              <i class="bi bi-exclamation-triangle-fill"></i>
-              <strong>${errorMessage}</strong>
-              <button
-                type="button"
-                class="btn-close"
-                data-bs-dismiss="alert"
-                aria-label="Close"
-              ></button>
-            </div>
-          </div>
-        `;
-      document.querySelector("#file-input").value = ""; // Clear the selected files
-      return false;
-    }
-  }
-</script>
-
-<!-- JSON Validation Script -->
-<script>
-  function readJSON() {
-    const fileInput = document.getElementById("json-file");
-    const file = fileInput.files[0];
-
-    const reader = new FileReader();
-
-    reader.onload = function (event) {
-      const fileContent = event.target.result;
-
-      // Clear previous errors.
-      document.getElementById("dynamic-error-section").innerHTML = "";
-
-      try {
-        const jsonObj = JSON.parse(fileContent);
-
-        if (validateJSON(jsonObj)) {
-          updateFileInfo(fileInput, "json-info");
-          return true;
-        } else {
+        // Check if the number of files exceeds 1000.
+        if (files.length > 1000) {
+          var errorMessage = "Sorry, you cannot upload more than 1000 files.";
+          // Display an error message in a styled alert box.
+          errorSection.innerHTML += `
+              <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                <div class="text-center">
+                  <i class="bi bi-exclamation-triangle-fill"></i>
+                  <strong>${errorMessage}</strong>
+                  <button
+                    type="button"
+                    class="btn-close"
+                    data-bs-dismiss="alert"
+                    aria-label="Close"
+                  ></button>
+                </div>
+              </div>
+            `;
+          document.querySelector("#file-input").value = ""; // Reset the file input to clear selected files.
           return false;
         }
-      } catch (e) {
-        console.log(e);
-        document.getElementById("dynamic-error-section").insertAdjacentHTML(
-          "beforeend",
-          `
-          <div class="alert alert-danger alert-dismissible fade show" role="alert">
-            <div class="text-center">
-            <i class="bi bi-exclamation-triangle-fill"></i>
-              <strong>Could not parse the JSON File, please ensure the format is correct.</strong>
-              <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+
+        // Calculate the total size of all files.
+        for (var i = 0; i < files.length; i++) {
+          totalSize += files[i].size;
+        }
+
+        // Check if the total size exceeds 1GB (1073741824 bytes).
+        if (totalSize > 1073741824) {
+          var errorMessage = "Sorry, the total dataset size cannot exceed 1GB.";
+          // Display an error message in a styled alert box.
+          errorSection.innerHTML += `
+              <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                <div class="text-center">
+                  <i class="bi bi-exclamation-triangle-fill"></i>
+                  <strong>${errorMessage}</strong>
+                  <button
+                    type="button"
+                    class="btn-close"
+                    data-bs-dismiss="alert"
+                    aria-label="Close"
+                  ></button>
+                </div>
+              </div>
+            `;
+          document.querySelector("#file-input").value = ""; // Reset the file input to clear selected files.
+          return false;
+        }
+      }
+    </script>
+
+    <!-- JSON Validation Script -->
+    <script>
+      // Function to read a JSON file and process its contents.
+      function readJSON() {
+        // Get the file input element and the selected file
+        const fileInput = document.getElementById("json-file");
+        const file = fileInput.files[0];
+
+        // Create a FileReader object to read the content of the file.
+        const reader = new FileReader();
+
+        // Define the onload event handler for the FileReader.
+        reader.onload = function (event) {
+          // Get the content of the file from the FileReader event.
+          const fileContent = event.target.result;
+
+          // Clear any previous errors displayed in the dynamic error section.
+          document.getElementById("dynamic-error-section").innerHTML = "";
+
+          try {
+            // Attempt to parse the file content as JSON.
+            const jsonObj = JSON.parse(fileContent);
+
+            // Validate the parsed JSON object using a custom validation function.
+            if (validateJSON(jsonObj)) {
+              // If validation is successful, update the UI with file information.
+              updateFileInfo(fileInput, "json-info");
+              return true;
+            } else {
+              // If validation fails, return false.
+              return false;
+            }
+          } catch (e) {
+            // Log the error to the console if JSON parsing fails.
+            console.log(e);
+            // Display an error message to the user in the dynamic error section.
+            document.getElementById("dynamic-error-section").insertAdjacentHTML(
+              "beforeend",
+              `
+              <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                <div class="text-center">
+                <i class="bi bi-exclamation-triangle-fill"></i>
+                  <strong>Could not parse the JSON File, please ensure the format is correct.</strong>
+                  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+              </div>
+              `
+            );
+
+            // Return false to indicate that processing the file failed.
+            return false;
+          }
+        };
+
+        // Initiate reading the file as text.
+        reader.readAsText(file);
+      }
+
+      function validateJSON(obj) {
+        let errors = [];
+
+        // Helper functions for validation.
+        function isValidString(value, placeholder) {
+          return value && value !== placeholder;
+        }
+
+        function isValidFloat(value) {
+          return (
+            !isNaN(value) && parseFloat(value) == value && parseFloat(value) > 0
+          );
+        }
+
+        function isValidInteger(value) {
+          return Number.isInteger(parseFloat(value)) && parseInt(value, 10) > 0;
+        }
+
+        function isValidDate(value) {
+          return !isNaN(Date.parse(value));
+        }
+
+        function isValidKeywords(value) {
+          if (Array.isArray(value)) {
+            return value.length >= 3;
+          } else if (typeof value === "string") {
+            return (
+              value
+                .split(/[,;|]/)
+                .map((s) => s.trim())
+                .filter(Boolean).length >= 3
+            );
+          }
+          return false;
+        }
+
+        function isValidCategory(value, categories) {
+          return categories
+            .map((c) => c.toLowerCase())
+            .includes(value.toLowerCase());
+        }
+
+        function isValidEmail(value) {
+          const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+          return emailRegex.test(value);
+        }
+
+        function isValidPercentage(value) {
+          return (
+            isValidFloat(value) &&
+            parseFloat(value) >= 0 &&
+            parseFloat(value) <= 100
+          );
+        }
+
+        // Validate Basic Identity.
+        if (
+          !isValidString(
+            obj.basic_identity?.title,
+            "Mandatory - Title of the Dataset."
+          )
+        ) {
+          errors.push(
+            "Your dataset metadata is missing the Title or it is not properly filled."
+          );
+        }
+        if (
+          !isValidString(
+            obj.basic_identity?.description,
+            "Mandatory - A detailed description of the dataset and its contents."
+          )
+        ) {
+          errors.push(
+            "Your dataset metadata is missing the Description or it is not properly filled."
+          );
+        }
+        if (!isValidFloat(Number(obj.basic_identity?.version))) {
+          errors.push(
+            "Your dataset metadata is missing the Version or it is not a float value."
+          );
+        }
+        if (!isValidKeywords(obj.basic_identity?.keywords)) {
+          errors.push(
+            "Your dataset metadata is missing the Keywords or there are less than 3 keywords in the correct format."
+          );
+        }
+        if (
+          !isValidString(
+            obj.basic_identity?.license,
+            "Mandatory - Type of license under which the dataset is distributed."
+          )
+        ) {
+          errors.push(
+            "Your dataset metadata is missing the License or it is not properly filled."
+          );
+        }
+
+        // Validate Author Contact Details.
+        if (!isValidEmail(obj.author_contact_details?.email)) {
+          errors.push(
+            "Your dataset metadata is missing the Author Email or it is not a valid email address."
+          );
+        }
+
+        // Validate Dataset Creation.
+        if (
+          !isValidString(
+            obj.dataset_creation?.general?.data_origin,
+            "Mandatory - Indicates whether the data is ('Synthetically-Generated'/ 'Naturally-Obtained'/ 'Other')."
+          )
+        ) {
+          errors.push(
+            "Your dataset metadata is missing the Data Origin or it is not properly filled."
+          );
+        } else {
+          const origin = obj.dataset_creation.general.data_origin.toLowerCase();
+          if (origin.includes("synthetically-generated")) {
+            if (
+              !isValidString(
+                obj.dataset_creation.general.synthetic_data_details
+                  ?.generation_method,
+                "Mandatory - Method used for generating synthetic data, if applicable."
+              )
+            ) {
+              errors.push(
+                "Your dataset metadata is missing the Synthetic Data Generation Method or it is not properly filled."
+              );
+            }
+            if (
+              !isValidString(
+                obj.dataset_creation.general.synthetic_data_details
+                  ?.software_used,
+                "Mandatory - Details of any software or tools used for generating synthetic data."
+              )
+            ) {
+              errors.push(
+                "Your dataset metadata is missing the Synthetic Data Software Used or it is not properly filled."
+              );
+            }
+          }
+          if (origin.includes("naturally-obtained")) {
+            const studyTypes = [
+              "Observational",
+              "Experimental",
+              "Clinical Trial",
+              "Field Study",
+              "Laboratory Study",
+              "Survey Research",
+              "Longitudinal Study",
+              "Cross-Sectional Study",
+              "Case Study",
+              "Other",
+            ];
+            if (
+              !isValidCategory(
+                obj.dataset_creation.general.natural_data_details?.study_type,
+                studyTypes
+              )
+            ) {
+              errors.push(
+                "Your dataset metadata is missing the Natural Data Study Type or it is not one of the specified categories."
+              );
+            }
+            if (
+              !isValidString(
+                obj.dataset_creation.general.natural_data_details
+                  ?.experimental_setup?.general_description,
+                "Mandatory - General description of the study, outlining its main objectives and methodology."
+              )
+            ) {
+              errors.push(
+                "Your dataset metadata is missing the Natural Data Experimental Setup Description or it is not properly filled."
+              );
+            }
+            if (
+              !isValidDate(
+                obj.dataset_creation.general.natural_data_details
+                  ?.experimental_setup?.study_start_date
+              )
+            ) {
+              errors.push(
+                "Your dataset metadata is missing the Natural Data Study Start Date or it is not in the correct format (mm/dd/yyyy)."
+              );
+            }
+            if (
+              !isValidDate(
+                obj.dataset_creation.general.natural_data_details
+                  ?.experimental_setup?.study_end_date
+              )
+            ) {
+              errors.push(
+                "Your dataset metadata is missing the Natural Data Study End Date or it is not in the correct format (mm/dd/yyyy)."
+              );
+            }
+            if (
+              !isValidString(
+                obj.dataset_creation.general.natural_data_details
+                  ?.experimental_conditions?.experiment_location,
+                "Mandatory - Location where the experiment was conducted, including specific site details and environmental conditions, if relevant."
+              )
+            ) {
+              errors.push(
+                "Your dataset metadata is missing the Natural Data Experiment Location or it is not properly filled."
+              );
+            }
+          }
+        }
+
+        // Validate Data Completion.
+        const datasetStatuses = [
+          "Complete",
+          "In Progress",
+          "Abandoned & Incomplete",
+          "Other",
+        ];
+        if (
+          !isValidCategory(
+            obj.dataset_creation?.data_completion?.dataset_status,
+            datasetStatuses
+          )
+        ) {
+          errors.push(
+            "Your dataset metadata is missing the Dataset Status or it is not one of the specified categories."
+          );
+        }
+
+        // Validate Pre Processing.
+        const yesNoNA = ["Yes", "No", "N/A"];
+        if (
+          !isValidCategory(
+            obj.dataset_creation?.pre_processing?.raw_data,
+            yesNoNA
+          )
+        ) {
+          errors.push(
+            "Your dataset metadata is missing the Raw Data field or it is not 'Yes'/'No'."
+          );
+        }
+        const cleanlinessStatuses = [
+          "Clean",
+          "Partially Clean",
+          "Unclean",
+          "N/A",
+        ];
+        if (
+          !isValidCategory(
+            obj.dataset_creation?.pre_processing?.data_cleanliness
+              ?.cleanliness_status,
+            cleanlinessStatuses
+          )
+        ) {
+          errors.push(
+            "Your dataset metadata is missing the Data Cleanliness Status or it is not one of the specified categories."
+          );
+        }
+        if (
+          !isValidCategory(
+            obj.dataset_creation?.pre_processing?.labeling?.labeled,
+            yesNoNA
+          )
+        ) {
+          errors.push(
+            "Your dataset metadata is missing the Labeling field or it is not 'Yes'/'No'."
+          );
+        }
+
+        // Validate Dataset Usage.
+        if (
+          !isValidString(
+            obj.dataset_usage?.data_usage_description,
+            "Mandatory - Description of how the data can be used, including any restrictions or guidelines."
+          )
+        ) {
+          errors.push(
+            "Your dataset metadata is missing the Data Usage Description or it is not properly filled."
+          );
+        }
+
+        // Validate Dataset Composition.
+        if (
+          !isValidInteger(Number(obj.dataset_composition.general?.dataset_size))
+        ) {
+          errors.push(
+            "Your dataset metadata is missing the Dataset Size or it is not an integer."
+          );
+        }
+        if (
+          !isValidInteger(
+            Number(obj.dataset_composition.general?.number_of_files)
+          )
+        ) {
+          errors.push(
+            "Your dataset metadata is missing the Number of Files or it is not an integer."
+          );
+        }
+        if (
+          !isValidFloat(
+            Number(obj.dataset_composition.general?.average_file_size)
+          )
+        ) {
+          errors.push(
+            "Your dataset metadata is missing the Average File Size or it is not a float value."
+          );
+        }
+        if (
+          !isValidString(
+            obj.dataset_composition?.general?.format,
+            "Mandatory - File format ('CSV'/ 'Excel'/ 'Image'/ 'Video'/ 'Audio'/ 'FASTA'/ 'GenBank'/ 'Text'/ 'PDF'/ 'Matlab'/ 'Other')."
+          )
+        ) {
+          errors.push(
+            "Your dataset metadata is missing the File Format or it is not properly filled."
+          );
+        } else {
+          const format = obj.dataset_composition.general.format.toLowerCase();
+          if (format.includes("csv")) {
+            if (
+              !isValidString(
+                obj.dataset_composition.csv?.delimiter,
+                "Mandatory - Delimiter used in CSV files ('Comma'/ 'Colon'/ 'Semicolon'/ 'Other')."
+              )
+            ) {
+              errors.push(
+                "Your dataset metadata is missing the CSV Delimiter or it is not properly filled."
+              );
+            }
+            if (
+              !isValidCategory(obj.dataset_composition.csv?.has_header, yesNoNA)
+            ) {
+              errors.push(
+                "Your dataset metadata is missing the CSV Has Header field or it is not 'Yes'/'No'."
+              );
+            }
+            if (
+              !Array.isArray(obj.dataset_composition.csv?.column_names) ||
+              obj.dataset_composition.csv.column_names.length === 0
+            ) {
+              errors.push(
+                "Your dataset metadata is missing the CSV Column Names or it is not a non-empty array."
+              );
+            }
+          }
+          if (format.includes("excel")) {
+            if (
+              !isValidCategory(
+                obj.dataset_composition.excel?.has_macros,
+                yesNoNA
+              )
+            ) {
+              errors.push(
+                "Your dataset metadata is missing the Excel Has Macros field or it is not 'Yes'/'No'."
+              );
+            }
+            if (
+              !isValidInteger(
+                Number(obj.dataset_composition.excel?.average_sheets)
+              )
+            ) {
+              errors.push(
+                "Your dataset metadata is missing the Excel Average Sheets or it is not an integer."
+              );
+            }
+          }
+          if (format.includes("image")) {
+            if (
+              !isValidString(
+                obj.dataset_composition.image?.file_type,
+                "Mandatory - File type of images ('JPEG'/ 'PNG'/ 'GIF'/ 'TIFF'/ 'BMP'/ 'Other')."
+              )
+            ) {
+              errors.push(
+                "Your dataset metadata is missing the Image File Type or it is not properly filled."
+              );
+            }
+            if (
+              !isValidFloat(
+                Number(obj.dataset_composition.image?.average_resolution)
+              )
+            ) {
+              errors.push(
+                "Your dataset metadata is missing the Image Average Resolution or it is not a float value."
+              );
+            }
+            const colorModes = ["RGB", "CMYK", "Grayscale", "Other"];
+            if (
+              !isValidCategory(
+                obj.dataset_composition.image?.color_mode,
+                colorModes
+              )
+            ) {
+              errors.push(
+                "Your dataset metadata is missing the Image Color Mode or it is not one of the specified categories."
+              );
+            }
+          }
+          if (format.includes("video")) {
+            if (
+              !isValidString(
+                obj.dataset_composition.video?.file_type,
+                "Mandatory - File type of videos ('MP4'/ 'AVI'/ 'MOV'/ 'WMV'/ 'MKV'/ 'Other')."
+              )
+            ) {
+              errors.push(
+                "Your dataset metadata is missing the Video File Type or it is not properly filled."
+              );
+            }
+            if (
+              !isValidFloat(
+                Number(obj.dataset_composition.video?.average_duration)
+              )
+            ) {
+              errors.push(
+                "Your dataset metadata is missing the Video Average Duration or it is not a float value."
+              );
+            }
+            const videoResolutions = [
+              "Lower than SD",
+              "SD",
+              "HD",
+              "Full HD",
+              "2K",
+              "4K",
+              "8K",
+              "Greater than 8K",
+            ];
+            if (
+              !isValidCategory(
+                obj.dataset_composition.video?.video_resolution,
+                videoResolutions
+              )
+            ) {
+              errors.push(
+                "Your dataset metadata is missing the Video Resolution or it is not one of the specified categories."
+              );
+            }
+          }
+          if (format.includes("audio")) {
+            if (
+              !isValidString(
+                obj.dataset_composition.audio?.file_type,
+                "Mandatory - File type of audio files ('MP3'/ 'WAV'/ 'AAC'/ 'FLAC'/ 'OGG'/ 'Other')."
+              )
+            ) {
+              errors.push(
+                "Your dataset metadata is missing the Audio File Type or it is not properly filled."
+              );
+            }
+            if (
+              !isValidFloat(
+                Number(obj.dataset_composition.audio?.average_duration)
+              )
+            ) {
+              errors.push(
+                "Your dataset metadata is missing the Audio Average Duration or it is not a float value."
+              );
+            }
+          }
+          if (format.includes("fasta")) {
+            if (
+              !isValidString(
+                obj.dataset_composition.fasta?.general_info?.sequence_type,
+                "Mandatory - List of predominant sequence types in the FASTA files ('DNA'/ 'RNA'/ 'cDNA'/ 'Amino Acid'/ 'Other')."
+              )
+            ) {
+              errors.push(
+                "Your dataset metadata is missing the FASTA Sequence Type or it is not properly filled."
+              );
+            }
+            const organismGroups = [
+              "Bacteria",
+              "Virus",
+              "Eukaryote",
+              "Archaea",
+              "Organelles",
+              "Other",
+            ];
+            if (
+              !isValidCategory(
+                obj.dataset_composition.fasta?.general_info?.organism_group,
+                organismGroups
+              )
+            ) {
+              errors.push(
+                "Your dataset metadata is missing the FASTA Organism Group or it is not one of the specified categories."
+              );
+            }
+            if (
+              !isValidInteger(
+                Number(
+                  obj.dataset_composition.fasta?.general_info
+                    ?.minimum_sequence_length
+                )
+              )
+            ) {
+              errors.push(
+                "Your dataset metadata is missing the FASTA Minimum Sequence Length or it is not an integer."
+              );
+            }
+            if (
+              !isValidInteger(
+                Number(
+                  obj.dataset_composition.fasta?.general_info
+                    ?.maximum_sequence_length
+                )
+              )
+            ) {
+              errors.push(
+                "Your dataset metadata is missing the FASTA Maximum Sequence Length or it is not an integer."
+              );
+            }
+            const sequencingMethods = [
+              "Illumina",
+              "PacBio SMRT",
+              "Nanopore Sequencing",
+              "Sanger",
+              "Ion Torrent",
+              "Pyrosequencing",
+              "SOLiD Sequencing",
+              "Other",
+            ];
+            if (
+              !isValidCategory(
+                obj.dataset_composition.fasta?.sequencing_info
+                  ?.sequencing_method,
+                sequencingMethods
+              )
+            ) {
+              errors.push(
+                "Your dataset metadata is missing the FASTA Sequencing Method or it is not one of the specified categories."
+              );
+            }
+          }
+          if (format.includes("genbank")) {
+            if (
+              !isValidString(
+                obj.dataset_composition.genbank?.general_info?.sequence_type,
+                "Mandatory - List of predominant sequence types in the GenBank files ('DNA'/ 'RNA'/ 'cDNA'/ 'Amino Acid'/ 'Other')."
+              )
+            ) {
+              errors.push(
+                "Your dataset metadata is missing the GenBank Sequence Type or it is not properly filled."
+              );
+            }
+            if (
+              !isValidCategory(
+                obj.dataset_composition.genbank?.general_info?.organism_group,
+                organismGroups
+              )
+            ) {
+              errors.push(
+                "Your dataset metadata is missing the GenBank Organism Group or it is not one of the specified categories."
+              );
+            }
+            if (
+              !isValidInteger(
+                Number(
+                  obj.dataset_composition.genbank?.general_info
+                    ?.minimum_sequence_length
+                )
+              )
+            ) {
+              errors.push(
+                "Your dataset metadata is missing the GenBank Minimum Sequence Length or it is not an integer."
+              );
+            }
+            if (
+              !isValidInteger(
+                Number(
+                  obj.dataset_composition.genbank?.general_info
+                    ?.maximum_sequence_length
+                )
+              )
+            ) {
+              errors.push(
+                "Your dataset metadata is missing the GenBank Maximum Sequence Length or it is not an integer."
+              );
+            }
+            if (
+              !isValidCategory(
+                obj.dataset_composition.genbank?.sequencing_info
+                  ?.sequencing_method,
+                sequencingMethods
+              )
+            ) {
+              errors.push(
+                "Your dataset metadata is missing the GenBank Sequencing Method or it is not one of the specified categories."
+              );
+            }
+          }
+          if (format.includes("matlab")) {
+            if (
+              !isValidString(
+                obj.dataset_composition.matlab?.matlab_version,
+                "Mandatory - Version of MATLAB used to generate the data (e.g., R2019b)."
+              )
+            ) {
+              errors.push(
+                "Your dataset metadata is missing the Matlab Version or it is not properly filled."
+              );
+            }
+            const matlabVariables = [
+              "Matrix",
+              "Cell Array",
+              "Structure",
+              "Table",
+              "Function Handle",
+              "Time Series",
+              "Other",
+            ];
+            if (
+              !isValidCategory(
+                obj.dataset_composition.matlab?.variables_stored,
+                matlabVariables
+              )
+            ) {
+              errors.push(
+                "Your dataset metadata is missing the Matlab Variables Stored or it is not one of the specified categories."
+              );
+            }
+          }
+          if (format.includes("text")) {
+            if (
+              !isValidString(
+                obj.dataset_composition.text?.encoding,
+                "Mandatory - Character encoding used in text files ('UTF-8'/ 'UTF-16'/ 'UTF-32'/ 'ASCII'/ 'Other')."
+              )
+            ) {
+              errors.push(
+                "Your dataset metadata is missing the Text Encoding or it is not properly filled."
+              );
+            }
+            if (
+              !isValidString(
+                obj.dataset_composition.text?.language,
+                "Mandatory - Predominant language of text files (e.g., English, Spanish, Chinese)."
+              )
+            ) {
+              errors.push(
+                "Your dataset metadata is missing the Text Language or it is not properly filled."
+              );
+            }
+          }
+          if (format.includes("pdf")) {
+            if (
+              !isValidCategory(obj.dataset_composition.pdf?.text_extractable, [
+                ...yesNoNA,
+                "N/A",
+              ])
+            ) {
+              errors.push(
+                "Your dataset metadata is missing the PDF Text Extractable field or it is not 'Yes'/'No'/'N/A'."
+              );
+            }
+          }
+        }
+
+        // Function to validate optional fields.
+        function validateOptionalField(
+          field,
+          typeCheckFunction,
+          errorMsg,
+          defaultInstruction
+        ) {
+          if (
+            field !== undefined &&
+            field !== defaultInstruction &&
+            !typeCheckFunction(field)
+          ) {
+            errors.push(errorMsg);
+          }
+        }
+
+        // Validate optional fields.
+        validateOptionalField(
+          obj.basic_identity?.changelog,
+          isValidString,
+          "Changelog must be a valid string.",
+          "Optional - Description of changes made compared to the previous version of the dataset."
+        );
+        validateOptionalField(
+          obj.author_contact_details?.affiliation,
+          isValidString,
+          "Affiliation must be a valid string.",
+          "Optional - Affiliation of the author."
+        );
+        validateOptionalField(
+          obj.author_contact_details?.phone,
+          isValidString,
+          "Phone must be a valid string.",
+          "Optional - Phone number of the author."
+        );
+        validateOptionalField(
+          obj.dataset_creation.general.synthetic_data_details
+            ?.related_publications,
+          isValidString,
+          "Related publications must be a valid string.",
+          "Optional - Citations or links to publications that are directly related to the synthetic data generation."
+        );
+        validateOptionalField(
+          obj.dataset_creation.general.natural_data_details?.experimental_setup
+            ?.instrumentation,
+          isValidString,
+          "Instrumentation must be a valid string.",
+          "Optional - Specific instruments and technologies used to collect the data."
+        );
+        validateOptionalField(
+          obj.dataset_creation.general.natural_data_details?.experimental_setup
+            ?.protocols,
+          isValidString,
+          "Protocols must be a valid string.",
+          "Optional - List any common protocols used during the experiment."
+        );
+        validateOptionalField(
+          obj.dataset_creation.general.natural_data_details?.sample_information
+            ?.number_of_samples,
+          isValidInteger,
+          "Number of samples must be an integer.",
+          "Optional - Total number of samples collected and analyzed in the study."
+        );
+        validateOptionalField(
+          obj.dataset_creation.general.natural_data_details?.sample_information
+            ?.sample_types,
+          isValidString,
+          "Sample types must be a valid string.",
+          "Optional - Description of the types of samples collected, such as biological tissues, environmental specimens, clinical samples, etc., including specific details when applicable."
+        );
+        validateOptionalField(
+          obj.dataset_creation.general.natural_data_details?.sample_information
+            ?.participants?.total_participants,
+          isValidInteger,
+          "Total participants must be an integer.",
+          "Optional - Total number of participants involved in the study, if applicable."
+        );
+        validateOptionalField(
+          obj.dataset_creation.general.natural_data_details?.sample_information
+            ?.participants?.demographic_data,
+          isValidString,
+          "Demographic data must be a valid string.",
+          "Optional - Information about the demographic characteristics of the participants (age range, gender, ethnicity, etc.)."
+        );
+        validateOptionalField(
+          obj.dataset_creation.general.natural_data_details?.sample_information
+            ?.participants?.selection_criteria,
+          isValidString,
+          "Selection criteria must be a valid string.",
+          "Optional - Criteria used for selecting participants, including any inclusion or exclusion criteria."
+        );
+        validateOptionalField(
+          obj.dataset_creation.general.natural_data_details?.sample_information
+            ?.participants?.health_status,
+          isValidString,
+          "Health status must be a valid string.",
+          "Optional - Health status or medical conditions of participants relevant to the study."
+        );
+        validateOptionalField(
+          obj.dataset_creation.general.natural_data_details
+            ?.experimental_conditions?.experiment_conditions,
+          isValidString,
+          "Experimental conditions must be a valid string.",
+          "Optional - Detailed conditions under which the experiment was performed, such as temperature, lighting, and other relevant environmental parameters."
+        );
+        validateOptionalField(
+          obj.dataset_creation.general.natural_data_details
+            ?.related_publications,
+          isValidString,
+          "Related publications must be a valid string.",
+          "Optional - Citations or links to publications that are directly related to the dataset's usage."
+        );
+        validateOptionalField(
+          obj.dataset_creation.data_completion?.future_work,
+          isValidString,
+          "Future work must be a valid string.",
+          "Optional - Description of any planned future work or improvements to be made on the dataset."
+        );
+        validateOptionalField(
+          obj.dataset_creation.pre_processing?.data_cleanliness
+            ?.cleaning_details,
+          isValidString,
+          "Cleaning details must be a valid string.",
+          "Optional - Description of the cleaning process applied to the dataset (e.g., methods used, types of errors corrected)."
+        );
+        validateOptionalField(
+          obj.dataset_creation.pre_processing?.labeling?.labeling_details,
+          isValidString,
+          "Labeling details must be a valid string.",
+          "Optional - Description of the labeling process and the types of labels used."
+        );
+        validateOptionalField(
+          obj.dataset_creation.pre_processing?.data_split?.train_split,
+          isValidPercentage,
+          "Train split must be a valid percentage.",
+          "Optional - Percentage of data used for training in machine learning datasets."
+        );
+        validateOptionalField(
+          obj.dataset_creation.pre_processing?.data_split?.validation_split,
+          isValidPercentage,
+          "Validation split must be a valid percentage.",
+          "Optional - Percentage of data used for validation in machine learning datasets."
+        );
+        validateOptionalField(
+          obj.dataset_creation.pre_processing?.data_split?.test_split,
+          isValidPercentage,
+          "Test split must be a valid percentage.",
+          "Optional - Percentage of data used for testing in machine learning datasets."
+        );
+        validateOptionalField(
+          obj.dataset_usage?.citation,
+          isValidString,
+          "Citation must be a valid string.",
+          "Optional - Recommended citation for the dataset."
+        );
+        validateOptionalField(
+          obj.dataset_usage?.related_datasets,
+          isValidString,
+          "Related datasets must be a valid string.",
+          "Optional - Links to related datasets."
+        );
+        validateOptionalField(
+          obj.dataset_usage?.related_publications,
+          isValidString,
+          "Related publications must be a valid string.",
+          "Optional - Links or references to any papers related to the dataset's usage."
+        );
+        validateOptionalField(
+          obj.dataset_composition.image?.image_processing,
+          isValidString,
+          "Image processing must be a valid string.",
+          "Optional - Description of any image processing applied (e.g., normalization, augmentation)."
+        );
+        validateOptionalField(
+          obj.dataset_composition.video?.video_processing,
+          isValidString,
+          "Video processing must be a valid string.",
+          "Optional - Description of any video processing applied (e.g., frame extraction, stabilization)."
+        );
+        validateOptionalField(
+          obj.dataset_composition.audio?.average_bitrate,
+          isValidFloat,
+          "Audio average bitrate must be a float value.",
+          "Optional - Average bitrate across audio files in bits per second."
+        );
+        validateOptionalField(
+          obj.dataset_composition.audio?.audio_processing,
+          isValidString,
+          "Audio processing must be a valid string.",
+          "Optional - Description of any audio processing applied (e.g., noise reduction, normalization)."
+        );
+        validateOptionalField(
+          obj.dataset_composition.fasta?.general_info?.specific_species,
+          isValidString,
+          "FASTA specific species must be a valid string.",
+          "Optional - List of the specific species or strains represented in the FASTA files."
+        );
+        validateOptionalField(
+          obj.dataset_composition.fasta?.sequencing_info?.coverage_depth,
+          isValidInteger,
+          "FASTA coverage depth must be an integer.",
+          "Optional - Average depth of coverage, crucial for assessing data quality as an Integer."
+        );
+        validateOptionalField(
+          obj.dataset_composition.fasta?.sequencing_info?.assembly_details,
+          isValidString,
+          "FASTA assembly details must be a valid string.",
+          "Optional - Description of assembly algorithms and parameters used in generating the genome assembly."
+        );
+        validateOptionalField(
+          obj.dataset_composition.fasta?.sequencing_info?.error_rate,
+          isValidFloat,
+          "FASTA error rate must be a float value.",
+          "Optional - Estimated error rate of the sequence data as a percentage (Float)."
+        );
+        validateOptionalField(
+          obj.dataset_composition.fasta?.further_source_details
+            ?.source_organism_info,
+          isValidString,
+          "FASTA source organism info must be a valid string.",
+          "Optional - Detailed information on the source organisms used, including any unique genetic or phenotypic characteristics. This includes both naturally occurring and engineered traits."
+        );
+        validateOptionalField(
+          obj.dataset_composition.fasta?.further_source_details
+            ?.NCBI_Taxonomy_ID,
+          isValidString,
+          "FASTA NCBI Taxonomy ID must be a valid string.",
+          "Optional - The National Center for Biotechnology Information (NCBI) Taxonomy IDs, if applicable."
+        );
+        validateOptionalField(
+          obj.dataset_composition.fasta?.further_source_details
+            ?.GenBank_Accession_Number,
+          isValidString,
+          "FASTA GenBank Accession Number must be a valid string.",
+          "Optional - The GenBank accession number associated with the genomic sequences of the organisms, if applicable."
+        );
+        validateOptionalField(
+          obj.dataset_composition.fasta?.further_source_details?.UniProt_ID,
+          isValidString,
+          "FASTA UniProt ID must be a valid string.",
+          "Optional - The Universal Protein Resource (UniProt) IDs, if applicable."
+        );
+        validateOptionalField(
+          obj.dataset_composition.genbank?.general_info?.specific_species,
+          isValidString,
+          "GenBank specific species must be a valid string.",
+          "Optional - List of the specific species or strains represented in the GenBank files."
+        );
+        validateOptionalField(
+          obj.dataset_composition.genbank?.sequencing_info?.coverage_depth,
+          isValidInteger,
+          "GenBank coverage depth must be an integer.",
+          "Optional - Average depth of coverage, crucial for assessing data quality as an Integer."
+        );
+        validateOptionalField(
+          obj.dataset_composition.genbank?.sequencing_info?.assembly_details,
+          isValidString,
+          "GenBank assembly details must be a valid string.",
+          "Optional - Description of assembly algorithms and parameters used in generating the genome assembly."
+        );
+        validateOptionalField(
+          obj.dataset_composition.genbank?.sequencing_info?.error_rate,
+          isValidFloat,
+          "GenBank error rate must be a float value.",
+          "Optional - Estimated error rate of the sequence data as a percentage (Float)."
+        );
+        validateOptionalField(
+          obj.dataset_composition.genbank?.further_source_details
+            ?.source_organism_info,
+          isValidString,
+          "GenBank source organism info must be a valid string.",
+          "Optional - Detailed information on the source organisms used, including any unique genetic or phenotypic characteristics. This includes both naturally occurring and engineered traits."
+        );
+        validateOptionalField(
+          obj.dataset_composition.genbank?.further_source_details
+            ?.NCBI_Taxonomy_ID,
+          isValidString,
+          "GenBank NCBI Taxonomy ID must be a valid string.",
+          "Optional - The National Center for Biotechnology Information (NCBI) Taxonomy IDs, if applicable."
+        );
+        validateOptionalField(
+          obj.dataset_composition.genbank?.further_source_details
+            ?.GenBank_Accession_Number,
+          isValidString,
+          "GenBank GenBank Accession Number must be a valid string.",
+          "Optional - The GenBank accession number associated with the genomic sequences of the organisms, if applicable."
+        );
+        validateOptionalField(
+          obj.dataset_composition.genbank?.further_source_details?.UniProt_ID,
+          isValidString,
+          "GenBank UniProt ID must be a valid string.",
+          "Optional - The Universal Protein Resource (UniProt) IDs, if applicable."
+        );
+        validateOptionalField(
+          obj.dataset_composition.matlab?.toolboxes_used,
+          isValidString,
+          "MATLAB toolboxes used must be a valid string.",
+          "Optional - Description of any MATLAB toolboxes required or used in conjunction with the data."
+        );
+        validateOptionalField(
+          obj.dataset_composition.text?.character_set,
+          isValidString,
+          "Text character set must be a valid string.",
+          "Optional - Character set used in text files (e.g., Latin, Cyrillic, CJK)."
+        );
+        validateOptionalField(
+          obj.dataset_composition.text?.line_endings,
+          isValidString,
+          "Text line endings must be a valid string.",
+          "Optional - Type of line endings used in text files ('LF'/ 'CRLF'/ 'CR')."
+        );
+        validateOptionalField(
+          obj.dataset_composition.text?.text_processing,
+          isValidString,
+          "Text processing must be a valid string.",
+          "Optional - Description of any text processing applied (e.g., tokenization, lemmatization)."
+        );
+        validateOptionalField(
+          obj.dataset_composition.pdf?.metadata_included,
+          isValidCategory,
+          "PDF metadata included must be 'Yes', 'No' or 'N/A'.",
+          "Optional - Information about the inclusion of metadata in PDF files.",
+          [...yesNoNA, "N/A"]
+        );
+        validateOptionalField(
+          obj.dataset_composition.pdf?.ocr_applied,
+          isValidCategory,
+          "PDF OCR applied must be 'Yes', 'No' or 'N/A'.",
+          "Optional - Whether Optical Character Recognition (OCR) has been applied to the PDFs.",
+          [...yesNoNA, "N/A"]
+        );
+
+        // Function to validate JSON structure.
+        function validateStructure(obj, template, parentKey = "") {
+          for (let key in template) {
+            if (
+              typeof template[key] === "object" &&
+              !Array.isArray(template[key])
+            ) {
+              if (!obj.hasOwnProperty(key)) {
+                errors.push(`Missing key: ${parentKey}${key}`);
+              } else {
+                validateStructure(
+                  obj[key],
+                  template[key],
+                  `${parentKey}${key}.`
+                );
+              }
+            } else if (Array.isArray(template[key])) {
+              template[key].forEach((subKey) => {
+                if (
+                  !obj[key]?.hasOwnProperty(subKey) &&
+                  template[key].length > 0
+                ) {
+                  errors.push(`Missing key: ${parentKey}${key}.${subKey}`);
+                }
+              });
+            } else {
+              if (!obj.hasOwnProperty(key)) {
+                errors.push(`Missing key: ${parentKey}${key}`);
+              }
+            }
+          }
+        }
+
+        // Template for validation.
+        const template = {
+          basic_identity: {
+            title: "",
+            description: "",
+            version: "",
+            changelog: "",
+            keywords: "",
+            license: "",
+          },
+          author_contact_details: {
+            affiliation: "",
+            email: "",
+            phone: "",
+          },
+          dataset_creation: {
+            general: {
+              data_origin: "",
+              synthetic_data_details: {
+                generation_method: "",
+                software_used: "",
+                related_publications: "",
+              },
+              natural_data_details: {
+                study_type: "",
+                experimental_setup: {
+                  general_description: "",
+                  instrumentation: "",
+                  protocols: "",
+                  study_start_date: "",
+                  study_end_date: "",
+                },
+                sample_information: {
+                  number_of_samples: "",
+                  sample_types: "",
+                  participants: {
+                    total_participants: "",
+                    demographic_data: "",
+                    selection_criteria: "",
+                    health_status: "",
+                  },
+                },
+                experimental_conditions: {
+                  experiment_location: "",
+                  experiment_conditions: "",
+                },
+                related_publications: "",
+              },
+            },
+            data_completion: {
+              dataset_status: "",
+              future_work: "",
+            },
+            pre_processing: {
+              raw_data: "",
+              data_cleanliness: {
+                cleanliness_status: "",
+                cleaning_details: "",
+              },
+              labeling: {
+                labeled: "",
+                labeling_details: "",
+              },
+              data_split: {
+                train_split: "",
+                validation_split: "",
+                test_split: "",
+              },
+            },
+          },
+          dataset_usage: {
+            citation: "",
+            data_usage_description: "",
+            related_datasets: "",
+            related_publications: "",
+          },
+          dataset_composition: {
+            general: {
+              format: "",
+              dataset_size: "",
+              number_of_files: "",
+              average_file_size: "",
+            },
+            csv: {
+              delimiter: "",
+              has_header: "",
+              column_names: "",
+            },
+            excel: {
+              has_macros: "",
+              average_sheets: "",
+            },
+            image: {
+              file_type: "",
+              average_resolution: "",
+              color_mode: "",
+              image_processing: "",
+            },
+            video: {
+              file_type: "",
+              average_duration: "",
+              video_resolution: "",
+              video_processing: "",
+            },
+            audio: {
+              file_type: "",
+              average_duration: "",
+              average_bitrate: "",
+              audio_processing: "",
+            },
+            fasta: {
+              general_info: {
+                sequence_type: "",
+                organism_group: "",
+                specific_species: "",
+                minimum_sequence_length: "",
+                maximum_sequence_length: "",
+              },
+              sequencing_info: {
+                sequencing_method: "",
+                coverage_depth: "",
+                assembly_details: "",
+                error_rate: "",
+              },
+              further_source_details: {
+                source_organism_info: "",
+                NCBI_Taxonomy_ID: "",
+                GenBank_Accession_Number: "",
+                UniProt_ID: "",
+              },
+            },
+            genbank: {
+              general_info: {
+                sequence_type: "",
+                organism_group: "",
+                specific_species: "",
+                minimum_sequence_length: "",
+                maximum_sequence_length: "",
+              },
+              sequencing_info: {
+                sequencing_method: "",
+                coverage_depth: "",
+                assembly_details: "",
+                error_rate: "",
+              },
+              further_source_details: {
+                source_organism_info: "",
+                NCBI_Taxonomy_ID: "",
+                GenBank_Accession_Number: "",
+                UniProt_ID: "",
+              },
+            },
+            matlab: {
+              matlab_version: "",
+              variables_stored: "",
+              toolboxes_used: "",
+            },
+            text: {
+              encoding: "",
+              language: "",
+            },
+            pdf: {
+              text_extractable: "",
+              pdf_version: "",
+            },
+          },
+          ethics: {
+            data_collection_ethics: "",
+            data_usage_ethics: "",
+            ethical_review_status: "",
+          },
+        };
+
+        // Calling the validateStructure function with the JSON object and the template.
+        validateStructure(obj, template);
+
+        // Display errors if any
+        if (errors.length > 0) {
+          errors.forEach((error) => {
+            document.getElementById("dynamic-error-section").insertAdjacentHTML(
+              "beforeend",
+              `
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+              <div class="text-center">
+                <i class="bi bi-exclamation-triangle-fill"></i>
+                <strong>${error}</strong>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+              </div>
             </div>
-          </div>
-        `
-        );
-
-        return false;
-      }
-    };
-
-    reader.readAsText(file);
-  }
-
-  function validateJSON(obj) {
-    let errors = [];
-
-    if (!obj.basic_identity?.title) {
-      errors.push("Your dataset metadata is missing the Title");
-    }
-
-    if (errors.length > 0) {
-      errors.forEach((error) => {
-        document.getElementById("dynamic-error-section").insertAdjacentHTML(
-          "beforeend",
           `
-      <div class="alert alert-danger alert-dismissible fade show" role="alert">
-        <div class="text-center">
-          <i class="bi bi-exclamation-triangle-fill"></i>
-          <strong>${error}</strong>
-          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        </div>
-      </div>
-    `
-        );
-      });
+            );
+          });
 
-      // Clears input field if the value is incorrect.
-      document.getElementById("json-file").value = "";
-      return false;
-    }
-    return true;
-  }
-</script>
+          // Clears input field if the value is incorrect.
+          document.getElementById("json-file").value = "";
+          return false;
+        }
 
-<!-- Upload Boxes Script -->
-<script>
-  function updateFileInfo(input, infoId) {
-    const infoDiv = document.getElementById(infoId);
-    const parentDiv = input.closest(".drag-area");
-    const defaultText = parentDiv.querySelector("p");
-    const defaultIcon = parentDiv.querySelector("i");
-
-    if (input.files && input.files[0]) {
-      const file = input.files[0];
-
-      // Determine the type of upload (folder or file) and update the display accordingly
-      if (input.getAttribute("webkitdirectory") !== null) {
-        // Folder upload
-        let folderName = file.webkitRelativePath.split("/")[0];
-        infoDiv.innerHTML = `<div class="file-display d-flex flex-column align-items-center justify-content-center">
-                            <i class="bi bi-folder mb-2"></i>
-                            <span>${folderName}</span>
-                         </div>`;
-      } else {
-        // File upload
-        infoDiv.innerHTML = `<div class="file-display d-flex flex-column align-items-center justify-content-center">
-                            <i class="bi bi-file-earmark-text mb-2"></i>
-                            <span>${file.name}</span>
-                         </div>`;
+        return true;
       }
+    </script>
 
-      // Style adjustments
-      infoDiv.style.position = "absolute";
-      infoDiv.style.top = "50%";
-      infoDiv.style.left = "50%";
-      infoDiv.style.transform = "translate(-50%, -50%)";
-      infoDiv.style.textAlign = "center";
+    <!-- Upload Boxes Script -->
+    <script>
+      function updateFileInfo(input, infoId) {
+        const infoDiv = document.getElementById(infoId);
+        const parentDiv = input.closest(".drag-area");
+        const defaultText = parentDiv.querySelector("p");
+        const defaultIcon = parentDiv.querySelector("i");
 
-      // Hide the default text and icon
-      defaultText.style.display = "none";
-      defaultIcon.style.display = "none";
+        if (input.files && input.files[0]) {
+          const file = input.files[0];
 
-      parentDiv.classList.add("file-uploaded");
-    } else {
-      // Reset to default if no file or folder is selected
-      defaultText.style.display = "";
-      defaultIcon.style.display = "";
-      infoDiv.innerHTML = "";
-      parentDiv.classList.remove("file-uploaded");
-    }
-  }
-</script>
+          // Determine the type of upload (folder or file) and update the display accordingly.
+          if (input.getAttribute("webkitdirectory") !== null) {
+            // Folder upload.
+            let folderName = file.webkitRelativePath.split("/")[0];
+            infoDiv.innerHTML = `<div class="file-display d-flex flex-column align-items-center justify-content-center">
+                                <i class="bi bi-folder mb-2"></i>
+                                <span>${folderName}</span>
+                             </div>`;
+          } else {
+            // File upload.
+            infoDiv.innerHTML = `<div class="file-display d-flex flex-column align-items-center justify-content-center">
+                                <i class="bi bi-file-earmark-text mb-2"></i>
+                                <span>${file.name}</span>
+                             </div>`;
+          }
 
-<!-- Expandable List Script -->
-<script>
-  function toggleVisibility(event, id) {
-    event.stopPropagation(); // Prevent event bubbling to parent elements
-    var element = document.getElementById(id);
-    var trigger = event.currentTarget;
-    var triggerSymbol = trigger.getElementsByClassName('toggle-symbol')[0];
+          // Style adjustments.
+          infoDiv.style.position = "absolute";
+          infoDiv.style.top = "50%";
+          infoDiv.style.left = "50%";
+          infoDiv.style.transform = "translate(-50%, -50%)";
+          infoDiv.style.textAlign = "center";
 
-    if (element.style.display === 'block') {
-      element.style.display = 'none';
-      if (triggerSymbol) {
-        triggerSymbol.textContent = '+';
+          // Hide the default text and icon.
+          defaultText.style.display = "none";
+          defaultIcon.style.display = "none";
+
+          parentDiv.classList.add("file-uploaded");
+        } else {
+          // Reset to default if no file or folder is selected.
+          defaultText.style.display = "";
+          defaultIcon.style.display = "";
+          infoDiv.innerHTML = "";
+          parentDiv.classList.remove("file-uploaded");
+        }
       }
-    } else {
-      element.style.display = 'block';
-      if (triggerSymbol) {
-        triggerSymbol.textContent = '-';
-      }
-    }
-  }
-  </script>
+    </script>
 
-{% endblock %}
+    <!-- Expandable List Script -->
+    <script>
+      function toggleVisibility(event, id) {
+        event.stopPropagation(); // Prevent event bubbling to parent elements.
+        var element = document.getElementById(id);
+        var trigger = event.currentTarget;
+        var triggerSymbol = trigger.getElementsByClassName("toggle-symbol")[0];
+
+        if (element.style.display === "block") {
+          element.style.display = "none";
+          if (triggerSymbol) {
+            triggerSymbol.textContent = "+";
+          }
+        } else {
+          element.style.display = "block";
+          if (triggerSymbol) {
+            triggerSymbol.textContent = "-";
+          }
+        }
+      }
+    </script>
+    {% endblock %}
+  </div>
+</div>

@@ -354,13 +354,13 @@
                   <h5>Data Split</h5>
                 {% endif %}
                 {% if datasetInfo.metadata_file.dataset_creation.pre_processing.data_split.train_split and 'Optional' not in datasetInfo.metadata_file.dataset_creation.pre_processing.data_split.train_split %}
-                  <p><strong>Train Split:</strong> {{ datasetInfo.metadata_file.dataset_creation.pre_processing.data_split.train_split }}</p>
+                  <p><strong>Train Split:</strong> {{ datasetInfo.metadata_file.dataset_creation.pre_processing.data_split.train_split }}%</p>
                 {% endif %}
                 {% if datasetInfo.metadata_file.dataset_creation.pre_processing.data_split.validation_split and 'Optional' not in datasetInfo.metadata_file.dataset_creation.pre_processing.data_split.validation_split %}
-                  <p><strong>Validation Split:</strong> {{ datasetInfo.metadata_file.dataset_creation.pre_processing.data_split.validation_split }}</p>
+                  <p><strong>Validation Split:</strong> {{ datasetInfo.metadata_file.dataset_creation.pre_processing.data_split.validation_split }}%</p>
                 {% endif %}
                 {% if datasetInfo.metadata_file.dataset_creation.pre_processing.data_split.test_split and 'Optional' not in datasetInfo.metadata_file.dataset_creation.pre_processing.data_split.test_split %}
-                  <p><strong>Test Split:</strong> {{ datasetInfo.metadata_file.dataset_creation.pre_processing.data_split.test_split }}</p>
+                  <p><strong>Test Split:</strong> {{ datasetInfo.metadata_file.dataset_creation.pre_processing.data_split.test_split }}%</p>
                 {% endif %}
               {% endif %}
             {% endif %}
@@ -401,7 +401,7 @@
                 {% endif %}
                 {% if datasetInfo.metadata_file.dataset_composition.general.dataset_size and 'Optional' not in datasetInfo.metadata_file.dataset_composition.general.dataset_size %}
                   <h5 id="item-5-1-2">Dataset Size</h5>
-                  <p>{{ datasetInfo.metadata_file.dataset_composition.general.dataset_size }}</p>
+                  <p>{{ datasetInfo.metadata_file.dataset_composition.general.dataset_size }}KB</p>
                 {% endif %}
                 {% if datasetInfo.metadata_file.dataset_composition.general.number_of_files and 'Optional' not in datasetInfo.metadata_file.dataset_composition.general.number_of_files %}
                   <h5 id="item-5-1-3">Number of Files</h5>
@@ -409,7 +409,7 @@
                 {% endif %}
                 {% if datasetInfo.metadata_file.dataset_composition.general.average_file_size and 'Optional' not in datasetInfo.metadata_file.dataset_composition.general.average_file_size %}
                   <h5 id="item-5-1-4">Average File Size</h5>
-                  <p>{{ datasetInfo.metadata_file.dataset_composition.general.average_file_size }}</p>
+                  <p>{{ datasetInfo.metadata_file.dataset_composition.general.average_file_size }}KB</p>
                 {% endif %}
               {% endif %}
               {% if 'CSV' in datasetInfo.metadata_file.dataset_composition.general.format %}
@@ -448,7 +448,7 @@
                   <p><strong>File Type:</strong> {{ datasetInfo.metadata_file.dataset_composition.image.file_type }}</p>
                 {% endif %}
                 {% if datasetInfo.metadata_file.dataset_composition.image.average_resolution and 'Optional' not in datasetInfo.metadata_file.dataset_composition.image.average_resolution %}
-                  <p><strong>Average Resolution:</strong> {{ datasetInfo.metadata_file.dataset_composition.image.average_resolution }}</p>
+                  <p><strong>Average Resolution:</strong> {{ datasetInfo.metadata_file.dataset_composition.image.average_resolution }}Mega Pixels</p>
                 {% endif %}
                 {% if datasetInfo.metadata_file.dataset_composition.image.color_mode and 'Optional' not in datasetInfo.metadata_file.dataset_composition.image.color_mode %}
                   <p><strong>Color Mode:</strong> {{ datasetInfo.metadata_file.dataset_composition.image.color_mode }}</p>
@@ -466,7 +466,7 @@
                   <p><strong>File Type:</strong> {{ datasetInfo.metadata_file.dataset_composition.video.file_type }}</p>
                 {% endif %}
                 {% if datasetInfo.metadata_file.dataset_composition.video.average_duration and 'Optional' not in datasetInfo.metadata_file.dataset_composition.video.average_duration %}
-                  <p><strong>Average Duration:</strong> {{ datasetInfo.metadata_file.dataset_composition.video.average_duration }}</p>
+                  <p><strong>Average Duration:</strong> {{ datasetInfo.metadata_file.dataset_composition.video.average_duration }}min</p>
                 {% endif %}
                 {% if datasetInfo.metadata_file.dataset_composition.video.video_resolution and 'Optional' not in datasetInfo.metadata_file.dataset_composition.video.video_resolution %}
                   <p><strong>Video Resolution:</strong> {{ datasetInfo.metadata_file.dataset_composition.video.video_resolution }}</p>
@@ -484,10 +484,10 @@
                   <p><strong>File Type:</strong> {{ datasetInfo.metadata_file.dataset_composition.audio.file_type }}</p>
                 {% endif %}
                 {% if datasetInfo.metadata_file.dataset_composition.audio.average_duration and 'Optional' not in datasetInfo.metadata_file.dataset_composition.audio.average_duration %}
-                  <p><strong>Average Duration:</strong> {{ datasetInfo.metadata_file.dataset_composition.audio.average_duration }}</p>
+                  <p><strong>Average Duration:</strong> {{ datasetInfo.metadata_file.dataset_composition.audio.average_duration }}min</p>
                 {% endif %}
                 {% if datasetInfo.metadata_file.dataset_composition.audio.average_bitrate and 'Optional' not in datasetInfo.metadata_file.dataset_composition.audio.average_bitrate %}
-                  <p><strong>Average Bitrate:</strong> {{ datasetInfo.metadata_file.dataset_composition.audio.average_bitrate }}</p>
+                  <p><strong>Average Bitrate:</strong> {{ datasetInfo.metadata_file.dataset_composition.audio.average_bitrate }}bits per second</p>
                 {% endif %}
                 {% if datasetInfo.metadata_file.dataset_composition.audio.audio_processing and 'Optional' not in datasetInfo.metadata_file.dataset_composition.audio.audio_processing %}
                   <p><strong>Audio Processing:</strong> {{ datasetInfo.metadata_file.dataset_composition.audio.audio_processing }}</p>

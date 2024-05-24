@@ -1,1 +1,1 @@
-web:cd synbiosource && gunicorn synbiosource.wsgi 
+web: cd synbiosource && gunicorn synbiosource.wsgi 

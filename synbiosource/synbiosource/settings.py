@@ -29,7 +29,7 @@ SECRET_KEY = os.getenv('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -57,6 +57,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
 ]
 
 ROOT_URLCONF = 'synbiosource.urls'
@@ -95,11 +96,11 @@ WSGI_APPLICATION = 'synbiosource.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'synbiosource', 
-        'USER': 'postgres',
-        'PASSWORD': 'root',
-        'HOST': '127.0.0.1', 
-        'PORT': '5432',
+        'NAME': os.getenv('db_NAME'), 
+        'USER': os.getenv('db_USER'),
+        'PASSWORD': os.getenv('db_PASSWORD'),
+        'HOST': os.getenv('db_HOST'), 
+        'PORT': os.getenv('db_PORT'),
     }
 }
 

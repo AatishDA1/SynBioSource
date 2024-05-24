@@ -125,7 +125,7 @@
             </p>
             <div class="text-center">
               <a
-                href="/static/metadata_standard/metadata_v4.json"
+                href="/static/metadata_standard/metadata_v5.json"
                 download="metadata_template.json"
                 class="btn btn-submit"
                 >Download Metadata Card</a
@@ -359,7 +359,7 @@
       function validateFiles(files) {
         var totalSize = 0;
         var errorSection = document.getElementById("dynamic-error-section");
-        errorSection.innerHTML = ""; // Clear previous errors
+        errorSection.innerHTML = ""; // Clear previous errors.
 
         if (files.length > 1000) {
           var errorMessage = "Sorry, you cannot upload more than 1000 files.";
@@ -377,7 +377,7 @@
                 </div>
               </div>
             `;
-          document.querySelector("#file-input").value = ""; // Clear the selected files
+          document.querySelector("#file-input").value = ""; // Clear the selected files.
           return false;
         }
 
@@ -402,7 +402,7 @@
                 </div>
               </div>
             `;
-          document.querySelector("#file-input").value = ""; // Clear the selected files
+          document.querySelector("#file-input").value = ""; // Clear the selected files.
           return false;
         }
       }
@@ -410,6 +410,7 @@
 
     <!-- JSON Validation Script -->
     <script>
+      // JSON Validation Script
       function readJSON() {
         const fileInput = document.getElementById("json-file");
         const file = fileInput.files[0];
@@ -456,23 +457,316 @@
       function validateJSON(obj) {
         let errors = [];
 
-        if (!obj.basic_identity?.title) {
-          errors.push("Your dataset metadata is missing the Title");
+        function isValidString(value, placeholder) {
+          return value && value !== placeholder;
         }
+
+        function isValidFloat(value) {
+          return !isNaN(value) && (Number(value) === value);
+        }
+
+        function isValidInteger(value) {
+          return !isNaN(value) && Number.isInteger(Number(value));
+        }
+
+        function isValidDate(value) {
+          return !isNaN(Date.parse(value));
+        }
+
+        function isValidKeywords(value) {
+          if (Array.isArray(value)) {
+            return value.length >= 3;
+          } else if (typeof value === 'string') {
+            return value.split(/[,;|]/).map(s => s.trim()).filter(Boolean).length >= 3;
+          }
+          return false;
+        }
+
+        function isValidCategory(value, categories) {
+          return categories.map(c => c.toLowerCase()).includes(value.toLowerCase());
+        }
+
+        function isValidEmail(value) {
+          const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+          return emailRegex.test(value);
+        }
+
+        function isValidPercentage(value) {
+          return isValidFloat(value);
+        }
+
+        {% comment %} // Validate Basic Identity
+        if (!isValidString(obj.basic_identity?.title, "Mandatory - Title of the Dataset.")) {
+          errors.push("Your dataset metadata is missing the Title or it is not properly filled.");
+        }
+        if (!isValidString(obj.basic_identity?.description, "Mandatory - A detailed description of the dataset and its contents.")) {
+          errors.push("Your dataset metadata is missing the Description or it is not properly filled.");
+        }
+        if (!isValidFloat(Number(obj.basic_identity?.version))) {
+          errors.push("Your dataset metadata is missing the Version or it is not a float value.");
+        }
+        if (!isValidKeywords(obj.basic_identity?.keywords)) {
+          errors.push("Your dataset metadata is missing the Keywords or there are less than 3 keywords in the correct format.");
+        }
+        if (!isValidString(obj.basic_identity?.license, "Mandatory - Type of license under which the dataset is distributed.")) {
+          errors.push("Your dataset metadata is missing the License or it is not properly filled.");
+        }
+
+        // Validate Author Contact Details
+        if (!isValidEmail(obj.author_contact_details?.email)) {
+          errors.push("Your dataset metadata is missing the Author Email or it is not a valid email address.");
+        }
+
+        // Validate Dataset Creation
+        if (!isValidString(obj.dataset_creation?.general?.data_origin, "Mandatory - Indicates whether the data is ('Synthetically-Generated'/ 'Naturally-Obtained'/ 'Other').")) {
+          errors.push("Your dataset metadata is missing the Data Origin or it is not properly filled.");
+        } else {
+          const origin = obj.dataset_creation.general.data_origin.toLowerCase();
+          if (origin.includes("synthetically-generated")) {
+            if (!isValidString(obj.dataset_creation.general.synthetic_data_details?.generation_method, "Mandatory - Method used for generating synthetic data, if applicable.")) {
+              errors.push("Your dataset metadata is missing the Synthetic Data Generation Method or it is not properly filled.");
+            }
+            if (!isValidString(obj.dataset_creation.general.synthetic_data_details?.software_used, "Mandatory - Details of any software or tools used for generating synthetic data.")) {
+              errors.push("Your dataset metadata is missing the Synthetic Data Software Used or it is not properly filled.");
+            }
+          }
+          if (origin.includes("naturally-obtained")) {
+            const studyTypes = ['Observational', 'Experimental', 'Clinical Trial', 'Field Study', 'Laboratory Study', 'Survey Research', 'Longitudinal Study', 'Cross-Sectional Study', 'Case Study', 'Other'];
+            if (!isValidCategory(obj.dataset_creation.general.natural_data_details?.study_type, studyTypes)) {
+              errors.push("Your dataset metadata is missing the Natural Data Study Type or it is not one of the specified categories.");
+            }
+            if (!isValidString(obj.dataset_creation.general.natural_data_details?.experimental_setup?.general_description, "Mandatory - General description of the study, outlining its main objectives and methodology.")) {
+              errors.push("Your dataset metadata is missing the Natural Data Experimental Setup Description or it is not properly filled.");
+            }
+            if (!isValidDate(obj.dataset_creation.general.natural_data_details?.experimental_setup?.study_start_date)) {
+              errors.push("Your dataset metadata is missing the Natural Data Study Start Date or it is not in the correct format (mm/dd/yyyy).");
+            }
+            if (!isValidDate(obj.dataset_creation.general.natural_data_details?.experimental_setup?.study_end_date)) {
+              errors.push("Your dataset metadata is missing the Natural Data Study End Date or it is not in the correct format (mm/dd/yyyy).");
+            }
+            if (!isValidString(obj.dataset_creation.general.natural_data_details?.experimental_conditions?.experiment_location, "Mandatory - Location where the experiment was conducted, including specific site details and environmental conditions, if relevant.")) {
+              errors.push("Your dataset metadata is missing the Natural Data Experiment Location or it is not properly filled.");
+            }
+          }
+        }
+
+        // Validate Data Completion
+        const datasetStatuses = ['Complete', 'In Progress', 'Abandoned & Incomplete', 'Other'];
+        if (!isValidCategory(obj.dataset_creation?.data_completion?.dataset_status, datasetStatuses)) {
+          errors.push("Your dataset metadata is missing the Dataset Status or it is not one of the specified categories.");
+        }
+
+        // Validate Pre Processing
+        const yesNoNA = ['Yes', 'No', 'N/A'];
+        if (!isValidCategory(obj.dataset_creation?.pre_processing?.raw_data, yesNoNA)) {
+          errors.push("Your dataset metadata is missing the Raw Data field or it is not 'Yes'/'No'.");
+        }
+        const cleanlinessStatuses = ['Clean', 'Partially Clean', 'Unclean', 'N/A'];
+        if (!isValidCategory(obj.dataset_creation?.pre_processing?.data_cleanliness?.cleanliness_status, cleanlinessStatuses)) {
+          errors.push("Your dataset metadata is missing the Data Cleanliness Status or it is not one of the specified categories.");
+        }
+        if (!isValidCategory(obj.dataset_creation?.pre_processing?.labeling?.labeled, yesNoNA)) {
+          errors.push("Your dataset metadata is missing the Labeling field or it is not 'Yes'/'No'.");
+        }
+        if (obj.dataset_creation?.pre_processing?.data_split?.train_split && !isValidPercentage(obj.dataset_creation.pre_processing.data_split.train_split)) {
+          errors.push("Train split must be a number (integer or float).");
+        }
+        if (obj.dataset_creation?.pre_processing?.data_split?.validation_split && !isValidPercentage(obj.dataset_creation.pre_processing.data_split.validation_split)) {
+          errors.push("Validation split must be a number (integer or float).");
+        }
+        if (obj.dataset_creation?.pre_processing?.data_split?.test_split && !isValidPercentage(obj.dataset_creation.pre_processing.data_split.test_split)) {
+          errors.push("Test split must be a number (integer or float).");
+        }
+
+        // Validate Dataset Usage
+        if (!isValidString(obj.dataset_usage?.data_usage_description, "Mandatory - Description of how the data can be used, including any restrictions or guidelines.")) {
+          errors.push("Your dataset metadata is missing the Data Usage Description or it is not properly filled.");
+        }
+
+        // Validate Dataset Composition
+        if (!isValidString(obj.dataset_composition?.general?.format, "Mandatory - File format ('CSV'/ 'Excel'/ 'Image'/ 'Video'/ 'Audio'/ 'FASTA'/ 'GenBank'/ 'Text'/ 'PDF'/ 'Matlab'/ 'Other').")) {
+          errors.push("Your dataset metadata is missing the File Format or it is not properly filled.");
+        } else {
+          const format = obj.dataset_composition.general.format.toLowerCase();
+          if (format.includes("csv")) {
+            if (!isValidString(obj.dataset_composition.csv?.delimiter, "Mandatory - Delimiter used in CSV files ('Comma'/ 'Colon'/ 'Semicolon'/ 'Other').")) {
+              errors.push("Your dataset metadata is missing the CSV Delimiter or it is not properly filled.");
+            }
+            if (!isValidCategory(obj.dataset_composition.csv?.has_header, yesNoNA)) {
+              errors.push("Your dataset metadata is missing the CSV Has Header field or it is not 'Yes'/'No'.");
+            }
+            if (!Array.isArray(obj.dataset_composition.csv?.column_names) || obj.dataset_composition.csv.column_names.length === 0) {
+              errors.push("Your dataset metadata is missing the CSV Column Names or it is not a non-empty array.");
+            }
+          }
+          if (format.includes("excel")) {
+            if (!isValidCategory(obj.dataset_composition.excel?.has_macros, yesNoNA)) {
+              errors.push("Your dataset metadata is missing the Excel Has Macros field or it is not 'Yes'/'No'.");
+            }
+            if (!isValidInteger(Number(obj.dataset_composition.excel?.average_sheets))) {
+              errors.push("Your dataset metadata is missing the Excel Average Sheets or it is not an integer.");
+            }
+          }
+          if (format.includes("image")) {
+            if (!isValidString(obj.dataset_composition.image?.file_type, "Mandatory - File type of images ('JPEG'/ 'PNG'/ 'GIF'/ 'TIFF'/ 'BMP'/ 'Other').")) {
+              errors.push("Your dataset metadata is missing the Image File Type or it is not properly filled.");
+            }
+            if (!isValidFloat(Number(obj.dataset_composition.image?.average_resolution))) {
+              errors.push("Your dataset metadata is missing the Image Average Resolution or it is not a float value.");
+            }
+            const colorModes = ['RGB', 'CMYK', 'Grayscale', 'Other'];
+            if (!isValidCategory(obj.dataset_composition.image?.color_mode, colorModes)) {
+              errors.push("Your dataset metadata is missing the Image Color Mode or it is not one of the specified categories.");
+            }
+          }
+          if (format.includes("video")) {
+            if (!isValidString(obj.dataset_composition.video?.file_type, "Mandatory - File type of videos ('MP4'/ 'AVI'/ 'MOV'/ 'WMV'/ 'MKV'/ 'Other').")) {
+              errors.push("Your dataset metadata is missing the Video File Type or it is not properly filled.");
+            }
+            if (!isValidFloat(Number(obj.dataset_composition.video?.average_duration))) {
+              errors.push("Your dataset metadata is missing the Video Average Duration or it is not a float value.");
+            }
+            const videoResolutions = ['Lower than SD', 'SD', 'HD', 'Full HD', '2K', '4K', '8K', 'Greater than 8K'];
+            if (!isValidCategory(obj.dataset_composition.video?.video_resolution, videoResolutions)) {
+              errors.push("Your dataset metadata is missing the Video Resolution or it is not one of the specified categories.");
+            }
+          }
+          if (format.includes("audio")) {
+            if (!isValidString(obj.dataset_composition.audio?.file_type, "Mandatory - File type of audio files ('MP3'/ 'WAV'/ 'AAC'/ 'FLAC'/ 'OGG'/ 'Other').")) {
+              errors.push("Your dataset metadata is missing the Audio File Type or it is not properly filled.");
+            }
+            if (!isValidFloat(Number(obj.dataset_composition.audio?.average_duration))) {
+              errors.push("Your dataset metadata is missing the Audio Average Duration or it is not a float value.");
+            }
+          }
+          if (format.includes("fasta")) {
+            if (!isValidString(obj.dataset_composition.fasta?.general_info?.sequence_type, "Mandatory - List of predominant sequence types in the FASTA files ('DNA'/ 'RNA'/ 'cDNA'/ 'Amino Acid'/ 'Other').")) {
+              errors.push("Your dataset metadata is missing the FASTA Sequence Type or it is not properly filled.");
+            }
+            const organismGroups = ['Bacteria', 'Virus', 'Eukaryote', 'Archaea', 'Organelles', 'Other'];
+            if (!isValidCategory(obj.dataset_composition.fasta?.general_info?.organism_group, organismGroups)) {
+              errors.push("Your dataset metadata is missing the FASTA Organism Group or it is not one of the specified categories.");
+            }
+            if (!isValidInteger(Number(obj.dataset_composition.fasta?.general_info?.minimum_sequence_length))) {
+              errors.push("Your dataset metadata is missing the FASTA Minimum Sequence Length or it is not an integer.");
+            }
+            if (!isValidInteger(Number(obj.dataset_composition.fasta?.general_info?.maximum_sequence_length))) {
+              errors.push("Your dataset metadata is missing the FASTA Maximum Sequence Length or it is not an integer.");
+            }
+            const sequencingMethods = ['Illumina', 'PacBio SMRT', 'Nanopore Sequencing', 'Sanger', 'Ion Torrent', 'Pyrosequencing', 'SOLiD Sequencing', 'Other'];
+            if (!isValidCategory(obj.dataset_composition.fasta?.sequencing_info?.sequencing_method, sequencingMethods)) {
+              errors.push("Your dataset metadata is missing the FASTA Sequencing Method or it is not one of the specified categories.");
+            }
+          }
+          if (format.includes("genbank")) {
+            if (!isValidString(obj.dataset_composition.genbank?.general_info?.sequence_type, "Mandatory - List of predominant sequence types in the GenBank files ('DNA'/ 'RNA'/ 'cDNA'/ 'Amino Acid'/ 'Other').")) {
+              errors.push("Your dataset metadata is missing the GenBank Sequence Type or it is not properly filled.");
+            }
+            if (!isValidCategory(obj.dataset_composition.genbank?.general_info?.organism_group, organismGroups)) {
+              errors.push("Your dataset metadata is missing the GenBank Organism Group or it is not one of the specified categories.");
+            }
+            if (!isValidInteger(Number(obj.dataset_composition.genbank?.general_info?.minimum_sequence_length))) {
+              errors.push("Your dataset metadata is missing the GenBank Minimum Sequence Length or it is not an integer.");
+            }
+            if (!isValidInteger(Number(obj.dataset_composition.genbank?.general_info?.maximum_sequence_length))) {
+              errors.push("Your dataset metadata is missing the GenBank Maximum Sequence Length or it is not an integer.");
+            }
+            if (!isValidCategory(obj.dataset_composition.genbank?.sequencing_info?.sequencing_method, sequencingMethods)) {
+              errors.push("Your dataset metadata is missing the GenBank Sequencing Method or it is not one of the specified categories.");
+            }
+          }
+          if (format.includes("matlab")) {
+            if (!isValidString(obj.dataset_composition.matlab?.matlab_version, "Mandatory - Version of MATLAB used to generate the data (e.g., R2019b).")) {
+              errors.push("Your dataset metadata is missing the Matlab Version or it is not properly filled.");
+            }
+            const matlabVariables = ['Matrix', 'Cell Array', 'Structure', 'Table', 'Function Handle', 'Time Series', 'Other'];
+            if (!isValidCategory(obj.dataset_composition.matlab?.variables_stored, matlabVariables)) {
+              errors.push("Your dataset metadata is missing the Matlab Variables Stored or it is not one of the specified categories.");
+            }
+          }
+          if (format.includes("text")) {
+            if (!isValidString(obj.dataset_composition.text?.encoding, "Mandatory - Character encoding used in text files ('UTF-8'/ 'UTF-16'/ 'UTF-32'/ 'ASCII'/ 'Other').")) {
+              errors.push("Your dataset metadata is missing the Text Encoding or it is not properly filled.");
+            }
+            if (!isValidString(obj.dataset_composition.text?.language, "Mandatory - Predominant language of text files (e.g., English, Spanish, Chinese).")) {
+              errors.push("Your dataset metadata is missing the Text Language or it is not properly filled.");
+            }
+          }
+          if (format.includes("pdf")) {
+            if (!isValidCategory(obj.dataset_composition.pdf?.text_extractable, [...yesNoNA, 'N/A'])) {
+              errors.push("Your dataset metadata is missing the PDF Text Extractable field or it is not 'Yes'/'No'/'N/A'.");
+            }
+          }
+        }
+
+        // Validate optional fields only if they are filled out and not containing the default instructions
+        function validateOptionalField(field, typeCheckFunction, errorMsg, defaultInstruction) {
+          if (field !== undefined && field !== defaultInstruction && !typeCheckFunction(field)) {
+            errors.push(errorMsg);
+          }
+        }
+
+        validateOptionalField(obj.basic_identity?.changelog, isValidString, "Changelog must be a valid string.", "Optional - Description of changes made compared to the previous version of the dataset.");
+        validateOptionalField(obj.author_contact_details?.affiliation, isValidString, "Affiliation must be a valid string.", "Optional - Affiliation of the author.");
+        validateOptionalField(obj.author_contact_details?.phone, isValidString, "Phone must be a valid string.", "Optional - Phone number of the author.");
+        validateOptionalField(obj.dataset_creation.general.synthetic_data_details?.related_publications, isValidString, "Related publications must be a valid string.", "Optional - Citations or links to publications that are directly related to the synthetic data generation.");
+        validateOptionalField(obj.dataset_creation.general.natural_data_details?.experimental_setup?.instrumentation, isValidString, "Instrumentation must be a valid string.", "Optional - Specific instruments and technologies used to collect the data.");
+        validateOptionalField(obj.dataset_creation.general.natural_data_details?.experimental_setup?.protocols, isValidString, "Protocols must be a valid string.", "Optional - List any common protocols used during the experiment.");
+        validateOptionalField(obj.dataset_creation.general.natural_data_details?.sample_information?.number_of_samples, isValidInteger, "Number of samples must be an integer.", "Optional - Total number of samples collected and analyzed in the study.");
+        validateOptionalField(obj.dataset_creation.general.natural_data_details?.sample_information?.sample_types, isValidString, "Sample types must be a valid string.", "Optional - Description of the types of samples collected, such as biological tissues, environmental specimens, clinical samples, etc., including specific details when applicable.");
+        validateOptionalField(obj.dataset_creation.general.natural_data_details?.sample_information?.participants?.total_participants, isValidInteger, "Total participants must be an integer.", "Optional - Total number of participants involved in the study, if applicable.");
+        validateOptionalField(obj.dataset_creation.general.natural_data_details?.sample_information?.participants?.demographic_data, isValidString, "Demographic data must be a valid string.", "Optional - Information about the demographic characteristics of the participants (age range, gender, ethnicity, etc.).");
+        validateOptionalField(obj.dataset_creation.general.natural_data_details?.sample_information?.participants?.selection_criteria, isValidString, "Selection criteria must be a valid string.", "Optional - Criteria used for selecting participants, including any inclusion or exclusion criteria.");
+        validateOptionalField(obj.dataset_creation.general.natural_data_details?.sample_information?.participants?.health_status, isValidString, "Health status must be a valid string.", "Optional - Health status or medical conditions of participants relevant to the study.");
+        validateOptionalField(obj.dataset_creation.general.natural_data_details?.experimental_conditions?.experiment_conditions, isValidString, "Experimental conditions must be a valid string.", "Optional - Detailed conditions under which the experiment was performed, such as temperature, lighting, and other relevant environmental parameters.");
+        validateOptionalField(obj.dataset_creation.general.natural_data_details?.related_publications, isValidString, "Related publications must be a valid string.", "Optional - Citations or links to publications that are directly related to the dataset's usage.");
+        validateOptionalField(obj.dataset_creation.data_completion?.future_work, isValidString, "Future work must be a valid string.", "Optional - Description of any planned future work or improvements to be made on the dataset.");
+        validateOptionalField(obj.dataset_creation.pre_processing?.data_cleanliness?.cleaning_details, isValidString, "Cleaning details must be a valid string.", "Optional - Description of the cleaning process applied to the dataset (e.g., methods used, types of errors corrected).");
+        validateOptionalField(obj.dataset_creation.pre_processing?.labeling?.labeling_details, isValidString, "Labeling details must be a valid string.", "Optional - Description of the labeling process and the types of labels used.");
+        validateOptionalField(obj.dataset_usage?.citation, isValidString, "Citation must be a valid string.", "Optional - Recommended citation for the dataset.");
+        validateOptionalField(obj.dataset_usage?.related_datasets, isValidString, "Related datasets must be a valid string.", "Optional - Links to related datasets.");
+        validateOptionalField(obj.dataset_usage?.related_publications, isValidString, "Related publications must be a valid string.", "Optional - Links or references to any papers related to the dataset's usage.");
+        validateOptionalField(obj.dataset_composition.image?.image_processing, isValidString, "Image processing must be a valid string.", "Optional - Description of any image processing applied (e.g., normalization, augmentation).");
+        validateOptionalField(obj.dataset_composition.video?.video_processing, isValidString, "Video processing must be a valid string.", "Optional - Description of any video processing applied (e.g., frame extraction, stabilization).");
+        validateOptionalField(obj.dataset_composition.audio?.average_bitrate, isValidFloat, "Audio average bitrate must be a float value.", "Optional - Average bitrate across audio files in bits per second.");
+        validateOptionalField(obj.dataset_composition.audio?.audio_processing, isValidString, "Audio processing must be a valid string.", "Optional - Description of any audio processing applied (e.g., noise reduction, normalization).");
+        validateOptionalField(obj.dataset_composition.fasta?.general_info?.specific_species, isValidString, "FASTA specific species must be a valid string.", "Optional - List of the specific species or strains represented in the FASTA files.");
+        validateOptionalField(obj.dataset_composition.fasta?.sequencing_info?.coverage_depth, isValidInteger, "FASTA coverage depth must be an integer.", "Optional - Average depth of coverage, crucial for assessing data quality as an Integer.");
+        validateOptionalField(obj.dataset_composition.fasta?.sequencing_info?.assembly_details, isValidString, "FASTA assembly details must be a valid string.", "Optional - Description of assembly algorithms and parameters used in generating the genome assembly.");
+        validateOptionalField(obj.dataset_composition.fasta?.sequencing_info?.error_rate, isValidFloat, "FASTA error rate must be a float value.", "Optional - Estimated error rate of the sequence data as a percentage (Float).");
+        validateOptionalField(obj.dataset_composition.fasta?.further_source_details?.source_organism_info, isValidString, "FASTA source organism info must be a valid string.", "Optional - Detailed information on the source organisms used, including any unique genetic or phenotypic characteristics. This includes both naturally occurring and engineered traits.");
+        validateOptionalField(obj.dataset_composition.fasta?.further_source_details?.NCBI_Taxonomy_ID, isValidString, "FASTA NCBI Taxonomy ID must be a valid string.", "Optional - The National Center for Biotechnology Information (NCBI) Taxonomy IDs, if applicable.");
+        validateOptionalField(obj.dataset_composition.fasta?.further_source_details?.GenBank_Accession_Number, isValidString, "FASTA GenBank Accession Number must be a valid string.", "Optional - The GenBank accession number associated with the genomic sequences of the organisms, if applicable.");
+        validateOptionalField(obj.dataset_composition.fasta?.further_source_details?.UniProt_ID, isValidString, "FASTA UniProt ID must be a valid string.", "Optional - The Universal Protein Resource (UniProt) IDs, if applicable.");
+        validateOptionalField(obj.dataset_composition.genbank?.general_info?.specific_species, isValidString, "GenBank specific species must be a valid string.", "Optional - List of the specific species or strains represented in the GenBank files.");
+        validateOptionalField(obj.dataset_composition.genbank?.sequencing_info?.coverage_depth, isValidInteger, "GenBank coverage depth must be an integer.", "Optional - Average depth of coverage, crucial for assessing data quality as an Integer.");
+        validateOptionalField(obj.dataset_composition.genbank?.sequencing_info?.assembly_details, isValidString, "GenBank assembly details must be a valid string.", "Optional - Description of assembly algorithms and parameters used in generating the genome assembly.");
+        validateOptionalField(obj.dataset_composition.genbank?.sequencing_info?.error_rate, isValidFloat, "GenBank error rate must be a float value.", "Optional - Estimated error rate of the sequence data as a percentage (Float).");
+        validateOptionalField(obj.dataset_composition.genbank?.further_source_details?.source_organism_info, isValidString, "GenBank source organism info must be a valid string.", "Optional - Detailed information on the source organisms used, including any unique genetic or phenotypic characteristics. This includes both naturally occurring and engineered traits.");
+        validateOptionalField(obj.dataset_composition.genbank?.further_source_details?.NCBI_Taxonomy_ID, isValidString, "GenBank NCBI Taxonomy ID must be a valid string.", "Optional - The National Center for Biotechnology Information (NCBI) Taxonomy IDs, if applicable.");
+        validateOptionalField(obj.dataset_composition.genbank?.further_source_details?.GenBank_Accession_Number, isValidString, "GenBank GenBank Accession Number must be a valid string.", "Optional - The GenBank accession number associated with the genomic sequences of the organisms, if applicable.");
+        validateOptionalField(obj.dataset_composition.genbank?.further_source_details?.UniProt_ID, isValidString, "GenBank UniProt ID must be a valid string.", "Optional - The Universal Protein Resource (UniProt) IDs, if applicable.");
+        validateOptionalField(obj.dataset_composition.matlab?.toolboxes_used, isValidString, "Matlab toolboxes used must be a valid string.", "Optional - List of MATLAB toolboxes used in the data generation process.");
+        validateOptionalField(obj.dataset_composition.text?.encoding, isValidString, "Text encoding must be a valid string.", "Optional - Character encoding used in text files ('UTF-8'/ 'UTF-16'/ 'UTF-32'/ 'ASCII'/ 'Other').");
+        validateOptionalField(obj.dataset_composition.text?.language, isValidString, "Text language must be a valid string.", "Optional - Predominant language of text files (e.g., English, Spanish, Chinese).");
+        validateOptionalField(obj.dataset_composition.pdf?.pdf_version, isValidString, "PDF version must be a valid string.", "Optional - Version of PDF format used (e.g., 1.4, 1.7).");
+        validateOptionalField(obj.ethics?.data_collection_ethics, isValidString, "Data collection ethics must be a valid string.", "Optional - Information on ethical considerations related to data collection (e.g., consent, privacy).");
+        validateOptionalField(obj.ethics?.data_usage_ethics, isValidString, "Data usage ethics must be a valid string.", "Optional - Information on ethical considerations related to data usage (e.g., intended use, potential misuse).");
+        validateOptionalField(obj.ethics?.ethical_review_status, isValidString, "Ethical review status must be a valid string.", "Optional - Information on whether the dataset has undergone ethical review (e.g., approved, pending, not applicable)."); {% endcomment %}
 
         if (errors.length > 0) {
           errors.forEach((error) => {
             document.getElementById("dynamic-error-section").insertAdjacentHTML(
               "beforeend",
               `
-          <div class="alert alert-danger alert-dismissible fade show" role="alert">
-            <div class="text-center">
-              <i class="bi bi-exclamation-triangle-fill"></i>
-              <strong>${error}</strong>
-              <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-            </div>
-          </div>
-        `
+              <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                <div class="text-center">
+                  <i class="bi bi-exclamation-triangle-fill"></i>
+                  <strong>${error}</strong>
+                  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+              </div>
+            `
             );
           });
 
@@ -536,7 +830,7 @@
     <!-- Expandable List Script -->
     <script>
       function toggleVisibility(event, id) {
-        event.stopPropagation(); // Prevent event bubbling to parent elements
+        event.stopPropagation(); // Prevent event bubbling to parent elements.
         var element = document.getElementById(id);
         var trigger = event.currentTarget;
         var triggerSymbol = trigger.getElementsByClassName('toggle-symbol')[0];

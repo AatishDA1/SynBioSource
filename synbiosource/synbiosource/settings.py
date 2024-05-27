@@ -12,7 +12,9 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 
 from pathlib import Path
 import os
+import sys
 from dotenv import load_dotenv
+import dj_database_url
 
 load_dotenv()  # take environment variables from .env.
 
@@ -92,7 +94,7 @@ WSGI_APPLICATION = 'synbiosource.wsgi.application'
 #     }
 # }
 
-# PostgreSQL Database
+# Production Database
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
@@ -104,6 +106,9 @@ DATABASES = {
     }
 }
 
+# Use the local PostgreSQL database for tests.
+if 'test' in sys.argv or 'test_coverage' in sys.argv:
+    DATABASES['default'] = dj_database_url.parse(os.getenv('TEST_DATABASE_URL'))
 
 # Password validation
 # https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators

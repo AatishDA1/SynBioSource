@@ -696,7 +696,7 @@ def EditDataset(request, dataset_id):
     data=DatasetRegistry.objects.filter(id=dataset_id).first()
     
      # Redirects if the current user is not the owner or a moderator.
-    if data.owner.id != request.user.id or not request.user.is_moderator:
+    if (data.owner.id != request.user.id) and (not request.user.is_moderator):
         return redirect('/dataset/browse/'+str(dataset_id))
 
     # Handles dataset update on POST request.
@@ -858,7 +858,7 @@ def DeleteDataset(request, dataset_id):
     data=DatasetRegistry.objects.filter(id=dataset_id).first()
 
     # Checks for dataset existence and if the user has the right to delete it.
-    if data.owner.id != request.user.id or not request.user.is_moderator:
+    if (data.owner.id != request.user.id) and not (request.user.is_moderator):
         # Redirects to the viewing page if the user lacks permissions.
         return redirect('/dataset/browse/'+str(dataset_id))
     

@@ -116,7 +116,7 @@ def forgot_password(request):
 
             # Create a JWT token that expires in 1 hour.
             jwt_token = jwt.encode({"id": user.id, "exp": datetime.now() + timedelta(hours=1)}, SCREATE, algorithm="HS256")
-            link = f"http://localhost:8000/reset-password/{jwt_token}"
+            link = f"https://synbiosource-04151ad4f184.herokuapp.com/reset-password/{jwt_token}"
 
             # Send password reset email.
             send_mail(
